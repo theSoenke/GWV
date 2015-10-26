@@ -1,4 +1,4 @@
-package gwv_uebung03;
+
 
 public class Field
 {
