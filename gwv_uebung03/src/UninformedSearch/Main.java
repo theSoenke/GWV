@@ -22,10 +22,12 @@ public class Main
 		Field[][] map = createLevelMap("gwv_uebung03/blatt3_environment.txt");
 		UninformedSearch uf = new UninformedSearch(map, mStart, mGoal);
 		uf.startDFS();
+		System.out.println("DFS");
 		System.out.println(uf.getLevelPath());
 		
 		map = createLevelMap("gwv_uebung03/blatt3_environment.txt");
 		uf = new UninformedSearch(map, mStart, mGoal);
+		System.out.println("BFS");
 		uf.startBFS();
 		System.out.println(uf.getLevelPath());
 		
@@ -43,8 +45,6 @@ public class Main
 		{
 			e.printStackTrace();
 		}
-		
-		System.out.println("Lines: " + lines.size());
 		
 
 		Field[][] map = new Field[lines.size()][lines.get(0).length()];
