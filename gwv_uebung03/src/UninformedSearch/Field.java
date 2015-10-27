@@ -1,3 +1,4 @@
+package UninformedSearch;
 
 
 public class Field

@@ -1,3 +1,4 @@
+package UninformedSearch;
 
 
 import java.io.IOException;
@@ -18,15 +19,17 @@ public class Main
 
 	public Main()
 	{
-		Field[][] map = createLevelMap("blatt3_environment.txt");
+		Field[][] map = createLevelMap("gwv_uebung03/blatt3_environment.txt");
 		UninformedSearch uf = new UninformedSearch(map, mStart, mGoal);
 		uf.startDFS();
 		System.out.println(uf.getLevelPath());
 		
-		map = createLevelMap("blatt3_environment.txt");
+		map = createLevelMap("gwv_uebung03/blatt3_environment.txt");
 		uf = new UninformedSearch(map, mStart, mGoal);
 		uf.startBFS();
 		System.out.println(uf.getLevelPath());
+		
+		
 	}
 
 	private Field[][] createLevelMap(String path)
@@ -38,8 +41,11 @@ public class Main
 		}
 		catch (IOException e)
 		{
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
+		
+		System.out.println("Lines: " + lines.size());
+		
 
 		Field[][] map = new Field[lines.size()][lines.get(0).length()];
 
