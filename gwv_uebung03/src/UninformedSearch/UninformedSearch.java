@@ -21,6 +21,9 @@ public class UninformedSearch
 		mGoal = goal;
 	}
 
+	/**
+	 * Führt eine BFS auf dem Level aus
+	 */
 	public void startBFS()
 	{
 		Queue<Field> frontier = new LinkedList<Field>();
@@ -44,6 +47,9 @@ public class UninformedSearch
 		}
 	}
 
+	/**
+	 * Führ eine DFS auf dem Level aus
+	 */
 	public void startDFS()
 	{
 		Stack<Field> frontier = new Stack<Field>();
@@ -67,6 +73,11 @@ public class UninformedSearch
 		}
 	}
 
+	/**
+	 * Gibt alle begehbaren Nachbarfelder eine Feldes zurück
+	 * @param field
+	 * @return
+	 */
 	private List<Field> getNeighbors(Field field)
 	{
 		List<Field> neighbors = new ArrayList<Field>();
@@ -118,11 +129,19 @@ public class UninformedSearch
 		return neighbors;
 	}
 
+	/**
+	 * Prüft, ob ein Feld nicht begehbar ist
+	 * @param field
+	 * @return
+	 */
 	private boolean isBlocked(Field field)
 	{
 		return (field.getType() == Field.FieldType.blocked);
 	}
 
+	/**
+	 * Gibt alle Feldpositionen vom gefundenen Pfad der Reihe nach aus
+	 */
 	public void printPath()
 	{
 		List<Field> path = new ArrayList<Field>();
@@ -142,6 +161,9 @@ public class UninformedSearch
 		}
 	}
 
+	/**
+	 * @return Gibt das Level mit gefundenen Pfad zurück
+	 */
 	public String getLevelPath()
 	{
 		List<Field> path = new ArrayList<Field>();

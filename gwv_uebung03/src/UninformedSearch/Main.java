@@ -19,21 +19,27 @@ public class Main
 
 	public Main()
 	{
+		// führt eine dfs auf dem level aus und gibt das ergebnis in der konsole aus		
 		Field[][] map = createLevelMap("gwv_uebung03/blatt3_environment.txt");
 		UninformedSearch uf = new UninformedSearch(map, mStart, mGoal);
 		uf.startDFS();
 		System.out.println("DFS");
 		System.out.println(uf.getLevelPath());
 		
+		// führt eine bfs auf dem level aus und gibt das ergebnis in der konsole aus
 		map = createLevelMap("gwv_uebung03/blatt3_environment.txt");
 		uf = new UninformedSearch(map, mStart, mGoal);
 		System.out.println("BFS");
 		uf.startBFS();
 		System.out.println(uf.getLevelPath());
-		
-		
 	}
 
+	/**
+	 * Liest die Level Datei ein und wandelt es in ein Array um
+	 * 
+	 * @param path Pfad zur Level Datei
+	 * @return Level als zweidimensionales Array
+	 */
 	private Field[][] createLevelMap(String path)
 	{
 		List<String> lines = new ArrayList<String>();

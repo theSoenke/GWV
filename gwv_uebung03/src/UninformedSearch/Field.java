@@ -5,10 +5,13 @@ public class Field
 {
 	private int mX;
 	private int mY;
-	private FieldType mType;
-	private Field mParent;
-	private boolean mVisited = false;
+	private FieldType mType; 
+	private Field mParent; // Feld von dem dieses Feld erreicht wurde
+	private boolean mVisited;
 
+	/**
+	 * Art des Feldes
+	 */
 	public enum FieldType
 	{
 		start, goal, blocked, empty, path
@@ -61,6 +64,11 @@ public class Field
 		return mParent;
 	}
 	
+	/**
+	 * Wandelt ein char in ein FieldType um
+	 * @param field
+	 * @return
+	 */
 	public static FieldType charToField(char field)
 	{
 		switch (field)
@@ -79,6 +87,11 @@ public class Field
 		}
 	}
 	
+	/**
+	 * Wandelt FieldType in einen char um
+	 * @param field
+	 * @return
+	 */
 	public static char fieldToChar(FieldType field)
 	{
 		if(field == FieldType.empty)
