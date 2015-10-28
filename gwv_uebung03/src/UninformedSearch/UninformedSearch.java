@@ -166,8 +166,8 @@ public class UninformedSearch
 	 */
 	public String getLevelPath()
 	{
-		List<Field> path = new ArrayList<Field>();
-		String output = "";
+		List<Field> path = new ArrayList<Field>();		
+		StringBuffer buffer = new StringBuffer();
 
 		Field field = mGoal;
 		while (field.getType() != Field.FieldType.start)
@@ -186,11 +186,12 @@ public class UninformedSearch
 			for (int x = 0; x < mMap[0].length; x++)
 			{
 				field = mMap[y][x];
-				output += Field.fieldToChar(field.getType());
+				buffer.append(Field.fieldToChar(field.getType()));
 			}
-			output += "\n";
+			
+			buffer.append("\n");
 		}
 		
-		return output;
+		return buffer.toString();
 	}
 }
