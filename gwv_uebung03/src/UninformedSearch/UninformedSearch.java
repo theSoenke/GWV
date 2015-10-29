@@ -7,7 +7,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
-
+/**
+ * Die Klasse UninformedSearch gibt einen Suchalgorithmus an,
+ *  der auf einer Umgebung angewendet werden kann.
+ *@param Field mStart Der Startpunkt auf der Umgebung
+ *@param Field mGoal Der Zielknoten auf der Umgebung
+ *@param Field[][] mMap Ein Zweidimensionales Array, dass eine Map darstellen soll.
+ */
 public class UninformedSearch
 {
 	private Field mStart;
@@ -132,7 +138,7 @@ public class UninformedSearch
 	/**
 	 * Prüft, ob ein Feld nicht begehbar ist
 	 * @param field
-	 * @return
+	 * @return true or false
 	 */
 	private boolean isBlocked(Field field)
 	{

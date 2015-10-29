@@ -36,36 +36,51 @@ public class Field
 		mType = type;
 	}
 
+	/**
+	 *  Gibt die X-Koordinate zurück
+	 */
 	public int getX()
 	{
 		return mX;
 	}
-
+	/**
+     *  Gibt die Y-Koordinate zurück
+     */
 	public int getY()
 	{
 		return mY;
 	}
-
+	/**
+     *  Gibt den Zustand eines Feldes zurück
+     */
 	public FieldType getType()
 	{
 		return mType;
 	}
-
+	/**
+     *  Gibt zurück ob ein Feld bereits besucht wurde
+     */
 	public boolean isVisisted()
 	{
 		return mVisited;
 	}
-
+	/**
+     *  Setzt ein Feld als schon besucht.
+     */
 	public void setVisited()
 	{
 		mVisited = true;
 	}
-
+	/**
+     *  Setzt den Vorgänger des aktuellen Feldes
+     */
 	public void setParent(Field parent)
 	{
 		mParent = parent;
 	}
-
+	/**
+     *  Gibt den Vorgänger des aktuellen Feldes zurück
+     */
 	public Field getParent()
 	{
 		return mParent;
@@ -74,7 +89,7 @@ public class Field
 	/**
 	 * Wandelt ein char in ein FieldType um
 	 * @param field
-	 * @return
+	 * @return FieldType
 	 */
 	public static FieldType charToField(char field)
 	{
@@ -97,7 +112,7 @@ public class Field
 	/**
 	 * Wandelt FieldType in einen char um
 	 * @param field
-	 * @return
+	 * @return char
 	 */
 	public static char fieldToChar(FieldType field)
 	{
