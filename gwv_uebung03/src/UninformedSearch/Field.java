@@ -1,12 +1,19 @@
 package UninformedSearch;
 
-
+/**
+ * Die Klasse Field erstellt ein neues Field
+ * @param int mX X-Koordinate
+ * @param int mY Y-Koordiante
+ * @param FieldType mType Gibt den Zustand des Feldes an
+ * @param Field mParent Feld von dem das aktuelle Feld erreicht wurde
+ * @param boolean mVisited Gibt an ob das Feld bereits besucht wurde
+ */
 public class Field
 {
 	private int mX;
 	private int mY;
 	private FieldType mType; 
-	private Field mParent; // Feld von dem dieses Feld erreicht wurde
+	private Field mParent; 
 	private boolean mVisited;
 
 	/**
