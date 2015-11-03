@@ -15,8 +15,6 @@ public class AStar
         _heuristic = heuristic;
         _start = start;
         _goal = goal;
-        closed = new ArrayList();
-        open = new ArrayList();
                 
     }
     
