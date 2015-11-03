@@ -1,4 +1,3 @@
-package UninformedSearch;
 
 
 import java.util.ArrayList;

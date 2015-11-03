@@ -1,4 +1,3 @@
-package UninformedSearch;
 
 /**
  * Die Klasse Field erstellt ein neues Field
