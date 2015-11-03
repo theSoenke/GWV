@@ -8,8 +8,6 @@ public class AStar
     private AStarHeuristic _heuristic;
     private Field _start;
     private Field _goal;
-    private ArrayList closed; // Die Felder die schon durchsucht wurden
-    private ArrayList open; // Die Felder die noch nicht durchsucht wurden
 
     public AStar(Field[][] map, AStarHeuristic heuristic, Field start, Field goal)
     {
