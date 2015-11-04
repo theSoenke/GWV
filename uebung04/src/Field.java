@@ -1,6 +1,6 @@
 package Search;
 
-
+import Search.Field.FieldType;
 
 /**
  * Die Klasse Field erstellt ein neues Field
@@ -12,11 +12,14 @@ package Search;
  */
 public class Field
 {
-    private int mX;
-    private int mY;
+    protected int mX;
+    protected int mY;
     private FieldType mType; 
-    private Field mParent; 
+    protected float cost;
+    protected float heuristic;
+    protected Field mParent; 
     private boolean mVisited;
+    protected int depth;
 
     /**
      * Art des Feldes
@@ -76,9 +79,12 @@ public class Field
     /**
      *  Setzt den Vorgänger des aktuellen Feldes
      */
-    public void setParent(Field parent)
-    {
+    public int setParent(Field parent)
+    { 
+        depth = parent.depth + 1;
         mParent = parent;
+        
+        return depth;
     }
     /**
      *  Gibt den Vorgänger des aktuellen Feldes zurück
@@ -141,6 +147,28 @@ public class Field
         else
         {
             return ' ';
+        }
+    }
+
+    
+    public int compareTo(Object o)
+    {
+        Field field = (Field) o;
+        
+        float c= heuristic + cost;
+        float fieldc= field.heuristic + field.cost;
+        
+        if(c < fieldc)
+        {
+            return -1;
+        }
+        else if(c > fieldc)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
         }
     }
 }
