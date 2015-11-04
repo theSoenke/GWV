@@ -1,222 +1,177 @@
 package Search;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import Search.Field.FieldType;
 
-public class AStar
+/**
+ * Die Klasse Field erstellt ein neues Field
+ * @param int mX X-Koordinate
+ * @param int mY Y-Koordiante
+ * @param FieldType mType Gibt den Zustand des Feldes an
+ * @param Field mParent Feld von dem das aktuelle Feld erreicht wurde
+ * @param boolean mVisited Gibt an ob das Feld bereits besucht wurde
+ */
+public class Field
 {
-    private Field[][] _map;
-    private Field _start;
-    private Field _goal;
-    private ArrayList<Field> closed; // Die Felder die schon durchsucht wurden
-    private SortedList open; // Die Felder die noch nicht durchsucht wurden
-    private int _maxSearchDistance;
+    protected int mX;
+    protected int mY;
+    private FieldType mType; 
+    protected float cost;
+    protected float heuristic;
+    protected Field mParent; 
+    private boolean mVisited;
+    protected int depth;
+    protected Field[][] _map;
 
-    public AStar(Field[][] map, Field start, Field goal, int mSD)
+    /**
+     * Art des Feldes
+     */
+    public enum FieldType
     {
-        _map = map;
-        _start = start;
-        _goal = goal;
-        open = new SortedList();
-        closed = new ArrayList<Field>();
-        _maxSearchDistance = mSD;
-                
+        start, goal, blocked, empty, path
+    }
+
+    public Field(int x, int y, FieldType type)
+    {
+        mX = x;
+        mY = y;
+        mType = type;
     }
     
-    public String findShortestPath()
+    public Field(FieldType type)
     {
-        StringBuffer buffer = new StringBuffer();
-        start().cost = 0;
-        start().depth = 0;
-        closed.clear();
-        open.clear();
-        open.add(start());
-        
-        goal().mParent = null;
-        int maxDepth = 0;
-        
-        if(isBlocked(goal()))
-        {
-            return "Das Ziel ist von diesem Startpunkt nicht erreichbar!";
-        }
-        
-        while((maxDepth < _maxSearchDistance) && (open.size() != 0))
-        {
-            Field search = open.getFirst();
-            
-            if(search == goal())
-            {
-                return "42";
-            }
-            
-            open.remove(search);
-            closed.add(search);
-            
-            for(Field neighbor: getNeighbors(search))
-            {
-                boolean betterNeighbor;
-                if(closed.contains(neighbor))
-                {
-                    continue;
-                }
-                if(!isBlocked(neighbor))
-                {
-                    float stepCosts = (search.cost + getDistanceToGoal(search,neighbor));
-                    if(!open.contains(neighbor))
-                    {
-                        open.add(neighbor);
-                        betterNeighbor = true;
-                    }
-                    else if(stepCosts < search.cost)
-                    {
-                        betterNeighbor = true;
-                    }
-                    else
-                    {
-                        betterNeighbor = false;
-                    }
-                    
-                    if(betterNeighbor)
-                    {
-                        neighbor.setParent(search);
-                        neighbor.cost = stepCosts;
-                        neighbor.heuristic= getDistanceToGoal(neighbor,_goal);
-                        buffer.append(Field.fieldToChar(neighbor.getType()));
-                    }
-                }
-            }
-        }
-        
-        return "42";
+        mType = type;
     }
-    
-    
-    private List<Field> getNeighbors(Field field)
+
+    /**
+     *  Gibt die X-Koordinate zurück
+     */
+    public int getX()
     {
-        List<Field> neighbors = new ArrayList<Field>();
-
-        // check top
-        if (field.getY() > 0 && field.getX() < _map[0].length)
-        {
-            Field fieldTop = _map[field.getY() - 1][field.getX()];
-            if (!isBlocked(fieldTop) && !fieldTop.isVisisted())
-            {
-                fieldTop.setVisited();
-                neighbors.add(fieldTop);
-            }
-        }
-
-        // check right
-        if (field.getX() < _map[0].length - 1)
-        {
-            Field fieldRight =_map[field.getY()][field.getX() + 1];
-            if (!isBlocked(fieldRight) && !fieldRight.isVisisted())
-            {
-                fieldRight.setVisited();
-                neighbors.add(fieldRight);
-            }
-        }
-
-        // check bottom
-        if (field.getY() < _map.length - 1)
-        {
-            Field fieldBottom = _map[field.getY() + 1][field.getX()];
-            if (!isBlocked(fieldBottom) && !fieldBottom.isVisisted())
-            {
-                fieldBottom.setVisited();
-                neighbors.add(fieldBottom);
-            }
-        }
-
-        // check left
-        if (field.getX() > 0)
-        {
-            Field fieldLeft = _map[field.getY()][field.getX() - 1];
-            if (!isBlocked(fieldLeft) && !fieldLeft.isVisisted())
-            {
-                fieldLeft.setVisited();
-                neighbors.add(fieldLeft);
-            }
-        }
-
-        return neighbors;
+        return mX;
+    }
+    /**
+     *  Gibt die Y-Koordinate zurück
+     */
+    public int getY()
+    {
+        return mY;
+    }
+    /**
+     *  Gibt den Zustand eines Feldes zurück
+     */
+    public FieldType getType()
+    {
+        return mType;
+    }
+    /**
+     *  Gibt zurück ob ein Feld bereits besucht wurde
+     */
+    public boolean isVisisted()
+    {
+        return mVisited;
+    }
+    /**
+     *  Setzt ein Feld als schon besucht.
+     */
+    public void setVisited()
+    {
+        mVisited = true;
+    }
+    /**
+     *  Setzt den Vorgänger des aktuellen Feldes
+     */
+    public int setParent(Field parent)
+    { 
+        depth = parent.depth + 1;
+        mParent = parent;
+        
+        return depth;
+    }
+    /**
+     *  Gibt den Vorgänger des aktuellen Feldes zurück
+     */
+    public Field getParent()
+    {
+        return mParent;
     }
     
     /**
-     * Prüft, ob ein Feld nicht begehbar ist
+     * Wandelt ein char in ein FieldType um
      * @param field
-     * @return true or false
+     * @return FieldType
      */
-    private boolean isBlocked(Field field)
+    public static FieldType charToField(char field)
     {
-        return (field.getType() == Field.FieldType.blocked);
+        switch (field)
+        {
+        case ' ':
+            return FieldType.empty;
+        case 's':
+            return FieldType.start;
+        case 'g':
+            return FieldType.goal;
+        case 'x':
+            return FieldType.blocked;
+        default:
+            System.out.println("Field does not exist");
+            return FieldType.blocked;
+        }
+    }
+    
+    /**
+     * Wandelt FieldType in einen char um
+     * @param field
+     * @return char
+     */
+    public static char fieldToChar(FieldType field)
+    {
+        if(field == FieldType.empty)
+        {
+            return ' ';
+        }
+        else if(field == FieldType.blocked)
+        {
+            return 'x';
+        }
+        else if(field == FieldType.start)
+        {
+            return 's';
+        }
+        else if(field == FieldType.goal)
+        {
+            return 'g';
+        }
+        else if(field == FieldType.path)
+        {
+            return 'o';
+        }
+        else
+        {
+            return ' ';
+        }
     }
 
-
-   
-    private Field start()
+    
+    public int compareTo(Object o)
     {
-        return _map[_start.getX()][_start.getY()];
-    }
-    
-    
-    
-    private Field goal()
-    {
-        return _map[_goal.getX()][_goal.getY()];
-    }
-    
-    
-    
-    public float getDistanceToGoal(Field start, Field goal)
-    {
-        float distanceX = goal.getX() - start.getX();
-        float distanceY = goal.getY() - start.getY();
+        Field field = (Field) o;
         
-        float result = (float) (Math.sqrt((distanceX*distanceX)+(distanceY*distanceY)));
+        float c= heuristic + cost;
+        float fieldc= field.heuristic + field.cost;
         
-        return result;
+        if(c < fieldc)
+        {
+            return -1;
+        }
+        else if(c > fieldc)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
     }
     
-    
-    
-    
-    private class SortedList
-    {
-       private ArrayList<Field> list = new ArrayList<Field>();
-       
-       public Field getFirst()
-       {
-           return list.get(0);
-       }
-       
-       public void clear()
-       {
-           list.clear();
-       }
-       
-       public void add(Field o)
-       {
-           list.add(o);
-           Collections.sort(list);
-       }
-       
-       public void remove(Field o)
-       {
-           list.remove(o);
-       }
-       
-       public int size()
-       {
-           return list.size();
-       }
-       
-       public boolean contains(Field o)
-       {
-           return list.contains(o);
-       }
-    }
-    
+  
 }
-
