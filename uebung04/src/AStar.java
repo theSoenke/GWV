@@ -7,84 +7,180 @@ import java.util.List;
 public class AStar
 {
     private Field[][] _map;
-    private AStarHeuristic _heuristic;
     private Field _start;
     private Field _goal;
     private ArrayList<Field> closed; // Die Felder die schon durchsucht wurden
     private SortedList open; // Die Felder die noch nicht durchsucht wurden
     private int _maxSearchDistance;
 
-    public AStar(Field[][] map, AStarHeuristic heuristic, Field start, Field goal, int mSD)
+    public AStar(Field[][] map, Field start, Field goal, int mSD)
     {
         _map = map;
-        _heuristic = heuristic;
         _start = start;
         _goal = goal;
-        closed = new ArrayList<Field>();
         open = new SortedList();
+        closed = new ArrayList<Field>();
         _maxSearchDistance = mSD;
                 
     }
     
-    public String findPath()
+    public String findShortestPath()
     {
+        StringBuffer buffer = new StringBuffer();
         start().cost = 0;
         start().depth = 0;
         closed.clear();
         open.clear();
-        open.add( _map[_start.getX()][_start.getY()]);
+        open.add(start());
         
         goal().mParent = null;
         int maxDepth = 0;
         
-        if(goalBlocked())
+        if(isBlocked(goal()))
         {
             return "Das Ziel ist von diesem Startpunkt nicht erreichbar!";
         }
+        
         while((maxDepth < _maxSearchDistance) && (open.size() != 0))
         {
             Field search = open.getFirst();
+            
             if(search == goal())
             {
-                break;
+                return "42";
             }
             
             open.remove(search);
             closed.add(search);
             
-            for(int x=-1;x<2;x++)
+            for(Field neighbor: getNeighbors(search))
             {
-                for(int y=-1;y<2;y++)
+                boolean betterNeighbor;
+                if(closed.contains(neighbor))
                 {
-                    if((x != 0) && (y != 0))
+                    continue;
+                }
+                if(!isBlocked(neighbor))
+                {
+                    float stepCosts = (search.cost + getDistanceToGoal(search,neighbor));
+                    if(!open.contains(neighbor))
                     {
-                        continue;
+                        open.add(neighbor);
+                        betterNeighbor = true;
+                    }
+                    else if(stepCosts < search.cost)
+                    {
+                        betterNeighbor = true;
+                    }
+                    else
+                    {
+                        betterNeighbor = false;
                     }
                     
-                    int xp = x + search.mX;
-                    int yp = y + search.mY;
+                    if(betterNeighbor)
+                    {
+                        neighbor.setParent(search);
+                        neighbor.cost = stepCosts;
+                        neighbor.heuristic= getDistanceToGoal(neighbor,_goal);
+                        buffer.append(Field.fieldToChar(neighbor.getType()));
+                    }
                 }
             }
-            
         }
-       
         
+        return buffer.toString;
+    }
+    
+    
+    private List<Field> getNeighbors(Field field)
+    {
+        List<Field> neighbors = new ArrayList<Field>();
+
+        // check top
+        if (field.getY() > 0 && field.getX() < _map[0].length)
+        {
+            Field fieldTop = _map[field.getY() - 1][field.getX()];
+            if (!isBlocked(fieldTop) && !fieldTop.isVisisted())
+            {
+                fieldTop.setVisited();
+                neighbors.add(fieldTop);
+            }
+        }
+
+        // check right
+        if (field.getX() < _map[0].length - 1)
+        {
+            Field fieldRight =_map[field.getY()][field.getX() + 1];
+            if (!isBlocked(fieldRight) && !fieldRight.isVisisted())
+            {
+                fieldRight.setVisited();
+                neighbors.add(fieldRight);
+            }
+        }
+
+        // check bottom
+        if (field.getY() < _map.length - 1)
+        {
+            Field fieldBottom = _map[field.getY() + 1][field.getX()];
+            if (!isBlocked(fieldBottom) && !fieldBottom.isVisisted())
+            {
+                fieldBottom.setVisited();
+                neighbors.add(fieldBottom);
+            }
+        }
+
+        // check left
+        if (field.getX() > 0)
+        {
+            Field fieldLeft = _map[field.getY()][field.getX() - 1];
+            if (!isBlocked(fieldLeft) && !fieldLeft.isVisisted())
+            {
+                fieldLeft.setVisited();
+                neighbors.add(fieldLeft);
+            }
+        }
+
+        return neighbors;
+    }
+    
+    /**
+     * Prüft, ob ein Feld nicht begehbar ist
+     * @param field
+     * @return true or false
+     */
+    private boolean isBlocked(Field field)
+    {
+        return (field.getType() == Field.FieldType.blocked);
     }
 
-    private boolean goalBlocked()
-    {
-        // TODO Auto-generated method stub
-        return false;
-    }
+
+   
     private Field start()
     {
         return _map[_start.getX()][_start.getY()];
     }
     
+    
+    
     private Field goal()
     {
         return _map[_goal.getX()][_goal.getY()];
     }
+    
+    
+    
+    public float getDistanceToGoal(Field start, Field goal)
+    {
+        float distanceX = goal.getX() - start.getX();
+        float distanceY = goal.getY() - start.getY();
+        
+        float result = (float) (Math.sqrt((distanceX*distanceX)+(distanceY*distanceY)));
+        
+        return result;
+    }
+    
+    
+    
     
     private class SortedList
     {
