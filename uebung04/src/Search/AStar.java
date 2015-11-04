@@ -88,7 +88,7 @@ public class AStar
             }
         }
         
-        return buffer.toString;
+        return buffer.toString();
     }
     
     
