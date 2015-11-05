@@ -19,15 +19,15 @@ import java.util.List;
  */
 public class Field implements Comparable<Field>
 {
-	protected int _x;
-	protected int _y;
+	private int _x;
+	private int _y;
 	private FieldType _type;
-	protected Field _parent;
-	protected int _depth;
+	private Field _parent;
+	private int _depth;
 	private List<Field> _neighbors;
 	private boolean _visited;
+	private Field _teleport;
 	public static Field _goal;
-	public Field _teleport;
 
 	/**
 	 * Art des Feldes
@@ -236,7 +236,7 @@ public class Field implements Comparable<Field>
 	public int compareTo(Field field)
 	{
 		float c = _depth + getHeuristic();
-		;
+		
 		float fieldc = field._depth + field.getHeuristic();
 
 		if (c < fieldc)
