@@ -140,7 +140,7 @@ public class Field implements Comparable<Field>
 		float distanceY = _goal.getY() - getY();
 		float result = (float) (Math.sqrt((distanceX * distanceX) + (distanceY * distanceY)));
 		
-		if(_type == FieldType.teleport1 || _type == FieldType.teleport2)
+		if(_teleport != null && (_type == FieldType.teleport1 || _type == FieldType.teleport2))
 		{
 			float distanceXTeleport = _goal.getX() - _teleport.getX();
 			float distanceYTeleport = _goal.getY() - _teleport.getY();

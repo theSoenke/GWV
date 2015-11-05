@@ -36,11 +36,6 @@ public class AStar
 		{
 			Field currentField = open.getFirst();
 
-			if (_closed.size() > 0)
-			{
-				currentField.setParent(_closed.get(_closed.size() - 1));
-			}
-
 			if (currentField.getType() == Field.FieldType.goal)
 			{
 				_closed.add(currentField);
@@ -52,6 +47,7 @@ public class AStar
 				if (!field.isVisited() && !open.contains(field))
 				{
 					open.add(field);
+					field.setParent(currentField);
 					field.setVisited();
 				}
 			}
@@ -69,13 +65,14 @@ public class AStar
 	 */
 	public void printPath()
 	{
-		for (Field field : _closed)
+		Field currentField = _goal.getParent();
+		
+		while(currentField.getType() != FieldType.start)
 		{
-			if (field.getType() != FieldType.goal && field.getType() != FieldType.start)
-			{
-				field.setAsPath();
-			}
+			currentField.setAsPath();
+			currentField = currentField.getParent();
 		}
+		
 
 		for (int y = 0; y < _map.size(); y++)
 		{
