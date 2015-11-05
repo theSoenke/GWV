@@ -4,163 +4,139 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 public class AStar
 {
-    private List<ArrayList<Field>> _map;
-    private Field _start;
-    private Field _goal;
-    private ArrayList<Field> closed; // Die Felder die schon durchsucht wurden
-    private SortedList open; // Die Felder die noch nicht durchsucht wurden
-    private int _maxSearchDistance;
+	private List<ArrayList<Field>> _map;
+	private List<Field> _path;
+	private Field _start;
+	private Field _goal;
 
-    public AStar(List<ArrayList<Field>> map, Field start, Field goal, int mSD)
-    {
-        _map = map;
-        _start = start;
-        _goal = goal;
-        open = new SortedList();
-        closed = new ArrayList<Field>();
-        _maxSearchDistance = mSD;
-    }
-    
-    public void findShortestPath()
-    {
-        _start.cost = 0;
-        _start.depth = 0;
-        closed.clear();
-        open.clear();
-        open.add(_start);
-        
-        _goal._parent = null;
-        int maxDepth = 0;
-        
-        
-        while((maxDepth < _maxSearchDistance) && (open.size() != 0))
-        {
-            Field search = open.getFirst();
-            
-            if(search.getType() == Field.FieldType.goal)
-            {
-                System.out.println("42");
-            }
-            
-            open.remove(search);
-            closed.add(search);
-            
-            for(Field neighbor: search.getNeighbors())
-            {
-                boolean betterNeighbor;
-                if(closed.contains(neighbor))
-                {
-                    continue;
-                }
-                if(!isBlocked(neighbor))
-                {
-                    float stepCosts = (search.cost + getDistanceToGoal(search,neighbor));
-                    if(!open.contains(neighbor))
-                    {
-                        open.add(neighbor);
-                        betterNeighbor = true;
-                    }
-                    else if(stepCosts < search.cost)
-                    {
-                        betterNeighbor = true;
-                    }
-                    else
-                    {
-                        betterNeighbor = false;
-                    }
-                    
-                    if(betterNeighbor)
-                    {
-                       
-                        neighbor.cost = stepCosts;
-                        neighbor.heuristic= getDistanceToGoal(neighbor,_goal);
-                        maxDepth= Math.max(maxDepth, neighbor.setParent(search));
-                    }
-                }
-            }
-        }
-    }
-    
-    public void printPath()
-    {
-        List<Field> path = new ArrayList<Field>();
+	public AStar(List<ArrayList<Field>> map, Field start, Field goal)
+	{
+		_map = map;
+		_start = start;
+		_goal = goal;
+	}
 
-        Field field = _goal;
-        while (field.getType() != Field.FieldType.start)
-        {
-            field = field.getParent();
-            path.add(field);
-        }
+	public void findShortestPath()
+	{
+		_start._cost = 0;
+		_start._depth = 0;
+		List<Field> closed = new ArrayList<Field>();
+		_path = new ArrayList<Field>();
 
-        Collections.reverse(path);
+		// Die Felder die noch nicht durchsucht wurden
+		SortedList open = new SortedList();
 
-        for (Field f : path)
-        {
-            System.out.println("Y: " + f.getY() + " X: " + f.getX());
-        }
-    }
-   
-    public float getDistanceToGoal(Field start, Field goal)
-    {
-        float distanceX = goal.getX() - start.getX();
-        float distanceY = goal.getY() - start.getY();
-        
-        float result = (float) (Math.sqrt((distanceX*distanceX)+(distanceY*distanceY)));
-        
-        return result;
-    }
-    
-    
-    
-    
-    private class SortedList
-    {
-       private ArrayList<Field> list = new ArrayList<Field>();
-       
-       public Field getFirst()
-       {
-           return list.get(0);
-       }
-       
-       public void clear()
-       {
-           list.clear();
-       }
-       
-       public void add(Field o)
-       {
-           list.add(o);
-           Collections.sort(list);
-       }
-       
-       public void remove(Field o)
-       {
-           list.remove(o);
-       }
-       
-       public int size()
-       {
-           return list.size();
-       }
-       
-       public boolean contains(Field o)
-       {
-           return list.contains(o);
-       }
-    }
-    
-    
-    /**
-     * Prüft, ob ein Feld nicht begehbar ist
-     * @param field
-     * @return true or false
-     */
-    private boolean isBlocked(Field field)
-    {
-        return (field.getType() == Field.FieldType.blocked);
-    }
+		open.add(_start);
+
+		int maxDepth = 0;
+
+		while (open.size() != 0)
+		{
+			Field currentField = open.getFirst();
+
+			if (currentField.getType() == Field.FieldType.goal)
+			{
+				return;
+			}
+
+			open.remove(currentField);
+			closed.add(currentField);
+			_path.add(currentField);
+
+			for (Field neighbor : currentField.getNeighbors())
+			{
+				boolean betterNeighbor;
+				if (closed.contains(neighbor))
+				{
+					continue;
+				}
+				float stepCosts = (currentField._cost + getDistanceToGoal(currentField, neighbor));
+				if (!open.contains(neighbor))
+				{
+					open.add(neighbor);
+					betterNeighbor = true;
+				}
+				else if (stepCosts < currentField._cost)
+				{
+					betterNeighbor = true;
+				}
+				else
+				{
+					betterNeighbor = false;
+				}
+
+				if (betterNeighbor)
+				{
+
+					neighbor._cost = stepCosts;
+					neighbor._heuristic = getDistanceToGoal(neighbor, _goal);
+					maxDepth = Math.max(maxDepth, neighbor.setParent(currentField));
+				}
+			}
+		}
+	}
+
+	public void printPath()
+	{
+		for (Field field : _path)
+		{
+			_map.get(field.getY()).get(field.getX()).setAsPath();
+		}
+
+		for (int y = 0; y < _map.size(); y++)
+		{
+			String line = "";
+
+			for (int x = 0; x < _map.get(0).size(); x++)
+			{
+				char character = _map.get(y).get(x).typeAsChar();
+				line += character;
+			}
+
+			System.out.println(line);
+		}
+	}
+
+	public float getDistanceToGoal(Field start, Field goal)
+	{
+		float distanceX = goal.getX() - start.getX();
+		float distanceY = goal.getY() - start.getY();
+
+		float result = (float) (Math.sqrt((distanceX * distanceX) + (distanceY * distanceY)));
+
+		return result;
+	}
+
+	private class SortedList
+	{
+		private ArrayList<Field> list = new ArrayList<Field>();
+
+		public Field getFirst()
+		{
+			return list.get(0);
+		}
+
+		public void add(Field o)
+		{
+			list.add(o);
+			Collections.sort(list);
+		}
+
+		public void remove(Field o)
+		{
+			list.remove(o);
+		}
+
+		public int size()
+		{
+			return list.size();
+		}
+
+		public boolean contains(Field o)
+		{
+			return list.contains(o);
+		}
+	}
 }
-
