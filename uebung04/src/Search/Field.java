@@ -10,7 +10,7 @@ import Search.Field.FieldType;
  * @param Field mParent Feld von dem das aktuelle Feld erreicht wurde
  * @param boolean mVisited Gibt an ob das Feld bereits besucht wurde
  */
-public class Field
+public class Field implements Comparable<Field>
 {
     protected int mX;
     protected int mY;
@@ -151,10 +151,10 @@ public class Field
         }
     }
 
-    
-    public int compareTo(Object o)
+    @Override
+    public int compareTo(Field o)
     {
-        Field field = (Field) o;
+        Field field =  o;
         
         float c= heuristic + cost;
         float fieldc= field.heuristic + field.cost;
@@ -172,6 +172,8 @@ public class Field
             return 0;
         }
     }
+
+ 
     
   
 }

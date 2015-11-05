@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import src.Field;
+
 public class AStar
 {
     private Field[][] _map;
@@ -79,9 +81,10 @@ public class AStar
                     
                     if(betterNeighbor)
                     {
-                        neighbor.setParent(search);
+                       
                         neighbor.cost = stepCosts;
                         neighbor.heuristic= getDistanceToGoal(neighbor,_goal);
+                        maxDepth= Math.max(maxDepth, neighbor.setParent(search));
                         buffer.append(Field.fieldToChar(neighbor.getType()));
                     }
                 }
@@ -91,69 +94,24 @@ public class AStar
         return buffer.toString();
     }
     
-    
-    private List<Field> getNeighbors(Field field)
+    public void printPath()
     {
-        List<Field> neighbors = new ArrayList<Field>();
+        List<Field> path = new ArrayList<Field>();
 
-        // check top
-        if (field.getY() > 0 && field.getX() < _map[0].length)
+        Field field = _goal;
+        while (field.getType() != Field.FieldType.start)
         {
-            Field fieldTop = _map[field.getY() - 1][field.getX()];
-            if (!isBlocked(fieldTop) && !fieldTop.isVisisted())
-            {
-                fieldTop.setVisited();
-                neighbors.add(fieldTop);
-            }
+            field = field.getParent();
+            path.add(field);
         }
 
-        // check right
-        if (field.getX() < _map[0].length - 1)
-        {
-            Field fieldRight =_map[field.getY()][field.getX() + 1];
-            if (!isBlocked(fieldRight) && !fieldRight.isVisisted())
-            {
-                fieldRight.setVisited();
-                neighbors.add(fieldRight);
-            }
-        }
+        Collections.reverse(path);
 
-        // check bottom
-        if (field.getY() < _map.length - 1)
+        for (Field f : path)
         {
-            Field fieldBottom = _map[field.getY() + 1][field.getX()];
-            if (!isBlocked(fieldBottom) && !fieldBottom.isVisisted())
-            {
-                fieldBottom.setVisited();
-                neighbors.add(fieldBottom);
-            }
+            System.out.println("Y: " + f.getY() + " X: " + f.getX());
         }
-
-        // check left
-        if (field.getX() > 0)
-        {
-            Field fieldLeft = _map[field.getY()][field.getX() - 1];
-            if (!isBlocked(fieldLeft) && !fieldLeft.isVisisted())
-            {
-                fieldLeft.setVisited();
-                neighbors.add(fieldLeft);
-            }
-        }
-
-        return neighbors;
     }
-    
-    /**
-     * Prüft, ob ein Feld nicht begehbar ist
-     * @param field
-     * @return true or false
-     */
-    private boolean isBlocked(Field field)
-    {
-        return (field.getType() == Field.FieldType.blocked);
-    }
-
-
    
     private Field start()
     {
