@@ -25,6 +25,7 @@ public class Field implements Comparable<Field>
 	protected Field _parent;
 	protected int _depth;
 	private List<Field> _neighbors;
+	private boolean _visited;
 	public static Field _goal;
 
 	/**
@@ -90,7 +91,17 @@ public class Field implements Comparable<Field>
 	{
 		return _parent;
 	}
+	
+	public void setVisited()
+	{
+		_visited = true;
+	}
 
+	public boolean isVisited()
+	{
+		return _visited;
+	}
+	
 	public void addNeighbor(Field neighbor)
 	{
 		_neighbors.add(neighbor);

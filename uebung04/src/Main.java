@@ -20,7 +20,7 @@ public class Main
 
 	public Main()
 	{
-		readLevelFile("blatt3_environment.txt");
+		readLevelFile("blatt4_environment_a.txt");
 		setNeighbors();
 
 		if (_start == null || _goal == null)
@@ -33,6 +33,7 @@ public class Main
 			AStar astar = new AStar(_map, _start, _goal);
 			astar.findShortestPath();
 			astar.printPath();
+			//astar.printPathByParent();
 		}
 	}
 

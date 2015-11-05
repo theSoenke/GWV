@@ -23,7 +23,7 @@ public class AStar
 
 	public void findShortestPath()
 	{
-		// Die Felder die noch nicht durchsucht wurden
+		// Die Felder, die noch nicht durchsucht wurden
 		SortedList open = new SortedList();
 
 		open.add(_start);
@@ -45,22 +45,25 @@ public class AStar
 
 			for (Field field : currentField.getNeighbors())
 			{
-				if (!open.contains(field))
+				if (!field.isVisited() && !open.contains(field))
 				{
 					open.add(field);
+					field.setVisited();
 				}
 			}
 
 			open.remove(currentField);
 			_closed.add(currentField);
 		}
+		
+		System.out.println("Es existiert kein Weg zum Ziel");
 	}
 
 	public void printPath()
 	{
 		for (Field field : _closed)
 		{
-			if(field.getType() != FieldType.goal && field.getType() != FieldType.start)
+			if (field.getType() != FieldType.goal && field.getType() != FieldType.start)
 			{
 				field.setAsPath();
 			}
@@ -80,6 +83,29 @@ public class AStar
 		}
 	}
 
+	public void printPathByParent()
+	{
+		Field field = _goal.getParent();
+
+		while (field.getType() != FieldType.start)
+		{
+			field.setAsPath();
+			field = field.getParent();
+		}
+
+		for (int y = 0; y < _map.size(); y++)
+		{
+			String line = "";
+
+			for (int x = 0; x < _map.get(0).size(); x++)
+			{
+				char character = _map.get(y).get(x).typeAsChar();
+				line += character;
+			}
+
+			System.out.println(line);
+		}
+	}
 
 	private class SortedList
 	{
@@ -99,6 +125,11 @@ public class AStar
 		public void remove(Field o)
 		{
 			list.remove(o);
+		}
+		
+		public int size()
+		{
+			return list.size();
 		}
 
 		public boolean isEmpty()
