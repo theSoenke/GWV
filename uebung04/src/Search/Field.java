@@ -1,5 +1,7 @@
 package Search;
 
+import java.util.List;
+
 import Search.Field.FieldType;
 
 /**
@@ -21,6 +23,7 @@ public class Field implements Comparable<Field>
     private boolean mVisited;
     protected int depth;
     protected Field[][] _map;
+    private List<Field> _neighbors;
 
     /**
      * Art des Feldes
@@ -93,6 +96,16 @@ public class Field implements Comparable<Field>
     public Field getParent()
     {
         return mParent;
+    }
+    
+    public void addNeighbor(Field neighbor)
+    {
+    	_neighbors.add(neighbor);
+    }
+    
+    public List<Field> getNeighbors()
+    {
+    	return _neighbors;
     }
     
     /**

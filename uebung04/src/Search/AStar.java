@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import src.Field;
 
 public class AStar
 {
@@ -55,7 +54,7 @@ public class AStar
             open.remove(search);
             closed.add(search);
             
-            for(Field neighbor: getNeighbors(search))
+            for(Field neighbor: search.getNeighbors())
             {
                 boolean betterNeighbor;
                 if(closed.contains(neighbor))
@@ -176,5 +175,15 @@ public class AStar
        }
     }
     
+    
+    /**
+     * Prüft, ob ein Feld nicht begehbar ist
+     * @param field
+     * @return true or false
+     */
+    private boolean isBlocked(Field field)
+    {
+        return (field.getType() == Field.FieldType.blocked);
+    }
 }
 
