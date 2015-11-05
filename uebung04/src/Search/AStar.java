@@ -4,85 +4,66 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import Search.Field.FieldType;
+
 public class AStar
 {
 	private List<ArrayList<Field>> _map;
-	private List<Field> _path;
 	private Field _start;
 	private Field _goal;
+	private List<Field> _closed;
 
 	public AStar(List<ArrayList<Field>> map, Field start, Field goal)
 	{
 		_map = map;
 		_start = start;
 		_goal = goal;
+		_closed = new ArrayList<Field>();
 	}
 
 	public void findShortestPath()
 	{
-		_start._cost = 0;
-		_start._depth = 0;
-		List<Field> closed = new ArrayList<Field>();
-		_path = new ArrayList<Field>();
-
 		// Die Felder die noch nicht durchsucht wurden
 		SortedList open = new SortedList();
 
 		open.add(_start);
 
-		int maxDepth = 0;
-
-		while (open.size() != 0)
+		while (!open.isEmpty())
 		{
 			Field currentField = open.getFirst();
 
+			if (_closed.size() > 0)
+			{
+				currentField.setParent(_closed.get(_closed.size() - 1));
+			}
+
 			if (currentField.getType() == Field.FieldType.goal)
 			{
+				_closed.add(currentField);
 				return;
 			}
 
-			open.remove(currentField);
-			closed.add(currentField);
-			_path.add(currentField);
-
-			for (Field neighbor : currentField.getNeighbors())
+			for (Field field : currentField.getNeighbors())
 			{
-				boolean betterNeighbor;
-				if (closed.contains(neighbor))
+				if (!open.contains(field))
 				{
-					continue;
-				}
-				float stepCosts = (currentField._cost + getDistanceToGoal(currentField, neighbor));
-				if (!open.contains(neighbor))
-				{
-					open.add(neighbor);
-					betterNeighbor = true;
-				}
-				else if (stepCosts < currentField._cost)
-				{
-					betterNeighbor = true;
-				}
-				else
-				{
-					betterNeighbor = false;
-				}
-
-				if (betterNeighbor)
-				{
-
-					neighbor._cost = stepCosts;
-					neighbor._heuristic = getDistanceToGoal(neighbor, _goal);
-					maxDepth = Math.max(maxDepth, neighbor.setParent(currentField));
+					open.add(field);
 				}
 			}
+
+			open.remove(currentField);
+			_closed.add(currentField);
 		}
 	}
 
 	public void printPath()
 	{
-		for (Field field : _path)
+		for (Field field : _closed)
 		{
-			_map.get(field.getY()).get(field.getX()).setAsPath();
+			if(field.getType() != FieldType.goal && field.getType() != FieldType.start)
+			{
+				field.setAsPath();
+			}
 		}
 
 		for (int y = 0; y < _map.size(); y++)
@@ -99,15 +80,6 @@ public class AStar
 		}
 	}
 
-	public float getDistanceToGoal(Field start, Field goal)
-	{
-		float distanceX = goal.getX() - start.getX();
-		float distanceY = goal.getY() - start.getY();
-
-		float result = (float) (Math.sqrt((distanceX * distanceX) + (distanceY * distanceY)));
-
-		return result;
-	}
 
 	private class SortedList
 	{
@@ -129,9 +101,9 @@ public class AStar
 			list.remove(o);
 		}
 
-		public int size()
+		public boolean isEmpty()
 		{
-			return list.size();
+			return list.isEmpty();
 		}
 
 		public boolean contains(Field o)

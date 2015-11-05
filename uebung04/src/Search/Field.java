@@ -22,8 +22,6 @@ public class Field implements Comparable<Field>
 	protected int _x;
 	protected int _y;
 	private FieldType _type;
-	protected float _cost;
-	protected float _heuristic;
 	protected Field _parent;
 	protected int _depth;
 	private List<Field> _neighbors;
@@ -107,6 +105,16 @@ public class Field implements Comparable<Field>
 	{
 		_type = FieldType.path;
 	}
+	
+	public float getHeuristic()
+	{
+		float distanceX = _goal.getX() - getX();
+		float distanceY = _goal.getY() - getY();
+
+		float result = (float) (Math.sqrt((distanceX * distanceX) + (distanceY * distanceY)));
+
+		return result;
+	}
 
 	/**
 	 * Wandelt ein char in ein FieldType um
@@ -167,12 +175,11 @@ public class Field implements Comparable<Field>
 	}
 
 	@Override
-	public int compareTo(Field o)
+	public int compareTo(Field field)
 	{
-		Field field = o;
-
-		float c = _heuristic + _cost;
-		float fieldc = field._heuristic + field._cost;
+		float c = _depth + getHeuristic();
+		;
+		float fieldc = field._depth + field.getHeuristic();
 
 		if (c < fieldc)
 		{
