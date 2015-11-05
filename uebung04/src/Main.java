@@ -31,9 +31,11 @@ public class Main
 		{
 			Field._goal = _goal;
 			AStar astar = new AStar(_map, _start, _goal);
-			astar.findShortestPath();
-			astar.printPath();
-			//astar.printPathByParent();
+			if(astar.findShortestPath())
+			{
+				astar.printPath();
+				//astar.printPathByParent();
+			}
 		}
 	}
 

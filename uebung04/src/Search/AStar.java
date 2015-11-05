@@ -21,7 +21,7 @@ public class AStar
 		_closed = new ArrayList<Field>();
 	}
 
-	public void findShortestPath()
+	public boolean findShortestPath()
 	{
 		// Die Felder, die noch nicht durchsucht wurden
 		SortedList open = new SortedList();
@@ -40,7 +40,7 @@ public class AStar
 			if (currentField.getType() == Field.FieldType.goal)
 			{
 				_closed.add(currentField);
-				return;
+				return true;
 			}
 
 			for (Field field : currentField.getNeighbors())
@@ -56,7 +56,8 @@ public class AStar
 			_closed.add(currentField);
 		}
 		
-		System.out.println("Es existiert kein Weg zum Ziel");
+		System.out.println("Es existiert kein Pfad zum Ziel");
+		return false;
 	}
 
 	public void printPath()
@@ -127,11 +128,6 @@ public class AStar
 			list.remove(o);
 		}
 		
-		public int size()
-		{
-			return list.size();
-		}
-
 		public boolean isEmpty()
 		{
 			return list.isEmpty();
