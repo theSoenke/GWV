@@ -21,7 +21,35 @@ public class Main
 
 	public Main()
 	{
-		readLevelFile("blatt4_environment_b.txt");
+		processAllLevels();
+	}
+	
+	private void processAllLevels()
+	{
+		// figure1
+		readLevelFile("blatt3_environment.txt");
+		setNeighbors();
+
+		if (_start == null || _goal == null)
+		{
+			System.out.println("Start oder Ziel nicht gefunden");
+		}
+		else
+		{
+			Field._goal = _goal;
+			AStar astar = new AStar(_map, _start, _goal);
+			if(astar.findShortestPath())
+			{
+				System.out.println("Figure1");
+				astar.printPath();
+			}
+		}
+		System.out.println("\n");
+
+		
+		//figure2
+		System.out.println("Figure2");
+		readLevelFile("blatt4_environment_a.txt");
 		setNeighbors();
 
 		if (_start == null || _goal == null)
@@ -35,11 +63,36 @@ public class Main
 			if(astar.findShortestPath())
 			{
 				astar.printPath();
-				//astar.printPathByParent();
 			}
 		}
+		System.out.println("\n");
+		
+		
+		//figure3
+		readLevelFile("blatt4_environment_b.txt");
+		setNeighbors();
+
+		if (_start == null || _goal == null)
+		{
+			System.out.println("Start oder Ziel nicht gefunden");
+		}
+		else
+		{
+			Field._goal = _goal;
+			AStar astar = new AStar(_map, _start, _goal);
+			if(astar.findShortestPath())
+			{
+				System.out.println("Figure3");
+				astar.printPath();
+			}
+		}
+		System.out.println("\n");
 	}
 
+	/**
+	 * Liest eine Level datei ein
+	 * @param path
+	 */
 	private void readLevelFile(String path)
 	{
 		List<ArrayList<Field>> map = new ArrayList<ArrayList<Field>>();
@@ -50,9 +103,12 @@ public class Main
 		Field teleport2 = null;
 
 		StringBuffer content = new StringBuffer();
-		try (FileReader file = new FileReader(filePath))
+		FileReader fileReader = null;
+		
+		try 
 		{
-			BufferedReader reader = new BufferedReader(file);
+			fileReader = new FileReader(filePath);
+			BufferedReader reader = new BufferedReader(fileReader);
 			String line;
 
 			int y = 0;
@@ -115,6 +171,9 @@ public class Main
 		_map = map;
 	}
 
+	/*
+	 * Erzeugt eines Graphen des Levels
+	 */
 	private void setNeighbors()
 	{
 		for (int y = 0; y < _map.size(); y++)

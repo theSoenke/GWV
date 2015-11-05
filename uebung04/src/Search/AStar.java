@@ -21,6 +21,10 @@ public class AStar
 		_closed = new ArrayList<Field>();
 	}
 
+	/**
+	 * Sucht den kürzesten Pfad mittels A*
+	 * @return
+	 */
 	public boolean findShortestPath()
 	{
 		// Die Felder, die noch nicht durchsucht wurden
@@ -60,6 +64,9 @@ public class AStar
 		return false;
 	}
 
+	/**
+	 * Gibt den Pfad der besuchten Felder aus
+	 */
 	public void printPath()
 	{
 		for (Field field : _closed)
@@ -84,30 +91,10 @@ public class AStar
 		}
 	}
 
-	public void printPathByParent()
-	{
-		Field field = _goal.getParent();
-
-		while (field.getType() != FieldType.start)
-		{
-			field.setAsPath();
-			field = field.getParent();
-		}
-
-		for (int y = 0; y < _map.size(); y++)
-		{
-			String line = "";
-
-			for (int x = 0; x < _map.get(0).size(); x++)
-			{
-				char character = _map.get(y).get(x).typeAsChar();
-				line += character;
-			}
-
-			System.out.println(line);
-		}
-	}
-
+	/**
+	 * Elemente in dieser Liste werden nach ihren Kosten und der heuristischen Entfernung sortiert
+	 *
+	 */
 	private class SortedList
 	{
 		private ArrayList<Field> list = new ArrayList<Field>();

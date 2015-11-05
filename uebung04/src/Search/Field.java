@@ -107,7 +107,11 @@ public class Field implements Comparable<Field>
 	{
 		return _visited;
 	}
-	
+
+	/**
+	 * Fügt einen Nachbarfeld hinzu, der von diesem Knoten erreicht werden kann
+	 * @param neighbor
+	 */
 	public void addNeighbor(Field neighbor)
 	{
 		_neighbors.add(neighbor);
@@ -118,11 +122,18 @@ public class Field implements Comparable<Field>
 		return _neighbors;
 	}
 
+	/**
+	 * Setzt den Typ des Feldes auf path
+	 */
 	public void setAsPath()
 	{
 		_type = FieldType.path;
 	}
 	
+	/**
+	 * Berechnet einen heuristischen Wert für den Abstand im Ziel
+	 * @return
+	 */
 	public float getHeuristic()
 	{
 		float distanceX = _goal.getX() - getX();
