@@ -23,6 +23,16 @@ public class Main
 	{
 		readLevelFile("blatt4_environment_a.txt");
 		setNeighbors();
+		
+		if(_start == null || _goal == null)
+		{
+			System.out.println("Start oder Ziel exisitiert nicht");
+		}
+		else
+		{
+			AStar asStar = new AStar(_map, _start, _goal, 5);
+			asStar.printPath();
+		}
 	}
 	
 	private void readLevelFile(String path)
@@ -42,7 +52,7 @@ public class Main
 			{
 				content.append(line + "\n");
 				
-				map.add(new ArrayList(line.length()));
+				map.add(new ArrayList<Field>(line.length()));
 				
 				for(int x = 0; x < line.length(); x++)
 				{
@@ -82,7 +92,7 @@ public class Main
 		        if (field.getY() > 0 && field.getX() < _map.get(0).size())
 		        {
 		            Field fieldTop = _map.get(field.getY() - 1).get(field.getX());
-		            if (!isBlocked(fieldTop))
+		            if (fieldTop.getType() == Field.FieldType.empty)
 		            {
 		                field.addNeighbor(fieldTop);
 		            }
@@ -92,7 +102,7 @@ public class Main
 		        if (field.getX() < _map.get(0).size() - 1)
 		        {
 		            Field fieldRight =_map.get(field.getY()).get(field.getX() + 1);
-		            if (!isBlocked(fieldRight))
+		            if (fieldRight.getType() == Field.FieldType.empty)
 		            {
 		                field.addNeighbor(fieldRight);
 		            }
@@ -102,7 +112,7 @@ public class Main
 		        if (field.getY() < _map.size() - 1)
 		        {
 		            Field fieldBottom = _map.get(field.getY() + 1).get(field.getX());
-		            if (!isBlocked(fieldBottom))
+		            if (fieldBottom.getType() == Field.FieldType.empty)
 		            {
 		                field.addNeighbor(fieldBottom);
 		            }
@@ -112,7 +122,7 @@ public class Main
 		        if (field.getX() > 0)
 		        {
 		            Field fieldLeft = _map.get(field.getY()).get(field.getX() - 1);
-		            if (!isBlocked(fieldLeft))
+		            if (fieldLeft.getType() == Field.FieldType.empty)
 		            {
 		                field.addNeighbor(fieldLeft);
 		            }
@@ -120,14 +130,4 @@ public class Main
 			}
 		}
 	}
-	
-	   /**
-     * Prüft, ob ein Feld nicht begehbar ist
-     * @param field
-     * @return true or false
-     */
-    private boolean isBlocked(Field field)
-    {
-        return (field.getType() == Field.FieldType.blocked);
-    }
 }

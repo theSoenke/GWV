@@ -1,8 +1,7 @@
 package Search;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import Search.Field.FieldType;
 
 /**
  * Die Klasse Field erstellt ein neues Field
@@ -19,10 +18,8 @@ public class Field implements Comparable<Field>
     private FieldType mType; 
     protected float cost;
     protected float heuristic;
-    protected Field mParent; 
-    private boolean mVisited;
+    protected Field _parent; 
     protected int depth;
-    protected Field[][] _map;
     private List<Field> _neighbors;
 
     /**
@@ -38,6 +35,7 @@ public class Field implements Comparable<Field>
         mX = x;
         mY = y;
         mType = type;
+        _neighbors = new ArrayList<Field>();
     }
     
     public Field(FieldType type)
@@ -66,27 +64,14 @@ public class Field implements Comparable<Field>
     {
         return mType;
     }
-    /**
-     *  Gibt zurück ob ein Feld bereits besucht wurde
-     */
-    public boolean isVisisted()
-    {
-        return mVisited;
-    }
-    /**
-     *  Setzt ein Feld als schon besucht.
-     */
-    public void setVisited()
-    {
-        mVisited = true;
-    }
+
     /**
      *  Setzt den Vorgänger des aktuellen Feldes
      */
     public int setParent(Field parent)
     { 
         depth = parent.depth + 1;
-        mParent = parent;
+        _parent = parent;
         
         return depth;
     }
@@ -95,7 +80,7 @@ public class Field implements Comparable<Field>
      */
     public Field getParent()
     {
-        return mParent;
+        return _parent;
     }
     
     public void addNeighbor(Field neighbor)
@@ -185,8 +170,4 @@ public class Field implements Comparable<Field>
             return 0;
         }
     }
-
- 
-    
-  
 }

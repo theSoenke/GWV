@@ -7,14 +7,14 @@ import java.util.List;
 
 public class AStar
 {
-    private Field[][] _map;
+    private List<ArrayList<Field>> _map;
     private Field _start;
     private Field _goal;
     private ArrayList<Field> closed; // Die Felder die schon durchsucht wurden
     private SortedList open; // Die Felder die noch nicht durchsucht wurden
     private int _maxSearchDistance;
 
-    public AStar(Field[][] map, Field start, Field goal, int mSD)
+    public AStar(List<ArrayList<Field>> map, Field start, Field goal, int mSD)
     {
         _map = map;
         _start = start;
@@ -22,33 +22,27 @@ public class AStar
         open = new SortedList();
         closed = new ArrayList<Field>();
         _maxSearchDistance = mSD;
-                
     }
     
-    public String findShortestPath()
+    public void findShortestPath()
     {
-        StringBuffer buffer = new StringBuffer();
-        start().cost = 0;
-        start().depth = 0;
+        _start.cost = 0;
+        _start.depth = 0;
         closed.clear();
         open.clear();
-        open.add(start());
+        open.add(_start);
         
-        goal().mParent = null;
+        _goal._parent = null;
         int maxDepth = 0;
         
-        if(isBlocked(goal()))
-        {
-            return "Das Ziel ist von diesem Startpunkt nicht erreichbar!";
-        }
         
         while((maxDepth < _maxSearchDistance) && (open.size() != 0))
         {
             Field search = open.getFirst();
             
-            if(search == goal())
+            if(search.getType() == Field.FieldType.goal)
             {
-                return "42";
+                System.out.println("42");
             }
             
             open.remove(search);
@@ -84,13 +78,10 @@ public class AStar
                         neighbor.cost = stepCosts;
                         neighbor.heuristic= getDistanceToGoal(neighbor,_goal);
                         maxDepth= Math.max(maxDepth, neighbor.setParent(search));
-                        buffer.append(Field.fieldToChar(neighbor.getType()));
                     }
                 }
             }
         }
-        
-        return buffer.toString();
     }
     
     public void printPath()
@@ -112,20 +103,6 @@ public class AStar
         }
     }
    
-    private Field start()
-    {
-        return _map[_start.getX()][_start.getY()];
-    }
-    
-    
-    
-    private Field goal()
-    {
-        return _map[_goal.getX()][_goal.getY()];
-    }
-    
-    
-    
     public float getDistanceToGoal(Field start, Field goal)
     {
         float distanceX = goal.getX() - start.getX();
