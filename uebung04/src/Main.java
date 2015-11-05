@@ -6,6 +6,7 @@ import java.util.*;
 
 import Search.AStar;
 import Search.Field;
+import Search.Field.FieldType;
 
 public class Main
 {
@@ -20,7 +21,7 @@ public class Main
 
 	public Main()
 	{
-		readLevelFile("blatt4_environment_a.txt");
+		readLevelFile("blatt4_environment_b.txt");
 		setNeighbors();
 
 		if (_start == null || _goal == null)
@@ -44,6 +45,9 @@ public class Main
 		List<ArrayList<Field>> map = new ArrayList<ArrayList<Field>>();
 
 		File filePath = new File(path);
+		
+		Field teleport1 = null;
+		Field teleport2 = null;
 
 		StringBuffer content = new StringBuffer();
 		try (FileReader file = new FileReader(filePath))
@@ -71,6 +75,33 @@ public class Main
 					else if (type == Field.FieldType.goal)
 					{
 						_goal = field;
+					}
+					
+					// check for teleport fields
+					
+					if(field.getType() == FieldType.teleport1)
+					{
+						if(teleport1 == null)
+						{
+							teleport1 = field;
+						}
+						else
+						{
+							teleport1.addNeighbor(field);
+							teleport1.setTeleport(field);
+						}
+					}
+					else if(field.getType() == FieldType.teleport2)
+					{
+						if(teleport2 == null)
+						{
+							teleport2 = field;
+						}
+						else
+						{
+							teleport2.addNeighbor(field);
+							teleport2.setTeleport(field);
+						}
 					}
 				}
 				y++;
