@@ -66,13 +66,17 @@ public class MarkovChain
 	{
 		if(_words.containsKey(start))
 		{
+			StringBuffer buffer = new StringBuffer();
+			
 			Word word = _words.get(start);
 			
 			for(int i = 0; i < length; i++)
 			{
-				System.out.println(word.getWord());
+				buffer.append(word.getWord() + " ");
 				word = word.getSuccessor();
 			}
+			
+			System.out.println(buffer.toString());
 		}
 		else
 		{
