@@ -11,6 +11,7 @@ public class Main
 	public Main()
 	{
 		MarkovChain markowChain = new MarkovChain("heiseticker-text.txt");
-		markowChain.printSentence("Silicon", 20);
+		markowChain.printBigramSentence("Silicon", 20);
+		markowChain.printTrigramSentence("Silicon", 10);
 	}
 }

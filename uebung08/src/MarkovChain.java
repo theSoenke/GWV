@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MarkovChain 
 {
@@ -26,6 +28,7 @@ public class MarkovChain
 
 		FileReader fileReader = null;
 		BufferedReader reader = null;
+		List<Word> trigramList = new LinkedList<Word>();
 		
 		try 
 		{
@@ -50,7 +53,15 @@ public class MarkovChain
 				
 				if(predecessor != null)
 				{
-					predecessor.addNextWord(word);
+					predecessor.addBigram(word);
+				}
+				
+				trigramList.add(word);
+				
+				if(trigramList.size() == 3)
+				{
+					trigramList.get(0).addTrigram(trigramList.get(1), trigramList.get(2));
+					trigramList.remove(0);
 				}
 
 				predecessor = word;
@@ -62,7 +73,7 @@ public class MarkovChain
 		}
 	}
 	
-	public void printSentence(String start, int length)
+	public void printBigramSentence(String start, int length)
 	{
 		if(_words.containsKey(start))
 		{
@@ -74,6 +85,29 @@ public class MarkovChain
 			{
 				buffer.append(word.getWord() + " ");
 				word = word.getNextState();
+			}
+			
+			System.out.println(buffer.toString());
+		}
+		else
+		{
+			System.out.println("Word does not exist");
+		}
+	}
+	
+	public void printTrigramSentence(String start, int length)
+	{
+		if(_words.containsKey(start))
+		{
+			StringBuffer buffer = new StringBuffer(start + " ");
+			
+			Word word = _words.get(start);
+			
+			for(int i = 0; i < length; i++)
+			{
+				List<Word> trigram = word.getNextTrigramState();
+				word = trigram.get(1);
+				buffer.append(trigram.get(0).getWord() + " " + trigram.get(1).getWord() + " ");
 			}
 			
 			System.out.println(buffer.toString());
