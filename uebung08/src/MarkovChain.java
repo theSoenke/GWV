@@ -73,7 +73,7 @@ public class MarkovChain
 			for(int i = 0; i < length; i++)
 			{
 				buffer.append(word.getWord() + " ");
-				word = word.getSuccessor();
+				word = word.getNextState();
 			}
 			
 			System.out.println(buffer.toString());

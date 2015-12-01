@@ -32,10 +32,10 @@ public class Word
 		}
 	}
 	
-	public Word getSuccessor()
+	public Word getNextState()
 	{
 		Iterator<Entry<Word, Integer>> it = _probabilities.entrySet().iterator();
-		Word successor = null;
+		Word nextState = null;
 		int frequenzy = 0;
 		    
 		while (it.hasNext()) 
@@ -44,15 +44,16 @@ public class Word
 		      
 		    if(pair.getValue() >= frequenzy)
 		    {
-		     	successor = pair.getKey();
+		     	nextState = pair.getKey();
 		      	frequenzy = pair.getValue();
 		    }
-		    else if(successor == null)
+		    else if(nextState == null)
 		    {
-		    	successor = pair.getKey();
+		    	nextState = pair.getKey();
+		    	frequenzy = pair.getValue();
 		    }
 		}
 		
-		return successor;
+		return nextState;
 	}
 }
