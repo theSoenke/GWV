@@ -36,18 +36,24 @@ public class MarkovChain
 
 			while ((line = reader.readLine()) != null)
 			{
+				Word word = null;
 				
 				if(!_words.containsKey(line))
 				{
-					Word word = new Word(line);
+					word = new Word(line);
 					_words.put(line, word);
+				}
+				else
+				{
+					word = _words.get(line);
 				}
 				
 				if(predecessor != null)
 				{
-					Word word = _words.get(line);
 					predecessor.addNextWord(word);
 				}
+
+				predecessor = word;
 			}
 		}
 		catch (IOException e)

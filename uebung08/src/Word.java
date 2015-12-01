@@ -25,7 +25,6 @@ public class Word
 		{
 			int frequency = _probabilities.get(word);
 			_probabilities.put(word, ++frequency);
-			System.out.println(frequency);
 		}
 		else
 		{
