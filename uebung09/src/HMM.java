@@ -7,18 +7,19 @@ import java.util.HashMap;
 public class HMM
 {
 	private HashMap<String, Word> _words;
+	private HashMap<String, Tag> _tags;
 
 	public HMM(String path)
 	{
 		_words = new HashMap<String, Word>();
+		_tags = new HashMap<String, Tag>();
+
 		readTextFile(path);
 		System.out.println("Unique words: " + _words.size());
 	}
 
 	/**
 	 * Liest die Textdatei ein
-	 * 
-	 * @param path
 	 */
 	private void readTextFile(String path)
 	{
@@ -32,13 +33,13 @@ public class HMM
 		{
 			fileReader = new FileReader(filePath);
 			reader = new BufferedReader(fileReader);
-			Word predecessor = null;
+			Word word;
+			Tag tag;
+			Tag predecessor = null;
 			String line;
 
 			while ((line = reader.readLine()) != null)
 			{
-				Word word = null;
-
 				if (!line.isEmpty())
 				{
 					line = new StringBuilder(line).reverse().toString();
@@ -49,33 +50,60 @@ public class HMM
 					String tagStr = new StringBuilder(splittedLine[0]).reverse().toString();
 
 					word = new Word(wordStr);
+					tag = new Tag(tagStr);
 
-					if (!_words.containsKey(line))
+					if (predecessor != null)
 					{
-						_words.put(wordStr, word);
-						predecessor = word;
+						tag.addPreceseccor(predecessor);
 					}
-					else
-					{
-						word = _words.get(line);
-					}
-					word.addBigram(tagStr);
+
+					predecessor = tag;
+					trainHMM(word, tag);
 				}
 				else
 				{
 					predecessor = null;
 				}
-
-				if (predecessor != null)
-				{
-				}
-
-				predecessor = word;
 			}
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	private void trainHMM(Word word, Tag tag)
+	{
+		if (!_words.containsKey(word.getWord()))
+		{
+			_words.put(word.getWord(), word);
+		}
+		else
+		{
+			word = _words.get(word.getWord());
+		}
+
+		if (!_tags.containsKey(tag.getTag()))
+		{
+			_tags.put(tag.getTag(), tag);
+		}
+		else
+		{
+			tag = _tags.get(tag.getTag());
+		}
+
+		word.addTag(tag);
+		tag.addEmmission(word);
+	}
+
+	/**
+	 * Returns probability for transmission between two tags
+	 */
+	public double getTransmissionProbability(Tag tag1, Tag tag2)
+	{
+		int size = tag1.getNumTransmission();
+		int frequenzy = tag1.getFrequenzyOfTransmissions(tag2);
+
+		return (double) size / (double) frequenzy;
 	}
 }
