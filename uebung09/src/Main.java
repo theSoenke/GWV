@@ -9,7 +9,8 @@ public class Main
 
 	public Main()
 	{
-		POSTagger tagger = new POSTagger("hdt-1-10000-train.tags");
-		tagger.printBigramSentence("Silicon");
+		HMM hmm = new HMM("hdt-1-10000-train.tags");
+		Viterbi viterbi = new Viterbi(hmm);
+		viterbi.mostLikelySequence("Silicon");
 	}
 }

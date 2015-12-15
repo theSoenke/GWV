@@ -4,11 +4,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class POSTagger
+public class HMM
 {
 	private HashMap<String, Word> _words;
 
-	public POSTagger(String path)
+	public HMM(String path)
 	{
 		_words = new HashMap<String, Word>();
 		readTextFile(path);
@@ -78,10 +78,4 @@ public class POSTagger
 			e.printStackTrace();
 		}
 	}
-
-	public void printBigramSentence(String sentence)
-	{
-		// TO-DO Satz taggen
-	}
-
 }
