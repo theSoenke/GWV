@@ -3,8 +3,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 public class POSTagger
 {
@@ -28,7 +26,7 @@ public class POSTagger
 
 		FileReader fileReader = null;
 		BufferedReader reader = null;
-		String[] array = new String[2];
+		String[] splittedLine = new String[2];
 
 		try
 		{
@@ -43,59 +41,25 @@ public class POSTagger
 
 				if (!line.isEmpty())
 				{
-
+					line = new StringBuilder(line).reverse().toString();
 					// split in word and Tag
-					array = line.split("\\s+", 2);
-					// split altering for whitespace words just as "New York"
-					if (array[1].matches("\\w*\\S*\\w*\\s+\\w*"))
-					{
-						String[] step;
-						step = array[1].toString().split("\\s+");
-						array[0] = array[0] + " " + step[0];
-						array[1] = step[1];
-					}
+					splittedLine = line.split("\\s", 2);
 
-					// split altering for 2 whitespace words just as "Wall
-					// Street Trader"
-					else
-						if (array[1].matches("\\w*\\S*\\w*\\s+\\w*\\S*\\w*\\s+\\w*"))
-						{
-							String[] step;
-							step = array[1].toString().split("\\s+", 2);
-							array[0] = array[0] + " " + step[0];
-							array[1] = step[1];
-							if (array[1].matches("\\w*\\S*\\w*\\s+\\w*"))
-							{
-								String[] step2;
-								step2 = array[1].toString().split("\\s+");
-								array[0] = array[0] + " " + step2[0];
-								array[1] = step2[1];
-							}
-						}
-					// change all signs to $
-					if (array[1].matches("(.*)\\p{Punct}"))
-					{
-						array[1] = "$";
-					}
+					String wordStr = new StringBuilder(splittedLine[1]).reverse().toString();
+					String tagStr = new StringBuilder(splittedLine[0]).reverse().toString();
 
-					word = new Word(array[0]);
+					word = new Word(wordStr);
 
-					Tag tag = Tag.valueOf(array[1]);
 					if (!_words.containsKey(line))
 					{
-						if (tag == null)
-						{
-							System.out.println("Tag doesn't exist.");
-						}
-						_words.put(array[0], word);
+						_words.put(wordStr, word);
 						predecessor = word;
 					}
 					else
 					{
 						word = _words.get(line);
 					}
-					word.addBigram(tag);
-
+					word.addBigram(tagStr);
 				}
 				else
 				{

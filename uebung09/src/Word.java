@@ -7,12 +7,12 @@ import java.util.Map.Entry;
 public class Word
 {
 	private final String _word;
-	private HashMap<Tag, Integer> _bigrams;
+	private HashMap<String, Integer> _bigrams;
 
 	public Word(String word)
 	{
 		_word = word;
-		_bigrams = new HashMap<Tag, Integer>();
+		_bigrams = new HashMap<String, Integer>();
 	}
 
 	public String getWord()
@@ -20,7 +20,7 @@ public class Word
 		return _word;
 	}
 
-	public void addBigram(Tag tag)
+	public void addBigram(String tag)
 	{
 		if (_bigrams.containsKey(tag))
 		{
@@ -33,16 +33,16 @@ public class Word
 		}
 	}
 
-	public Tag getTag()
+	public String getTag()
 	{
 		// TO-DO Ausrechnen was der aktuelle Tag ist
-		Iterator<Entry<Tag, Integer>> it = _bigrams.entrySet().iterator();
-		Tag nextState = null;
+		Iterator<Entry<String, Integer>> it = _bigrams.entrySet().iterator();
+		String nextState = null;
 		int frequenzy = 0;
 
 		while (it.hasNext())
 		{
-			Map.Entry<Tag, Integer> pair = it.next();
+			Map.Entry<String, Integer> pair = it.next();
 
 			if (pair.getValue() >= frequenzy)
 			{
@@ -60,16 +60,16 @@ public class Word
 		return nextState;
 	}
 
-	public Tag getMostFrequentTag()
+	public String getMostFrequentTag()
 	{
 		// TO-DO Ausrechnen was der aktuelle Tag ist
-		Iterator<Entry<Tag, Integer>> it = _bigrams.entrySet().iterator();
-		Tag nextState = null;
+		Iterator<Entry<String, Integer>> it = _bigrams.entrySet().iterator();
+		String nextState = null;
 		int frequenzy = 0;
 
 		while (it.hasNext())
 		{
-			Map.Entry<Tag, Integer> pair = it.next();
+			Map.Entry<String, Integer> pair = it.next();
 
 			if (pair.getValue() >= frequenzy)
 			{
