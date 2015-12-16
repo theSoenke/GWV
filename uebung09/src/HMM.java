@@ -48,6 +48,7 @@ public class HMM
 
 					String wordStr = new StringBuilder(splittedLine[1]).reverse().toString();
 					String tagStr = new StringBuilder(splittedLine[0]).reverse().toString();
+					System.out.println(splittedLine[1]);
 
 					word = new Word(wordStr);
 					tag = new Tag(tagStr);
@@ -105,5 +106,13 @@ public class HMM
 		int frequenzy = tag1.getFrequenzyOfTransmissions(tag2);
 
 		return (double) size / (double) frequenzy;
+	}
+	
+	public double getEmmissionProbability(Tag tag, Word word)
+	{
+	    int size = tag.getNumEmission();
+	    int frequenzy = tag.getFrequenzyOfEmmissions(word);
+	    
+	    return (double) size / (double) frequenzy;
 	}
 }
