@@ -34,11 +34,9 @@ public class Viterbi
 						tagProb = newProb;
 						tag = t;
 					}
-
-					//System.out.println(t.toString() + "tp: " + tp);
 				}
-				buffer.append(words[i] + " \\ " + tag.toString() + " ");
-				System.out.println(words[i] + " " + tag.toString());
+				buffer.append(words[i] + "\t" + tag.toString() + " ");
+				System.out.println(words[i] + "\t" + tag.toString());
 			}
 			else
 			{
