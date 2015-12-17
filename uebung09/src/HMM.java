@@ -15,7 +15,7 @@ public class HMM
 		_tags = new HashMap<String, Tag>();
 
 		readTextFile(path);
-		System.out.println("Unique words: " + _words.size());
+		//System.out.println("Unique words: " + _words.size());
 	}
 
 	/**
@@ -42,13 +42,12 @@ public class HMM
 			{
 				if (!line.isEmpty())
 				{
+					// split in word and tag
 					line = new StringBuilder(line).reverse().toString();
-					// split in word and Tag
 					splittedLine = line.split("\\s", 2);
 
 					String wordStr = new StringBuilder(splittedLine[1]).reverse().toString();
 					String tagStr = new StringBuilder(splittedLine[0]).reverse().toString();
-					// System.out.println(splittedLine[1]);
 
 					tag = trainHMM(wordStr, tagStr, predecessor);
 					predecessor = tag;
@@ -67,8 +66,42 @@ public class HMM
 
 	private Tag trainHMM(String wordStr, String tagStr, Tag predecessor)
 	{
-		Word word;
+		Word word = getOrCreateWord(wordStr);
+		Tag tag = getOrCreateTag(tagStr);
+
+		word.addTag(tag);
+		tag.addPredecessor(predecessor);
+		predecessor = tag;
+
+		return tag;
+	}
+
+	/*
+	 * String to Tag
+	 */
+	private Tag getOrCreateTag(String tagStr)
+	{
 		Tag tag;
+
+		if (_tags.containsKey(tagStr))
+		{
+			tag = _tags.get(tagStr);
+		}
+		else
+		{
+			tag = new Tag(tagStr);
+			_tags.put(tagStr, tag);
+		}
+
+		return tag;
+	}
+
+	/*
+	 * String to Word
+	 */
+	public Word getOrCreateWord(String wordStr)
+	{
+		Word word;
 
 		if (_words.containsKey(wordStr))
 		{
@@ -80,22 +113,26 @@ public class HMM
 			_words.put(wordStr, word);
 		}
 
-		if (_tags.containsKey(tagStr))
+		return word;
+	}
+
+	/*
+	 * String to Word. Does not create a new word if not already in _words
+	 */
+	public Word getWord(String wordStr)
+	{
+		Word word;
+
+		if (_words.containsKey(wordStr))
 		{
-			tag = _tags.get(tagStr);
-			tag.increaseFrequenzy();
+			word = _words.get(wordStr);
 		}
 		else
 		{
-			tag = new Tag(tagStr);
-			_tags.put(tagStr, tag);
+			word = null;
 		}
-		
-		word.addTag(tag);
-		tag.addPredecessor(predecessor);
-		predecessor = tag;
-		
-		return tag;
+
+		return word;
 	}
 
 	/**
@@ -119,7 +156,7 @@ public class HMM
 		return (double) size / (double) frequenzy;
 	}
 
-	public double getEmissionProbability(Tag tag, String word)
+	public double getEmissionProbability(Tag tag, Word word)
 	{
 		int frequenzy; // overall frequenzy of tag
 		if (_tags.containsKey(tag.toString()))
@@ -132,23 +169,18 @@ public class HMM
 			System.out.println("Tag does not exist");
 		}
 
-		Word w = getWord(word);
-
-		return (double) w.getTagFrequenzy(tag) / (double) frequenzy;
+		return (double) word.getTagFrequenzy(tag) / (double) frequenzy;
 	}
 
-	public Word getWord(String word)
+	/*
+	 * Checks whether model contains word
+	 */
+	public boolean checkWord(String word)
 	{
-		Word w = null;
 		if (_words.containsKey(word))
 		{
-			w = _words.get(word);
+			return true;
 		}
-		else
-		{
-			System.out.println("Word does not exist");
-		}
-
-		return w;
+		return false;
 	}
 }

@@ -7,6 +7,9 @@ public class Viterbi
 		_hmm = hmm;
 	}
 
+	/*
+	 * Returns tagged sentence with the highest sequence tag probability
+	 */
 	public String mostLikelySequence(String sentence)
 	{
 		String[] words = sentence.split("\\s+");
@@ -19,14 +22,19 @@ public class Viterbi
 			Tag tag = null;
 			double tp, ep, tagProb = 0;
 
-			if (word != null)
+			if (_hmm.checkWord(words[i]))
 			{
+				if (words[i].equals("Tedfst"))
+				{
+					System.out.println("test");
+				}
+
 				Tag[] tags = word.getTags();
 
 				for (Tag t : tags)
 				{
 					tp = _hmm.getTransmissionProbability(t, previousTag);
-					ep = _hmm.getEmissionProbability(t, word.toString());
+					ep = _hmm.getEmissionProbability(t, word);
 
 					double newProb = tp * ep;
 					if (newProb >= tagProb)
@@ -35,13 +43,12 @@ public class Viterbi
 						tag = t;
 					}
 				}
-				buffer.append(words[i] + "\t" + tag.toString() + " ");
-				System.out.println(words[i] + "\t" + tag.toString());
+
+				buffer.append(words[i] + "\t" + tag.toString() + "\n");
 			}
 			else
 			{
-				System.out.println("Word does not exist in tranings data");
-				continue;
+				buffer.append(words[i] + "\t" + "Does not exist in traningsdata" + "\n");
 			}
 		}
 
