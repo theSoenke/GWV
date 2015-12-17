@@ -20,23 +20,18 @@ public class Viterbi
 		{
 			Word word = _hmm.getWord(words[i]);
 			Tag tag = null;
-			double tp, ep, tagProb = 0;
+			double transmissionProb, emissionPro, tagProb = 0;
 
 			if (_hmm.checkWord(words[i]))
 			{
-				if (words[i].equals("Tedfst"))
-				{
-					System.out.println("test");
-				}
-
 				Tag[] tags = word.getTags();
 
 				for (Tag t : tags)
 				{
-					tp = _hmm.getTransmissionProbability(t, previousTag);
-					ep = _hmm.getEmissionProbability(t, word);
+					transmissionProb = _hmm.getTransmissionProbability(t, previousTag);
+					emissionPro = _hmm.getEmissionProbability(t, word);
 
-					double newProb = tp * ep;
+					double newProb = transmissionProb * emissionPro;
 					if (newProb >= tagProb)
 					{
 						tagProb = newProb;
