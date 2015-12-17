@@ -33,19 +33,13 @@ public class HMM
 		{
 			fileReader = new FileReader(filePath);
 			reader = new BufferedReader(fileReader);
-			Word word;
-			Tag predecessor = null;
+			Tag predecessor = Tag.START_TAG;
+			Tag tag;
 			String line;
 			_tags.put(Tag.START_TAG.toString(), Tag.START_TAG);
 
 			while ((line = reader.readLine()) != null)
 			{
-				if (predecessor == null)
-				{
-					predecessor = Tag.START_TAG;
-				}
-				Tag tag;
-
 				if (!line.isEmpty())
 				{
 					line = new StringBuilder(line).reverse().toString();
@@ -56,17 +50,12 @@ public class HMM
 					String tagStr = new StringBuilder(splittedLine[0]).reverse().toString();
 					// System.out.println(splittedLine[1]);
 
-					word = new Word(wordStr);
-					tag = new Tag(tagStr);
-
-					tag.addPredecessor(predecessor);
+					tag = trainHMM(wordStr, tagStr, predecessor);
 					predecessor = tag;
-
-					trainHMM(word, tag);
 				}
 				else
 				{
-					predecessor = null;
+					predecessor = Tag.START_TAG;
 				}
 			}
 		}
@@ -76,32 +65,41 @@ public class HMM
 		}
 	}
 
-	private void trainHMM(Word word, Tag tag)
+	private Tag trainHMM(String wordStr, String tagStr, Tag predecessor)
 	{
-		if (_words.containsKey(word.getWord()))
+		Word word;
+		Tag tag;
+
+		if (_words.containsKey(wordStr))
 		{
-			word = _words.get(word.getWord());
+			word = _words.get(wordStr);
 		}
 		else
 		{
-			_words.put(word.getWord(), word);
+			word = new Word(wordStr);
+			_words.put(wordStr, word);
 		}
 
-		if (_tags.containsKey(tag.toString()))
+		if (_tags.containsKey(tagStr))
 		{
-			tag = _tags.get(tag.toString());
+			tag = _tags.get(tagStr);
 			tag.increaseFrequenzy();
 		}
 		else
 		{
-			_tags.put(tag.toString(), tag);
+			tag = new Tag(tagStr);
+			_tags.put(tagStr, tag);
 		}
-
+		
 		word.addTag(tag);
+		tag.addPredecessor(predecessor);
+		predecessor = tag;
+		
+		return tag;
 	}
 
 	/**
-	 * Returns probability for transmission between two tags
+	 * Returns probability for transmission from tag1 to tag2
 	 */
 	public double getTransmissionProbability(Tag tag1, Tag tag2)
 	{

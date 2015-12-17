@@ -25,8 +25,8 @@ public class Viterbi
 
 				for (Tag t : tags)
 				{
-					tp = _hmm.getTransmissionProbability(previousTag, t);
-					ep = _hmm.getEmissionProbability(t, word.getWord());
+					tp = _hmm.getTransmissionProbability(t, previousTag);
+					ep = _hmm.getEmissionProbability(t, word.toString());
 
 					double newProb = tp * ep;
 					if (newProb >= tagProb)
@@ -35,7 +35,7 @@ public class Viterbi
 						tag = t;
 					}
 
-					System.out.println(t.toString() + "tp: " + tp);
+					//System.out.println(t.toString() + "tp: " + tp);
 				}
 				buffer.append(words[i] + " \\ " + tag.toString() + " ");
 				System.out.println(words[i] + " " + tag.toString());

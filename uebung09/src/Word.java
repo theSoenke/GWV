@@ -12,7 +12,8 @@ public class Word
 		_tags = new HashMap<Tag, Integer>();
 	}
 
-	public String getWord()
+	@Override
+	public String toString()
 	{
 		return _word;
 	}
