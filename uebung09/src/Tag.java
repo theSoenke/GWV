@@ -2,74 +2,61 @@ import java.util.HashMap;
 
 public class Tag
 {
-    private String _tag;
-    private HashMap<Tag, Integer> _transmissions;
-    private HashMap<Word, Integer> _emmissions;
+	public static Tag START_TAG = new Tag("START");
 
-    public Tag(String tag)
-    {
-        _tag = tag;
-        _transmissions = new HashMap<Tag, Integer>();
-        _emmissions = new HashMap<Word, Integer>();
+	private String _tag;
+	private HashMap<String, Integer> _transmissions;
+	private int _frequenzy;
 
-    }
+	public Tag(String tag)
+	{
+		_tag = tag;
+		_transmissions = new HashMap<String, Integer>();
+	}
 
-    public String getTag()
-    {
-        return _tag;
-    }
+	@Override
+	public String toString()
+	{
+		return _tag;
+	}
 
-    public void addPreceseccor(Tag tag)
-    {
-        if (_transmissions.containsKey(tag))
-        {
-            int frequency = _transmissions.get(tag);
-            _transmissions.put(tag, ++frequency);
-        }
-        else
-        {
-            _transmissions.put(tag, 1);
-        }
-    }
+	public void addPredecessor(Tag tag)
+	{
+		if (_transmissions.containsKey(tag.toString()))
+		{
+			int frequency = _transmissions.get(tag.toString());
+			_transmissions.put(tag.toString(), ++frequency);
+		}
+		else
+		{
+			_transmissions.put(tag.toString(), 1);
+		}
+	}
 
-    public void addEmmission(Word word)
-    {
-        if (_emmissions.containsKey(word))
-        {
-            int frequency = _emmissions.get(word);
-            _emmissions.put(word, ++frequency);
-        }
-        else
-        {
-            _emmissions.put(word, 1);
-        }
-    }
+	public int getNumTransmission()
+	{
+		return _transmissions.size();
+	}
 
-    public int getNumTransmission()
-    {
-        return _transmissions.size();
-    }
-    
-    public int getFrequenzyOfTransmissions(Tag tag)
-    {
-        if(_transmissions.containsKey(tag))
-        {
-            return _transmissions.get(tag);
-        }
-        return 0;
-    }
+	/*
+	 * Frequenzy of tranmission to tag
+	 */
+	public int getFrequenzyOfTransmissions(Tag tag)
+	{
+		if (_transmissions.containsKey(tag.toString()))
+		{
+			return _transmissions.get(tag.toString());
+		}
+		return 0;
+	}
 
-    public int getNumEmission()
-    {
-        return _emmissions.size();
-    }
-    
-    public int getFrequenzyOfEmmissions(Word word)
-    {
-        if(_emmissions.containsKey(word))
-        {
-            return _emmissions.get(word);
-        }
-        return 0;
-    }
+	public void increaseFrequenzy()
+	{
+		_frequenzy++;
+	}
+
+	public int getFrequenzy()
+	{
+		return _frequenzy;
+	}
 }

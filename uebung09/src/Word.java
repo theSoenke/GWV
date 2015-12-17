@@ -1,8 +1,5 @@
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 
 public class Word
 {
@@ -33,30 +30,25 @@ public class Word
 		}
 	}
 
-	public Tag getTags()
+	/*
+	 * Returns how often the word is tagged with the tag
+	 */
+	public int getTagFrequenzy(Tag tag)
 	{
-		// TO-DO Ausrechnen was der aktuelle Tag ist
-		Iterator<Entry<Tag, Integer>> it = _tags.entrySet().iterator();
-		Tag nextState = null;
-		int frequenzy = 0;
-
-		while (it.hasNext())
+		int freq = 0;
+		if (_tags.containsKey(tag))
 		{
-			Map.Entry<Tag, Integer> pair = it.next();
-
-			if (pair.getValue() >= frequenzy)
-			{
-				nextState = pair.getKey();
-				frequenzy = pair.getValue();
-			}
-			else
-				if (nextState == null)
-				{
-					nextState = pair.getKey();
-					frequenzy = pair.getValue();
-				}
+			freq = _tags.get(tag);
 		}
 
-		return nextState;
+		return freq;
+	}
+
+	/*
+	 * Returns all tags
+	 */
+	public Tag[] getTags()
+	{
+		return _tags.keySet().toArray(new Tag[_tags.size()]);
 	}
 }

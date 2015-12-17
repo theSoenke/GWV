@@ -34,12 +34,18 @@ public class HMM
 			fileReader = new FileReader(filePath);
 			reader = new BufferedReader(fileReader);
 			Word word;
-			Tag tag;
 			Tag predecessor = null;
 			String line;
+			_tags.put(Tag.START_TAG.toString(), Tag.START_TAG);
 
 			while ((line = reader.readLine()) != null)
 			{
+				if (predecessor == null)
+				{
+					predecessor = Tag.START_TAG;
+				}
+				Tag tag;
+
 				if (!line.isEmpty())
 				{
 					line = new StringBuilder(line).reverse().toString();
@@ -48,17 +54,14 @@ public class HMM
 
 					String wordStr = new StringBuilder(splittedLine[1]).reverse().toString();
 					String tagStr = new StringBuilder(splittedLine[0]).reverse().toString();
-					System.out.println(splittedLine[1]);
+					// System.out.println(splittedLine[1]);
 
 					word = new Word(wordStr);
 					tag = new Tag(tagStr);
 
-					if (predecessor != null)
-					{
-						tag.addPreceseccor(predecessor);
-					}
-
+					tag.addPredecessor(predecessor);
 					predecessor = tag;
+
 					trainHMM(word, tag);
 				}
 				else
@@ -75,26 +78,26 @@ public class HMM
 
 	private void trainHMM(Word word, Tag tag)
 	{
-		if (!_words.containsKey(word.getWord()))
-		{
-			_words.put(word.getWord(), word);
-		}
-		else
+		if (_words.containsKey(word.getWord()))
 		{
 			word = _words.get(word.getWord());
 		}
-
-		if (!_tags.containsKey(tag.getTag()))
+		else
 		{
-			_tags.put(tag.getTag(), tag);
+			_words.put(word.getWord(), word);
+		}
+
+		if (_tags.containsKey(tag.toString()))
+		{
+			tag = _tags.get(tag.toString());
+			tag.increaseFrequenzy();
 		}
 		else
 		{
-			tag = _tags.get(tag.getTag());
+			_tags.put(tag.toString(), tag);
 		}
 
 		word.addTag(tag);
-		tag.addEmmission(word);
 	}
 
 	/**
@@ -105,14 +108,49 @@ public class HMM
 		int size = tag1.getNumTransmission();
 		int frequenzy = tag1.getFrequenzyOfTransmissions(tag2);
 
+		if (size == 0)
+		{
+			throw new RuntimeException("Size cannot be 0");
+		}
+
+		if (frequenzy == 0)
+		{
+			throw new RuntimeException("Frequenzy cannot be 0");
+		}
+
 		return (double) size / (double) frequenzy;
 	}
-	
-	public double getEmmissionProbability(Tag tag, Word word)
+
+	public double getEmissionProbability(Tag tag, String word)
 	{
-	    int size = tag.getNumEmission();
-	    int frequenzy = tag.getFrequenzyOfEmmissions(word);
-	    
-	    return (double) size / (double) frequenzy;
+		int frequenzy; // overall frequenzy of tag
+		if (_tags.containsKey(tag.toString()))
+		{
+			frequenzy = _tags.get(tag.toString()).getFrequenzy();
+		}
+		else
+		{
+			frequenzy = 0;
+			System.out.println("Tag does not exist");
+		}
+
+		Word w = getWord(word);
+
+		return (double) w.getTagFrequenzy(tag) / (double) frequenzy;
+	}
+
+	public Word getWord(String word)
+	{
+		Word w = null;
+		if (_words.containsKey(word))
+		{
+			w = _words.get(word);
+		}
+		else
+		{
+			System.out.println("Word does not exist");
+		}
+
+		return w;
 	}
 }
