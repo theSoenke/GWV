@@ -31,13 +31,13 @@ public class PuzzleStateTest
 	{
 		PuzzleState state1 = new PuzzleState(_testPuzzle1);
 		List<PuzzleState> neighbors = state1.getNeighborStates();
+		assertEquals(2, neighbors.size());
 
 		int[][] stateUpValues = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 0 }, { 13, 14, 15, 12 } };
 		int[][] stateLeftValues = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 0, 15 } };
 		PuzzleState stateUp = new PuzzleState(stateUpValues);
 		PuzzleState stateLeft = new PuzzleState(stateLeftValues);
 
-		assertEquals(2, neighbors.size());
 		assertTrue(neighbors.contains(stateUp));
 		assertTrue(neighbors.contains(stateLeft));
 	}

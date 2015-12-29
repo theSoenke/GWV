@@ -31,6 +31,18 @@ public class PuzzleState implements Comparable<PuzzleState>
 		_emptyCell = getEmptyCell();
 	}
 
+	public PuzzleState(int[][] puzzle, int moves)
+	{
+		if (puzzle.length != 4 && puzzle[0].length != 4)
+		{
+			throw new RuntimeException("Puzzle is not 4x4");
+		}
+
+		_moves = moves;
+		_puzzle = puzzle;
+		_emptyCell = getEmptyCell();
+	}
+
 	/*
 	 * Returns a puzzle that is solvable
 	 */
@@ -136,19 +148,25 @@ public class PuzzleState implements Comparable<PuzzleState>
 	@Override
 	public int hashCode()
 	{
-		return Arrays.deepHashCode(_puzzle);
+		return Arrays.deepHashCode(_puzzle) + _moves;
 	}
 
 	@Override
 	public boolean equals(Object o)
 	{
-		return Arrays.deepEquals(_puzzle, ((PuzzleState) o).getArray());
+		if (!(o instanceof PuzzleState))
+		{
+			return false;
+		}
+		PuzzleState state = (PuzzleState) o;
+		return Arrays.deepEquals(_puzzle, state.getArray()) && state.getMoves() == getMoves();
 	}
 
 	@Override
 	public PuzzleState clone()
 	{
-		return new PuzzleState(_puzzle);
+		PuzzleState cloneState = new PuzzleState(_puzzle, _moves);
+		return cloneState;
 	}
 
 	/*
@@ -204,6 +222,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		PuzzleState left = clone();
 		if (left.moveCell(moveDirection.left))
 		{
+			System.out.println("left hash: " + left.hashCode());
 			neighbors.add(left);
 		}
 
@@ -212,6 +231,8 @@ public class PuzzleState implements Comparable<PuzzleState>
 		{
 			neighbors.add(right);
 		}
+
+		System.out.println("left hash: " + left.hashCode());
 
 		PuzzleState up = clone();
 		if (up.moveCell(moveDirection.up))
@@ -230,7 +251,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	}
 
 	/*
-	 * Tries to move
+	 * Tries to move empty cell
 	 */
 	private boolean moveCell(moveDirection dir)
 	{
