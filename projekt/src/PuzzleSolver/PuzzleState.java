@@ -51,6 +51,45 @@ public class PuzzleState implements Comparable<PuzzleState>
 		return _puzzle;
 	}
 
+	/*
+	 * Returns true when the puzzle has as solution
+	 */
+	public boolean isSolvable()
+	{
+		if (getManhattanDistance() == 0)
+		{
+			return true;
+		}
+
+		int[] flatarray = new int[16];
+		int parity = 0;
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				flatarray[(i * _puzzle.length) + j] = _puzzle[i][j];
+			}
+		}
+
+		for (int i = 0; i < flatarray.length; i++)
+		{
+			for (int j = i + 1; j < flatarray.length; j++)
+			{
+				if (flatarray[i] > flatarray[j] && !(i == 3 && j == 3 && flatarray[i] == 0))
+				{
+					parity++;
+				}
+			}
+		}
+
+		if (parity % 2 == 0)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	public int getValue(int x, int y)
 	{
 		if (x < 0 || y < 0 || x > 3 || y > 3)
