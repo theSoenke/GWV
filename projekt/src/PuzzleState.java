@@ -26,6 +26,11 @@ public class PuzzleState
 		_emptyCell = getEmptyCell();
 	}
 
+	public int[][] getArray()
+	{
+		return _puzzle;
+	}
+
 	public int getValue(int x, int y)
 	{
 		if (x < 0 || y < 0 || x > 3 || y > 3)
@@ -45,7 +50,7 @@ public class PuzzleState
 	@Override
 	public boolean equals(Object o)
 	{
-		return Arrays.deepEquals(_puzzle, (int[][]) o);
+		return Arrays.deepEquals(_puzzle, ((PuzzleState) o).getArray());
 	}
 
 	@Override
@@ -206,14 +211,14 @@ public class PuzzleState
 	private Cell getEmptyCell()
 	{
 		Cell emptyCell = null;
-		
+
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 4; j++)
 			{
 				if (_puzzle[i][j] == 0)
 				{
-					if(emptyCell == null)
+					if (emptyCell == null)
 					{
 						emptyCell = new Cell(j, i);
 					}
@@ -224,8 +229,8 @@ public class PuzzleState
 				}
 			}
 		}
-		
-		if(emptyCell == null)
+
+		if (emptyCell == null)
 		{
 			throw new RuntimeException("Puzzle does not contain an empty cell");
 		}

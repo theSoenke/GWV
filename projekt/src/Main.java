@@ -13,6 +13,7 @@ public class Main
 	public Main()
 	{
 		PuzzleState puzzle = createPuzzle();
+		System.out.println("Initial State:");
 		puzzle.printPuzzle();
 		Solver solver = new Solver(puzzle);
 	}
