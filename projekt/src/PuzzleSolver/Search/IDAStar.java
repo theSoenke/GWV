@@ -24,7 +24,7 @@ public class IDAStar
 
 		if (!_foundGoal)
 		{
-			System.out.println("Found no solution");
+			System.out.println("No solution found");
 		}
 	}
 
