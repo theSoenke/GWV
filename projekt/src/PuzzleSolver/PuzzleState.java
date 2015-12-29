@@ -61,29 +61,23 @@ public class PuzzleState implements Comparable<PuzzleState>
 			return true;
 		}
 
-		int[] flatarray = new int[16];
-		int parity = 0;
+		int inversions = 0;
 
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < _puzzle.length; i++)
 		{
-			for (int j = 0; j < 4; j++)
+			for (int j = 0; j < _puzzle.length; j++)
 			{
-				flatarray[(i * _puzzle.length) + j] = _puzzle[i][j];
-			}
-		}
-
-		for (int i = 0; i < flatarray.length; i++)
-		{
-			for (int j = i + 1; j < flatarray.length; j++)
-			{
-				if (flatarray[i] > flatarray[j] && !(i == 3 && j == 3 && flatarray[i] == 0))
+				for (int j2 = i + j; j2 < _puzzle.length; j2++)
 				{
-					parity++;
+					if (_puzzle[i][j] < _puzzle[j][j2])
+					{
+						inversions++;
+					}
 				}
 			}
 		}
 
-		if (parity % 2 == 0)
+		if (inversions % 2 == 0)
 		{
 			return true;
 		}
