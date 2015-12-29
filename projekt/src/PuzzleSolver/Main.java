@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import PuzzleSolver.Search.AStar;
 import PuzzleSolver.Search.IDAStar;
 
 public class Main
@@ -20,7 +21,8 @@ public class Main
 		System.out.println("Initial State:");
 		puzzle.printPuzzle();
 		
-		IDAStar idastar = new IDAStar(puzzle);		
+		//IDAStar idastar = new IDAStar(puzzle);		
+		AStar aStar = new AStar(puzzle);
 	}
 
 	/*

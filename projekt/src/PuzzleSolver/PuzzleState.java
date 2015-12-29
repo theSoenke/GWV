@@ -9,7 +9,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	private final int[][] _puzzle;
 	private Cell _emptyCell;
 	private PuzzleState _parentState;
-	private int _depth;
+	private int _moves;
 
 	/*
 	 * Move direction of the empty cell
@@ -32,7 +32,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 
 	public void setParentState(PuzzleState parent)
 	{
-		_depth += parent.getDepth() + 1;
+		_moves += parent.getMoves() + 1;
 		_parentState = parent;
 	}
 
@@ -41,9 +41,9 @@ public class PuzzleState implements Comparable<PuzzleState>
 		return _parentState;
 	}
 
-	public int getDepth()
+	public int getMoves()
 	{
-		return _depth;
+		return _moves;
 	}
 
 	public int[][] getArray()
@@ -95,28 +95,8 @@ public class PuzzleState implements Comparable<PuzzleState>
 			line = "";
 		}
 
-		System.err.println("\n \n");
+		System.err.println("\n");
 	}
-
-	/*
-	 * Returns all neighbors of the empty cell
-	 */
-	/*
-	 * public List<Cell> getNeighbors() { List<Cell> neighbors = new
-	 * ArrayList<Cell>();
-	 * 
-	 * if (_emptyCell.x > 0 && _emptyCell.y > 0) { neighbors.add(new
-	 * Cell(_emptyCell.x - 1, _emptyCell.y, _puzzle[_emptyCell.y][_emptyCell.x -
-	 * 1])); // left neighbors.add(new Cell(_emptyCell.x, _emptyCell.y - 1,
-	 * _puzzle[_emptyCell.y - 1][_emptyCell.x])); // top }
-	 * 
-	 * if (_emptyCell.x < 3 && _emptyCell.y < 3) { neighbors.add(new
-	 * Cell(_emptyCell.x + 1, _emptyCell.y, _puzzle[_emptyCell.y][_emptyCell.x +
-	 * 1])); // right neighbors.add(new Cell(_emptyCell.x, _emptyCell.y + 1,
-	 * _puzzle[_emptyCell.y + 1][_emptyCell.x])); // down }
-	 * 
-	 * return neighbors; }
-	 */
 
 	/*
 	 * Returns Manhattan distance of puzzle state
@@ -132,7 +112,9 @@ public class PuzzleState implements Comparable<PuzzleState>
 				int value = _puzzle[i][j];
 				if (value != 0)
 				{
-					distance += Math.abs(value / 4 - i) + Math.abs(value % 4 - j);
+					int x = ((value - 1) / 4);
+					int y = ((value - 1) % 4);
+					distance += Math.abs(i - x) + Math.abs(j - y);
 				}
 			}
 		}
@@ -178,7 +160,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	/*
 	 * Tries to move
 	 */
-	public boolean moveCell(moveDirection dir)
+	private boolean moveCell(moveDirection dir)
 	{
 		if (dir == moveDirection.up)
 		{
@@ -275,15 +257,14 @@ public class PuzzleState implements Comparable<PuzzleState>
 	@Override
 	public int compareTo(PuzzleState state)
 	{
-		float c = _depth + getManhattanDistance();
+		float cost = _moves + getManhattanDistance();
+		float compareCost = state.getMoves() + state.getManhattanDistance();
 
-		float fieldc = state.getDepth() + state.getManhattanDistance();
-
-		if (c < fieldc)
+		if (cost < compareCost)
 		{
 			return -1;
 		}
-		else if (c > fieldc)
+		else if (cost > compareCost)
 		{
 			return 1;
 		}

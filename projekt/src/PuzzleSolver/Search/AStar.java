@@ -34,6 +34,8 @@ public class AStar
 
 			for (PuzzleState state : currentState.getNeighborStates())
 			{
+				state.printPuzzle();
+				
 				if (!closed.contains(state) && !open.contains(state))
 				{
 					open.add(state);

@@ -16,12 +16,11 @@ public class IDAStar
 		int depth = 0;
 		_startState = initialState;
 
-		depthBoundSearch(_startState, 15);
-
-		/*
-		 * while (!_foundGoal && depth < 100) { depth++;
-		 * depthBoundSearch(_startState, depth); }
-		 */
+		while (!_foundGoal && depth < 100)
+		{
+			depth++;
+			depthBoundSearch(_startState, depth);
+		}
 
 		if (!_foundGoal)
 		{
@@ -45,7 +44,7 @@ public class IDAStar
 
 			for (int i = 0; i < bound; i++)
 			{
-				neighbors = root.neighborStates();
+				neighbors = root.getNeighborStates();
 
 				int minManhattanDist = Integer.MAX_VALUE;
 				PuzzleState bestNextState = null;
