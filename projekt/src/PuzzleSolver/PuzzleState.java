@@ -165,7 +165,13 @@ public class PuzzleState implements Comparable<PuzzleState>
 	@Override
 	public PuzzleState clone()
 	{
-		PuzzleState cloneState = new PuzzleState(_puzzle, _moves);
+		int[][] puzzleClone = new int[4][4];
+
+		for (int i = 0; i < _puzzle.length; i++)
+		{
+			puzzleClone[i] = Arrays.copyOf(_puzzle[i], _puzzle.length);
+		}
+		PuzzleState cloneState = new PuzzleState(puzzleClone, _moves);
 		return cloneState;
 	}
 
@@ -222,7 +228,6 @@ public class PuzzleState implements Comparable<PuzzleState>
 		PuzzleState left = clone();
 		if (left.moveCell(moveDirection.left))
 		{
-			System.out.println("left hash: " + left.hashCode());
 			neighbors.add(left);
 		}
 
@@ -231,8 +236,6 @@ public class PuzzleState implements Comparable<PuzzleState>
 		{
 			neighbors.add(right);
 		}
-
-		System.out.println("left hash: " + left.hashCode());
 
 		PuzzleState up = clone();
 		if (up.moveCell(moveDirection.up))
