@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PuzzleState
+public class PuzzleState implements Comparable<PuzzleState>
 {
 	private final int[][] _puzzle;
 	private Cell _emptyCell;
+	private PuzzleState _parentState;
+	private int _depth;
 
 	/*
 	 * Move direction of the empty cell
@@ -26,6 +28,22 @@ public class PuzzleState
 
 		_puzzle = puzzle;
 		_emptyCell = getEmptyCell();
+	}
+
+	public void setParentState(PuzzleState parent)
+	{
+		_depth += parent.getDepth() + 1;
+		_parentState = parent;
+	}
+
+	public PuzzleState getParentState()
+	{
+		return _parentState;
+	}
+
+	public int getDepth()
+	{
+		return _depth;
 	}
 
 	public int[][] getArray()
@@ -125,7 +143,7 @@ public class PuzzleState
 	/*
 	 * Returns all possible neighbor states
 	 */
-	public List<PuzzleState> neighborStates()
+	public List<PuzzleState> getNeighborStates()
 	{
 		List<PuzzleState> neighbors = new LinkedList<PuzzleState>();
 
@@ -251,6 +269,27 @@ public class PuzzleState
 		{
 			this.x = x;
 			this.y = y;
+		}
+	}
+
+	@Override
+	public int compareTo(PuzzleState state)
+	{
+		float c = _depth + getManhattanDistance();
+
+		float fieldc = state.getDepth() + state.getManhattanDistance();
+
+		if (c < fieldc)
+		{
+			return -1;
+		}
+		else if (c > fieldc)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
 		}
 	}
 }

@@ -19,7 +19,8 @@ public class Main
 		PuzzleState puzzle = createPuzzle();
 		System.out.println("Initial State:");
 		puzzle.printPuzzle();
-		IDAStar solver = new IDAStar(puzzle);
+		
+		IDAStar idastar = new IDAStar(puzzle);		
 	}
 
 	/*
