@@ -1,6 +1,10 @@
+package PuzzleSolver;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import PuzzleSolver.Search.IDAStar;
 
 public class Main
 {
@@ -15,11 +19,11 @@ public class Main
 		PuzzleState puzzle = createPuzzle();
 		System.out.println("Initial State:");
 		puzzle.printPuzzle();
-		Solver solver = new Solver(puzzle);
+		IDAStar solver = new IDAStar(puzzle);
 	}
 
 	/*
-	 * Erstellt ein zufälliges Puzzle. Kann unlösbar sein
+	 * Create a random puzzle. Can be unsolvable
 	 */
 	private PuzzleState createPuzzle()
 	{

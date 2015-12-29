@@ -1,13 +1,17 @@
+package PuzzleSolver.Search;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Solver
+import PuzzleSolver.PuzzleState;
+
+public class IDAStar
 {
 	private final PuzzleState _startState;
 	private boolean _foundGoal;
 
-	public Solver(PuzzleState initialState)
+	public IDAStar(PuzzleState initialState)
 	{
 		int depth = 0;
 		_startState = initialState;
@@ -59,15 +63,22 @@ public class Solver
 					}
 					else if (tmpDist < minManhattanDist)
 					{
-						minManhattanDist = tmpDist;
-						bestNextState = state;
+						if (!visitedStates.contains(state))
+						{
+							minManhattanDist = tmpDist;
+							bestNextState = state;
+						}
+						else
+						{
+							bestNextState = null;
+						}
 					}
 				}
 
-				if (!visitedStates.contains(bestNextState))
+				if (bestNextState != null)
 				{
-					visitedStates.add(bestNextState);
 					states.add(bestNextState);
+					visitedStates.add(bestNextState);
 					bestNextState.printPuzzle();
 				}
 			}
