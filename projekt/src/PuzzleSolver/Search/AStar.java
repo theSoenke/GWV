@@ -15,35 +15,34 @@ public class AStar
 		solve();
 	}
 
-	public void solve()
+	private void solve()
 	{
+		PriorityQueue<PuzzleState> frontier = new PriorityQueue<PuzzleState>();
 		HashSet<PuzzleState> closed = new HashSet<PuzzleState>();
-		PriorityQueue<PuzzleState> open = new PriorityQueue<PuzzleState>();
-		open.add(_startState);
+		PuzzleState currentState = null;
 
-		while (!open.isEmpty())
+		frontier.add(_startState);
+
+		while (!frontier.isEmpty())
 		{
-			PuzzleState currentState = open.poll();
+			currentState = frontier.poll();
+			int manhattanDist = currentState.getManhattanDistance();
 
-			if (currentState.getManhattanDistance() == 0)
+			if (manhattanDist == 0)
 			{
-				closed.add(currentState);
-				System.out.println("Found solution");
+				System.out.println("Found goal");
 				return;
 			}
 
-			for (PuzzleState state : currentState.getNeighborStates())
+			for (PuzzleState neighbor : currentState.getNeighborStates())
 			{
-				state.printPuzzle();
-				
-				if (!closed.contains(state) && !open.contains(state))
+				if (!closed.contains(neighbor) && !frontier.contains(neighbor))
 				{
-					open.add(state);
-					state.setParentState(currentState);
+					frontier.add(neighbor);
+					currentState.setParentState(currentState);
 				}
 			}
-
-			open.remove(currentState);
+			
 			closed.add(currentState);
 		}
 

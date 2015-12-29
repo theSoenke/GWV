@@ -16,10 +16,9 @@ public class Main
 		PuzzleState puzzle = PuzzleState.createSolvablePuzzle();
 		System.out.println("Initial State:");
 		puzzle.printPuzzle();
-		System.out.println(puzzle.isSolvable());
 
-		//IDAStar idastar = new IDAStar(puzzle);
-		AStar aStar = new AStar(puzzle);
+		IDAStar idastar = new IDAStar(puzzle);
+		//AStar aStar = new AStar(puzzle);
 	}
 
 }

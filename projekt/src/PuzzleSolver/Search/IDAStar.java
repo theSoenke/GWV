@@ -1,8 +1,7 @@
 package PuzzleSolver.Search;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.PriorityQueue;
 
 import PuzzleSolver.PuzzleState;
 
@@ -16,71 +15,55 @@ public class IDAStar
 		int depth = 0;
 		_startState = initialState;
 
-		while (!_foundGoal && depth < 100)
+		while (!_foundGoal && depth < 10)
 		{
-			depth++;
-			depthBoundSearch(_startState, depth);
+			depth = depthBoundSearch(_startState, depth);
 		}
 
 		if (!_foundGoal)
 		{
 			System.out.println("No solution found");
 		}
-	}
-
-	private void depthBoundSearch(PuzzleState root, int bound)
-	{
-		List<PuzzleState> states = new LinkedList<PuzzleState>();
-		HashSet<PuzzleState> visitedStates = new HashSet<PuzzleState>();
-
-		if (root.getManhattanDistance() == 0)
-		{
-			_foundGoal = true;
-			return;
-		}
 		else
 		{
-			List<PuzzleState> neighbors;
+			System.out.println("Found best path");
+		}
+	}
 
-			for (int i = 0; i < bound; i++)
+	private int depthBoundSearch(PuzzleState root, int bound)
+	{
+		PriorityQueue<PuzzleState> frontier = new PriorityQueue<PuzzleState>();
+		HashSet<PuzzleState> closed = new HashSet<PuzzleState>();
+		int depth = 0;
+		PuzzleState currentState = null;
+
+		frontier.add(root);
+
+		while (!frontier.isEmpty() && depth < bound)
+		{
+			currentState = frontier.poll();
+			int manhattanDist = currentState.getManhattanDistance();
+			depth = currentState.getMoves() + manhattanDist;
+			System.out.println(depth);
+
+			if (manhattanDist == 0)
 			{
-				neighbors = root.getNeighborStates();
+				_foundGoal = true;
+				return depth;
+			}
 
-				int minManhattanDist = Integer.MAX_VALUE;
-				PuzzleState bestNextState = null;
-				for (PuzzleState state : neighbors)
+			for (PuzzleState neighbor : currentState.getNeighborStates())
+			{
+				if (!closed.contains(neighbor) && !frontier.contains(neighbor))
 				{
-					int tmpDist = state.getManhattanDistance();
-
-					if (tmpDist == 0)
-					{
-						_foundGoal = true;
-						states.add(state);
-						System.out.println("Found goal: ");
-						state.printPuzzle();
-						return;
-					}
-					else if (tmpDist < minManhattanDist)
-					{
-						if (!visitedStates.contains(state))
-						{
-							minManhattanDist = tmpDist;
-							bestNextState = state;
-						}
-						else
-						{
-							bestNextState = null;
-						}
-					}
-				}
-
-				if (bestNextState != null)
-				{
-					states.add(bestNextState);
-					visitedStates.add(bestNextState);
-					bestNextState.printPuzzle();
+					frontier.add(neighbor);
+					currentState.setParentState(currentState);
 				}
 			}
+			
+			closed.add(currentState);
 		}
+
+		return depth;
 	}
 }
