@@ -12,14 +12,15 @@ public class Main
 
 	public Main()
 	{
-		int[][] puzzle = createPuzzle();
-		printPuzzle(puzzle);
+		PuzzleState puzzle = createPuzzle();
+		puzzle.printPuzzle();
+		Solver solver = new Solver(puzzle);
 	}
 
 	/*
 	 * Erstellt ein zufälliges Puzzle. Kann unlösbar sein
 	 */
-	private int[][] createPuzzle()
+	private PuzzleState createPuzzle()
 	{
 		int[][] puzzle = new int[4][4];
 
@@ -36,24 +37,6 @@ public class Main
 			}
 		}
 
-		return puzzle;
-	}
-
-	/*
-	 * Gibt ein Puzzle in der Konsole aus
-	 */
-	private void printPuzzle(int[][] puzzle)
-	{
-
-		for (int x = 0; x < 4; x++)
-		{
-			String line = "";
-			for (int y = 0; y < 4; y++)
-			{
-				line += puzzle[x][y] + "\t";
-			}
-			System.out.println(line + "\n");
-			line = "";
-		}
+		return new PuzzleState(puzzle);
 	}
 }
