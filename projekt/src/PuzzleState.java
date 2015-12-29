@@ -59,12 +59,12 @@ public class PuzzleState
 	 */
 	public void printPuzzle()
 	{
-		for (int x = 0; x < 4; x++)
+		for (int i = 0; i < 4; i++)
 		{
 			String line = "";
-			for (int y = 0; y < 4; y++)
+			for (int j = 0; j < 4; j++)
 			{
-				line += _puzzle[x][y] + "\t";
+				line += _puzzle[i][j] + "\t";
 			}
 			System.out.println(line + "\n");
 			line = "";
@@ -107,7 +107,7 @@ public class PuzzleState
 				int value = _puzzle[i][j];
 				if (value != 0)
 				{
-					distance += Math.abs(value / 4 - j) + Math.abs(value % 4 - i);
+					distance += Math.abs(value / 4 - i) + Math.abs(value % 4 - j);
 				}
 			}
 		}
@@ -205,18 +205,34 @@ public class PuzzleState
 
 	private Cell getEmptyCell()
 	{
-		for (int x = 0; x < 4; x++)
+		Cell emptyCell = null;
+		
+		for (int i = 0; i < 4; i++)
 		{
-			for (int y = 0; y < 4; y++)
+			for (int j = 0; j < 4; j++)
 			{
-				if (_puzzle[x][y] == 0)
+				if (_puzzle[i][j] == 0)
 				{
-					return new Cell(x, y);
+					if(emptyCell == null)
+					{
+						emptyCell = new Cell(j, i);
+					}
+					else
+					{
+						throw new RuntimeException("Puzzle contains more than 1 empty cell");
+					}
 				}
 			}
 		}
-
-		throw new RuntimeException("Puzzle does not contain an empty cell");
+		
+		if(emptyCell == null)
+		{
+			throw new RuntimeException("Puzzle does not contain an empty cell");
+		}
+		else
+		{
+			return emptyCell;
+		}
 	}
 
 	private class Cell
