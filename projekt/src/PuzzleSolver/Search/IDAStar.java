@@ -7,49 +7,52 @@ import PuzzleSolver.PuzzleState;
 
 public class IDAStar
 {
-	private final PuzzleState _startState;
+	private final PuzzleState _initialState;
 	private boolean _foundGoal;
 
 	public IDAStar(PuzzleState initialState)
 	{
-		int depth = 0;
-		_startState = initialState;
+		int depth = initialState.getManhattanDistance();
+		int maxDepth = depth * 10;
+		_initialState = initialState;
 
-		while (!_foundGoal && depth < 10)
+		while (!_foundGoal && depth < maxDepth)
 		{
-			depth = depthBoundSearch(_startState, depth);
+			depth = depthBoundSearch(_initialState, depth);
+			depth++;
 		}
 
-		if (!_foundGoal)
-		{
-			System.out.println("No solution found");
-		}
-		else
+		if (_foundGoal)
 		{
 			System.out.println("Found best path");
 		}
+		else
+		{
+			System.out.println("No solution found");
+		}
 	}
 
+	/*
+	 * Starts a depth bound DFS with a manhattan heuristic
+	 */
 	private int depthBoundSearch(PuzzleState root, int bound)
 	{
 		PriorityQueue<PuzzleState> frontier = new PriorityQueue<PuzzleState>();
 		HashSet<PuzzleState> closed = new HashSet<PuzzleState>();
-		int depth = 0;
+		int minDepth = 0;
 		PuzzleState currentState = null;
 
 		frontier.add(root);
 
-		while (!frontier.isEmpty() && depth < bound)
+		while (!frontier.isEmpty() && minDepth < bound)
 		{
 			currentState = frontier.poll();
-			int manhattanDist = currentState.getManhattanDistance();
-			depth = currentState.getMoves() + manhattanDist;
-			System.out.println(depth);
+			minDepth = Integer.MAX_VALUE;
 
-			if (manhattanDist == 0)
+			if (currentState.getManhattanDistance() == 0)
 			{
 				_foundGoal = true;
-				return depth;
+				return minDepth;
 			}
 
 			for (PuzzleState neighbor : currentState.getNeighborStates())
@@ -57,13 +60,19 @@ public class IDAStar
 				if (!closed.contains(neighbor) && !frontier.contains(neighbor))
 				{
 					frontier.add(neighbor);
-					currentState.setParentState(currentState);
+					neighbor.setParentState(currentState);
+
+					int cost = neighbor.getMoves() + neighbor.getManhattanDistance();
+					if (cost < minDepth)
+					{
+						minDepth = cost;
+					}
 				}
 			}
-			
+
 			closed.add(currentState);
 		}
 
-		return depth;
+		return minDepth;
 	}
 }

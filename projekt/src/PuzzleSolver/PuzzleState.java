@@ -135,20 +135,10 @@ public class PuzzleState implements Comparable<PuzzleState>
 		return false;
 	}
 
-	public int getValue(int x, int y)
-	{
-		if (x < 0 || y < 0 || x > 3 || y > 3)
-		{
-			throw new RuntimeException("Zugriff auf ungültigen Index");
-		}
-
-		return _puzzle[y][x];
-	}
-
 	@Override
 	public int hashCode()
 	{
-		return Arrays.deepHashCode(_puzzle) + _moves;
+		return Arrays.deepHashCode(_puzzle);
 	}
 
 	@Override
@@ -159,7 +149,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 			return false;
 		}
 		PuzzleState state = (PuzzleState) o;
-		return Arrays.deepEquals(_puzzle, state.getArray()) && state.getMoves() == getMoves();
+		return Arrays.deepEquals(_puzzle, state.getArray());
 	}
 
 	@Override
@@ -191,7 +181,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 			line = "";
 		}
 
-		System.err.println("\n");
+		System.out.println("\n");
 	}
 
 	/*
