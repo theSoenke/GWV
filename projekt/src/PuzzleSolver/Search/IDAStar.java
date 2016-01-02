@@ -70,7 +70,6 @@ public class IDAStar
 				if (!closed.contains(neighbor) && !frontier.contains(neighbor))
 				{
 					frontier.add(neighbor);
-					neighbor.setParentState(currentState);
 
 					int cost = neighbor.getMoves() + neighbor.getManhattanDistance();
 

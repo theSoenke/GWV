@@ -1,9 +1,11 @@
 package PuzzleSolver;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class PuzzleState implements Comparable<PuzzleState>
 {
@@ -11,6 +13,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	private Cell _emptyCell;
 	private PuzzleState _parentState;
 	private int _moves;
+	private int _manhattanDistance;
 
 	/*
 	 * Move direction of the empty cell
@@ -29,18 +32,21 @@ public class PuzzleState implements Comparable<PuzzleState>
 
 		_puzzle = puzzle;
 		_emptyCell = getEmptyCell();
+		_manhattanDistance = calcManhattanDistance();
 	}
 
-	public PuzzleState(int[][] puzzle, int moves)
+	public PuzzleState(int[][] puzzle, int moves, PuzzleState parent)
 	{
 		if (puzzle.length != 4 && puzzle[0].length != 4)
 		{
 			throw new RuntimeException("Puzzle is not 4x4");
 		}
 
-		_moves = moves;
 		_puzzle = puzzle;
 		_emptyCell = getEmptyCell();
+		_moves = moves;
+		_parentState = parent;
+		_manhattanDistance = calcManhattanDistance();
 	}
 
 	/*
@@ -54,6 +60,25 @@ public class PuzzleState implements Comparable<PuzzleState>
 			puzzle = createRandomPuzzle();
 		}
 		while (!puzzle.isSolvable());
+
+		return puzzle;
+	}
+
+	/*
+	 * Returns a random puzzle created by sliding tiles
+	 */
+	public static PuzzleState createSolvableBySliding()
+	{
+		int[][] defaultPuzzle = { { 0, 1, 2, 3 }, { 4, 5, 6, 7 }, { 8, 9, 10, 11 }, { 12, 13, 14, 15 } };
+		PuzzleState puzzle = new PuzzleState(defaultPuzzle);
+		Random random = new Random();
+
+		for (int i = 0; i < 100; i++)
+		{
+			List<PuzzleState> neighbors = puzzle.getNeighborStates();
+			int rand = random.nextInt(neighbors.size());
+			puzzle = neighbors.get(rand);
+		}
 
 		return puzzle;
 	}
@@ -81,13 +106,6 @@ public class PuzzleState implements Comparable<PuzzleState>
 		return new PuzzleState(puzzle);
 	}
 
-	int a = 0;
-	public void setParentState(PuzzleState parent)
-	{
-		_moves = parent.getMoves() + 1;
-		_parentState = parent;
-	}
-
 	public PuzzleState getParentState()
 	{
 		return _parentState;
@@ -108,32 +126,100 @@ public class PuzzleState implements Comparable<PuzzleState>
 	 */
 	public boolean isSolvable()
 	{
-		if (getManhattanDistance() == 0)
+		List<Integer> puzzle = convertToFlatArray();
+		int parity = 0;
+		int gridWidth = (int) Math.sqrt(puzzle.size());
+		int row = 0;
+		int blankRow = 0;
+
+		for (int i = 0; i < puzzle.size(); i++)
+		{
+			if (i % gridWidth == 0)
+			{
+				row++;
+			}
+			if (puzzle.get(i) == 0)
+			{
+				blankRow = row;
+			}
+			for (int j = i + 1; j < puzzle.size(); j++)
+			{
+				if (puzzle.get(i) > puzzle.get(j) && puzzle.get(j) != 0)
+				{
+					parity++;
+				}
+			}
+		}
+
+		if (gridWidth % 2 == 0)
+		{
+			if (blankRow % 2 == 0)
+			{
+				return parity % 2 == 0;
+			}
+			else
+			{
+				return parity % 2 != 0;
+			}
+		}
+		else
+		{
+			return parity % 2 == 0;
+		}
+	}
+
+	public boolean isSolvable2()
+	{
+		if (_manhattanDistance == 0)
 		{
 			return true;
 		}
 
-		int inversions = 0;
+		int parity = 0;
+		int emptyRow = 0;
+		List<Integer> flatpuzzle = convertToFlatArray();
+
+		for (int i = 0; i < flatpuzzle.size(); i++)
+		{
+			for (int j = i + 1; j < flatpuzzle.size(); j++)
+			{
+				if (flatpuzzle.get(i) == 0)
+				{
+					emptyRow = i;
+				}
+				if (flatpuzzle.get(i) > flatpuzzle.get(j) && flatpuzzle.get(i) != 0 && flatpuzzle.get(j) != 0)
+				{
+					parity++;
+				}
+			}
+		}
+
+		if (emptyRow % 2 == 0)
+		{
+			return (parity % 2 == 0);
+		}
+		else
+		{
+			return (parity % 2 != 0);
+		}
+	}
+
+	/*
+	 * Converts 2d to 1d array
+	 */
+	private List<Integer> convertToFlatArray()
+	{
+		List<Integer> flatpuzzle = new ArrayList<Integer>();
 
 		for (int i = 0; i < _puzzle.length; i++)
 		{
 			for (int j = 0; j < _puzzle.length; j++)
 			{
-				for (int j2 = i + j; j2 < _puzzle.length; j2++)
-				{
-					if (_puzzle[i][j] < _puzzle[j][j2])
-					{
-						inversions++;
-					}
-				}
+				flatpuzzle.add(_puzzle[i][j]);
 			}
 		}
 
-		if (inversions % 2 == 0)
-		{
-			return true;
-		}
-		return false;
+		return flatpuzzle;
 	}
 
 	@Override
@@ -162,7 +248,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		{
 			puzzleClone[i] = Arrays.copyOf(_puzzle[i], _puzzle.length);
 		}
-		PuzzleState cloneState = new PuzzleState(puzzleClone, _moves);
+		PuzzleState cloneState = new PuzzleState(puzzleClone, _moves + 1, this);
 		return cloneState;
 	}
 
@@ -186,9 +272,17 @@ public class PuzzleState implements Comparable<PuzzleState>
 	}
 
 	/*
-	 * Returns Manhattan distance of puzzle state
+	 * Returns cached manhattan distance
 	 */
 	public int getManhattanDistance()
+	{
+		return _manhattanDistance;
+	}
+
+	/*
+	 * Returns Manhattan distance of puzzle state
+	 */
+	private int calcManhattanDistance()
 	{
 		int distance = 0;
 
@@ -199,9 +293,9 @@ public class PuzzleState implements Comparable<PuzzleState>
 				int value = _puzzle[i][j];
 				if (value != 0)
 				{
-					int x = ((value - 1) / 4);
-					int y = ((value - 1) % 4);
-					distance += Math.abs(i - x) + Math.abs(j - y);
+					int y = ((value - 1) / 4);
+					int x = ((value - 1) % 4);
+					distance += Math.abs(i - y) + Math.abs(j - x);
 				}
 			}
 		}
@@ -342,12 +436,13 @@ public class PuzzleState implements Comparable<PuzzleState>
 	}
 
 	int i = 0;
+
 	@Override
 	public int compareTo(PuzzleState state)
 	{
-		float cost = _moves + getManhattanDistance();
-		float compareCost = state.getMoves() + state.getManhattanDistance();
-		
+		float cost = _moves + calcManhattanDistance();
+		float compareCost = state.getMoves() + state.calcManhattanDistance();
+
 		if (cost < compareCost)
 		{
 			return -1;

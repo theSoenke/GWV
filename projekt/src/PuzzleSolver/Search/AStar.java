@@ -27,6 +27,8 @@ public class AStar
 		}
 	}
 
+	int i = 100;
+
 	private void solve()
 	{
 		PriorityQueue<PuzzleState> frontier = new PriorityQueue<PuzzleState>();
@@ -49,21 +51,37 @@ public class AStar
 				return;
 			}
 
+			if (i < 100)
+			{
+				System.out.println("Current" + " moves: " + currentState.getMoves() + " manhattan: " + currentState.getManhattanDistance());
+				currentState.printPuzzle();
+			}
+
 			for (PuzzleState neighbor : currentState.getNeighborStates())
 			{
 				if (!closed.contains(neighbor.hashCode()) && !open.contains(neighbor.hashCode()))
 				{
-					neighbor.setParentState(currentState);
-					//currentState.setParentState(currentState);
+					if (i < 100)
+					{
+						System.out.println("Neighbor" + " moves: " + neighbor.getMoves() + " manhattan: " + neighbor.getManhattanDistance());
+						neighbor.printPuzzle();
+					}
 					frontier.add(neighbor);
 					open.add(neighbor.hashCode());
 				}
 			}
+			
+			//System.out.println(currentState.isSolvable());
+			//System.out.println("cost: " + (currentState.getMoves() + currentState.getManhattanDistance()) );
 
 			open.remove(currentState.hashCode());
 			closed.add(currentState.hashCode());
 
-			System.out.println("closed: " + closed.size() + " frontier: " + frontier.size());
+			if (closed.size() % 10000 == 0)
+			{
+				System.out.println("closed: " + closed.size() + " frontier: " + frontier.size());
+			}
+			i++;
 		}
 
 		System.out.println("No solution found");
