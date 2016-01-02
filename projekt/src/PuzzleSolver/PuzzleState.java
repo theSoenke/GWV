@@ -81,9 +81,10 @@ public class PuzzleState implements Comparable<PuzzleState>
 		return new PuzzleState(puzzle);
 	}
 
+	int a = 0;
 	public void setParentState(PuzzleState parent)
 	{
-		_moves += parent.getMoves() + 1;
+		_moves = parent.getMoves() + 1;
 		_parentState = parent;
 	}
 
@@ -340,12 +341,13 @@ public class PuzzleState implements Comparable<PuzzleState>
 		}
 	}
 
+	int i = 0;
 	@Override
 	public int compareTo(PuzzleState state)
 	{
 		float cost = _moves + getManhattanDistance();
 		float compareCost = state.getMoves() + state.getManhattanDistance();
-
+		
 		if (cost < compareCost)
 		{
 			return -1;

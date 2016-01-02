@@ -17,8 +17,8 @@ public class Main
 		System.out.println("Initial State:");
 		puzzle.printPuzzle();
 
-		IDAStar idastar = new IDAStar(puzzle);
-		//AStar aStar = new AStar(puzzle);
+		//IDAStar idastar = new IDAStar(puzzle);
+		AStar aStar = new AStar(puzzle);
 	}
 
 }

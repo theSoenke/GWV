@@ -16,9 +16,16 @@ public class IDAStar
 		int maxDepth = depth * 10;
 		_initialState = initialState;
 
+		if (!initialState.isSolvable())
+		{
+			System.out.println("Puzzle not solvable");
+			return;
+		}
+
+		depth = depthBoundSearch(_initialState, 100);
 		while (!_foundGoal && depth < maxDepth)
 		{
-			depth = depthBoundSearch(_initialState, depth);
+			//depth = depthBoundSearch(_initialState, depth);
 			depth++;
 		}
 
@@ -32,8 +39,10 @@ public class IDAStar
 		}
 	}
 
-	/*
+	/**
 	 * Starts a depth bound DFS with a manhattan heuristic
+	 * 
+	 * @return new max depth bound
 	 */
 	private int depthBoundSearch(PuzzleState root, int bound)
 	{
@@ -42,7 +51,8 @@ public class IDAStar
 		int minDepth = 0;
 		PuzzleState currentState = null;
 
-		frontier.add(root);
+		PuzzleState startState = root.clone();
+		frontier.add(startState);
 
 		while (!frontier.isEmpty() && minDepth < bound)
 		{
@@ -63,6 +73,7 @@ public class IDAStar
 					neighbor.setParentState(currentState);
 
 					int cost = neighbor.getMoves() + neighbor.getManhattanDistance();
+
 					if (cost < minDepth)
 					{
 						minDepth = cost;
