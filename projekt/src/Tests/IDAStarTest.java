@@ -23,8 +23,8 @@ public class IDAStarTest
 		int[][] puzzle = { { 12, 13, 11, 9 }, { 10, 15, 14, 1 }, { 2, 8, 0, 4 }, { 3, 7, 6, 5 } };
 
 		PuzzleState startState = new PuzzleState(puzzle);
-		// startState.printPuzzle();
-		// AStar astar = new AStar(startState);
+		//startState.printPuzzle();
+		//IDAStar ida = new IDAStar(startState);
 	}
 	
 	@Test
@@ -33,7 +33,7 @@ public class IDAStarTest
 		int[][] puzzle = { { 2, 0, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 15, 1 } };
 
 		PuzzleState startState = new PuzzleState(puzzle);
-		//startState.printPuzzle();
-		//IDAStar ida = new IDAStar(startState);
+		startState.printPuzzle();
+		IDAStar ida = new IDAStar(startState);
 	}
 }

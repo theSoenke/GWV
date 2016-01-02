@@ -13,11 +13,11 @@ public class Main
 
 	public Main()
 	{
-		PuzzleState puzzle = PuzzleState.createSolvablePuzzle();
+		PuzzleState puzzle = PuzzleState.createPuzzleBySliding();
 		System.out.println("Initial State:");
 		puzzle.printPuzzle();
 
-		// IDAStar idastar = new IDAStar(puzzle);
+		//IDAStar idastar = new IDAStar(puzzle);
 		AStar aStar = new AStar(puzzle);
 	}
 }

@@ -22,11 +22,12 @@ public class IDAStar
 			return;
 		}
 
-		depth = depthBoundSearch(_initialState, 100);
+		//depth = depthBoundSearch(_initialState, 100);
 		while (!_foundGoal && depth < maxDepth)
 		{
-			//depth = depthBoundSearch(_initialState, depth);
-			depth++;
+			depth = depthBoundSearch(_initialState, depth);
+			System.out.println(depth);
+			//depth++;
 		}
 
 		if (_foundGoal)

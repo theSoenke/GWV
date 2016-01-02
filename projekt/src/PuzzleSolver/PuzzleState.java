@@ -67,13 +67,13 @@ public class PuzzleState implements Comparable<PuzzleState>
 	/*
 	 * Returns a random puzzle created by sliding tiles
 	 */
-	public static PuzzleState createSolvableBySliding()
+	public static PuzzleState createPuzzleBySliding()
 	{
-		int[][] defaultPuzzle = { { 0, 1, 2, 3 }, { 4, 5, 6, 7 }, { 8, 9, 10, 11 }, { 12, 13, 14, 15 } };
+		int[][] defaultPuzzle = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 15, 0 } };
 		PuzzleState puzzle = new PuzzleState(defaultPuzzle);
 		Random random = new Random();
 
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 80; i++)
 		{
 			List<PuzzleState> neighbors = puzzle.getNeighborStates();
 			int rand = random.nextInt(neighbors.size());
