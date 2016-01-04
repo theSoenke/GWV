@@ -1,11 +1,14 @@
 package PuzzleSolver;
 
+import GUI.GUI;
 import PuzzleSolver.Search.AStar;
 import PuzzleSolver.Search.IDAStar;
 
 public class Main
 {
 
+    final GUI gui = new GUI();
+    
 	public static void main(String[] args)
 	{
 		new Main();
@@ -13,11 +16,13 @@ public class Main
 
 	public Main()
 	{
-		PuzzleState puzzle = PuzzleState.createPuzzleBySliding();
+		
+	    gui.zeigeFenster();
+	    PuzzleState puzzle = PuzzleState.createPuzzleBySliding();
 		System.out.println("Initial State:");
 		puzzle.printPuzzle();
 
-		// IDAStar idastar = new IDAStar(puzzle);
+		//IDAStar idastar = new IDAStar(puzzle);
 		AStar aStar = new AStar(puzzle);
 	}
 }
