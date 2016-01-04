@@ -94,8 +94,8 @@ public class AStar
 
 		while (currentState != null && !currentState.equals(_startState))
 		{
-			path.add(currentState);
 			currentState = currentState.getParentState();
+			path.add(currentState);
 		}
 
 		Collections.reverse(path);
