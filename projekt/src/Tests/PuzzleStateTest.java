@@ -18,6 +18,7 @@ public class PuzzleStateTest
 	private int[][] _testPuzzle3 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 15, 14, 0 } };
 	private int[][] _testPuzzle4 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 0, 15 } };
 	private int[][] _testPuzzle5 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 0, 11 }, { 13, 14, 15, 12 } };
+	private int[][] _testPuzzle6 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 0 }, { 13, 14, 15, 12 } };
 
 	@Test
 	public void testManhattanDistance()
@@ -30,6 +31,9 @@ public class PuzzleStateTest
 
 		PuzzleState state4 = new PuzzleState(_testPuzzle4);
 		assertEquals(1, state4.getManhattanDistance());
+
+		PuzzleState state6 = new PuzzleState(_testPuzzle6);
+		assertEquals(1, state6.getManhattanDistance());
 	}
 
 	@Test

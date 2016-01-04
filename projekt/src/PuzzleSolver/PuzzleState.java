@@ -73,7 +73,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		PuzzleState puzzle = new PuzzleState(defaultPuzzle);
 		Random random = new Random();
 
-		for (int i = 0; i < 80; i++)
+		for (int i = 0; i < 100; i++)
 		{
 			List<PuzzleState> neighbors = puzzle.getNeighborStates();
 			int rand = random.nextInt(neighbors.size());
@@ -440,8 +440,8 @@ public class PuzzleState implements Comparable<PuzzleState>
 	@Override
 	public int compareTo(PuzzleState state)
 	{
-		float cost = _moves + calcManhattanDistance();
-		float compareCost = state.getMoves() + state.calcManhattanDistance();
+		float cost = _moves + getManhattanDistance();
+		float compareCost = state.getMoves() + state.getManhattanDistance();
 
 		if (cost < compareCost)
 		{

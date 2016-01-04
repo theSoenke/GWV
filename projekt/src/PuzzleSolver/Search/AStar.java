@@ -20,14 +20,13 @@ public class AStar
 		if (startState.isSolvable())
 		{
 			solve();
+			printSolution();
 		}
 		else
 		{
 			System.out.println("Puzzle not solvable");
 		}
 	}
-
-	int i = 100;
 
 	private void solve()
 	{
@@ -47,32 +46,17 @@ public class AStar
 			if (manhattanDist == 0)
 			{
 				_goalState = currentState;
-				printSolution();
 				return;
-			}
-
-			if (i < 100)
-			{
-				System.out.println("Current" + " moves: " + currentState.getMoves() + " manhattan: " + currentState.getManhattanDistance());
-				currentState.printPuzzle();
 			}
 
 			for (PuzzleState neighbor : currentState.getNeighborStates())
 			{
 				if (!closed.contains(neighbor.hashCode()) && !open.contains(neighbor.hashCode()))
 				{
-					if (i < 100)
-					{
-						System.out.println("Neighbor" + " moves: " + neighbor.getMoves() + " manhattan: " + neighbor.getManhattanDistance());
-						neighbor.printPuzzle();
-					}
 					frontier.add(neighbor);
 					open.add(neighbor.hashCode());
 				}
 			}
-			
-			//System.out.println(currentState.isSolvable());
-			//System.out.println("cost: " + (currentState.getMoves() + currentState.getManhattanDistance()) );
 
 			open.remove(currentState.hashCode());
 			closed.add(currentState.hashCode());
@@ -81,7 +65,6 @@ public class AStar
 			{
 				System.out.println("closed: " + closed.size() + " frontier: " + frontier.size());
 			}
-			i++;
 		}
 
 		System.out.println("No solution found");
