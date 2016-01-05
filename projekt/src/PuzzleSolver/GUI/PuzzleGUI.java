@@ -6,24 +6,28 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-public class GUI
+
+public class PuzzleGUI
 {
     private JPanel mainpanel;
     private JButton solve;
     private JButton reset;
     private JFrame frame;
     private GraphicsPanel puzzleGraphics;
-    private PuzzleWerkzeug werkzeug = new GUIWerkzeug();
+    private PuzzleWerkzeug werkzeug = new PuzzleWerkzeug();
 
-    public GUI()
+    public PuzzleGUI()
     {
         initGUI();
     }
@@ -89,7 +93,7 @@ public class GUI
         frame.setVisible(true);
     }
 
-    class GraphicsPanel extends JPanel
+    class GraphicsPanel extends JPanel implements MouseListener
     {
         private static final int ROWS = 4;
         private static final int COLS = 4;
@@ -103,6 +107,7 @@ public class GUI
             this.setPreferredSize(
                     new Dimension(CELL_SIZE * COLS, CELL_SIZE * ROWS));
             this.setBackground(Color.black);
+            this.addMouseListener(this);
         }
 
         public void paintComponent(Graphics g)
@@ -126,6 +131,32 @@ public class GUI
                 }
             }
         }
+
+        @Override
+        public void mouseClicked(MouseEvent arg0){}
+
+        @Override
+        public void mouseEntered(MouseEvent arg0){}
+
+        @Override
+        public void mouseExited(MouseEvent arg0){}
+
+        @Override
+        public void mousePressed(MouseEvent e)
+        {
+            int col = e.getX()/CELL_SIZE;
+            int row = e.getY()/CELL_SIZE;
+            
+            if (!werkzeug.moveTile(row, col))
+            {
+                Toolkit.getDefaultToolkit().beep();
+            }
+            
+            this.repaint();
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent arg0){}
     }
 
     public class NewGameAction implements ActionListener
