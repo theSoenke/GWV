@@ -1,6 +1,6 @@
 package GUI;
 
-public class GUIWerkzeug
+public class PuzzleWerkzeug
 {
     private static final int ROWS = 4;
     private static final int COLS = 4;
@@ -8,7 +8,7 @@ public class GUIWerkzeug
     private Tile[][] contents;
     private Tile emptyTile;
 
-    public GUIWerkzeug()
+    public PuzzleWerkzeug()
     {
         contents = new Tile[ROWS][COLS];
         reset();

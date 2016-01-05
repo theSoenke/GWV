@@ -21,7 +21,7 @@ public class GUI
     private JButton reset;
     private JFrame frame;
     private GraphicsPanel puzzleGraphics;
-    private GUIWerkzeug werkzeug = new GUIWerkzeug();
+    private PuzzleWerkzeug werkzeug = new GUIWerkzeug();
 
     public GUI()
     {
