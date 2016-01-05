@@ -1,5 +1,7 @@
 package PuzzleSolver.GUI;
 
+import PuzzleSolver.PuzzleState;
+
 public class PuzzleWerkzeug
 {
 	private static final int ROWS = 4;
@@ -29,15 +31,23 @@ public class PuzzleWerkzeug
 			}
 		}
 
-		emptyTile = contents[ROWS - 1][COLS - 1];
-		emptyTile.setNumber(null);
+		PuzzleState newPuzzle = PuzzleState.createPuzzleBySliding();
 
 		// Tausche Tile mit einer einer zufälligen Tile
 		for (int r = 0; r < ROWS; r++)
 		{
 			for (int c = 0; c < COLS; c++)
 			{
-				switchTiles(r, c, (int) (Math.random() * ROWS), (int) (Math.random() * COLS));
+				int value = newPuzzle.getArray()[r][c];
+				if (value == 0)
+				{
+					emptyTile = contents[r][c];
+					emptyTile.setNumber(null);
+				}
+				else
+				{
+					contents[r][c] = new Tile(r, c, "" + value);
+				}
 			}
 		}
 	}
