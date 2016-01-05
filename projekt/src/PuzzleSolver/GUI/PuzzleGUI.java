@@ -115,14 +115,14 @@ public class PuzzleGUI
 				{
 					int x = c * CELL_SIZE;
 					int y = r * CELL_SIZE;
-					String text = werkzeug.getNumber(r, c);
-					if (text != null)
+					int value = werkzeug.getNumber(r, c);
+					if (value != 0)
 					{
 						g.setColor(Color.gray);
 						g.fillRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4);
 						g.setColor(Color.black);
 						g.setFont(_biggerFont);
-						g.drawString(text, x + 20, y + (3 * CELL_SIZE) / 4);
+						g.drawString(Integer.toString(value), x + 20, y + (3 * CELL_SIZE) / 4);
 					}
 				}
 			}

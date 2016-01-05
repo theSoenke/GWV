@@ -7,72 +7,72 @@ public class PuzzleWerkzeug
 	private static final int ROWS = 4;
 	private static final int COLS = 4;
 
-	private Tile[][] contents;
-	private Tile emptyTile;
+	private PuzzleState _currentState;
 
 	public PuzzleWerkzeug()
 	{
-		contents = new Tile[ROWS][COLS];
 		reset();
 	}
 
-	String getNumber(int row, int col)
+	public int getNumber(int r, int c)
 	{
-		return contents[row][col].getNumber();
+		return _currentState.getArray()[r][c];
 	}
 
+	/*
+	 * Creates a new random puzzle
+	 */
 	public void reset()
 	{
-		for (int r = 0; r < ROWS; r++)
-		{
-			for (int c = 0; c < COLS; c++)
-			{
-				contents[r][c] = new Tile(r, c, "" + (r * COLS + c + 1));
-			}
-		}
-
-		PuzzleState newPuzzle = PuzzleState.createPuzzleBySliding();
-
-		// Tausche Tile mit einer einer zufälligen Tile
-		for (int r = 0; r < ROWS; r++)
-		{
-			for (int c = 0; c < COLS; c++)
-			{
-				int value = newPuzzle.getArray()[r][c];
-				if (value == 0)
-				{
-					emptyTile = contents[r][c];
-					emptyTile.setNumber(null);
-				}
-				else
-				{
-					contents[r][c] = new Tile(r, c, "" + value);
-				}
-			}
-		}
-	}
-
-	private void switchTiles(int r1, int c1, int r2, int c2)
-	{
-		Tile temp = contents[r1][c1];
-		contents[r1][c1] = contents[r2][c2];
-		contents[r2][c2] = temp;
+		_currentState = PuzzleState.createPuzzleBySliding();
 	}
 
 	public boolean moveTile(int r, int c)
 	{
-		return checkEmptyTile(r, c, -1, 0) || checkEmptyTile(r, c, 1, 0) || checkEmptyTile(r, c, 0, -1)
-				|| checkEmptyTile(r, c, 0, 1);
+		if (moveEmptyTile(r, c - 1))
+		{
+			PuzzleState tmpState = _currentState.moveRight();
+			if (tmpState != null)
+			{
+				_currentState = tmpState;
+				return true;
+			}
+		}
+		else if (moveEmptyTile(r, c + 1))
+		{
+			PuzzleState tmpState = _currentState.moveLeft();
+			if (tmpState != null)
+			{
+				_currentState = tmpState;
+				return true;
+			}
+		}
+		else if (moveEmptyTile(r - 1, c))
+		{
+			PuzzleState tmpState = _currentState.moveDown();
+			if (tmpState != null)
+			{
+				_currentState = tmpState;
+				return true;
+			}
+		}
+		else if (moveEmptyTile(r + 1, c))
+		{
+			PuzzleState tmpState = _currentState.moveUp();
+			if (tmpState != null)
+			{
+				_currentState = tmpState;
+				return true;
+			}
+		}
+
+		return false;
 	}
 
-	private boolean checkEmptyTile(int r, int c, int rdelta, int cdelta)
+	private boolean moveEmptyTile(int r, int c)
 	{
-		int rNeighbor = r + rdelta;
-		int cNeighbor = c + cdelta;
-		// --- Check to see if this neighbor is on board and is empty.
-		if (isLegal(rNeighbor, cNeighbor) && contents[rNeighbor][cNeighbor] == emptyTile)
+		if (_currentState.getEmptyCell().y == r && _currentState.getEmptyCell().x == c)
 		{
-			switchTiles(r, c, rNeighbor, cNeighbor);
 			return true;
 		}
 		return false;
@@ -85,15 +85,11 @@ public class PuzzleWerkzeug
 
 	public boolean isGameOver()
 	{
-		for (int r = 0; r < ROWS; r++)
+		if (_currentState.getManhattanDistance() == 0)
 		{
-			for (int c = 0; c < ROWS; c++)
-			{
-				Tile t = contents[r][c];
-				return t.isInFinalPosition(r, c);
-			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 }

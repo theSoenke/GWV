@@ -391,7 +391,47 @@ public class PuzzleState implements Comparable<PuzzleState>
 		return false;
 	}
 
-	private Cell getEmptyCell()
+	public PuzzleState moveRight()
+	{
+		PuzzleState cloneState = clone();
+		if (cloneState.moveCell(moveDirection.right))
+		{
+			return cloneState;
+		}
+		return null;
+	}
+
+	public PuzzleState moveLeft()
+	{
+		PuzzleState cloneState = clone();
+		if (cloneState.moveCell(moveDirection.left))
+		{
+			return cloneState;
+		}
+		return null;
+	}
+
+	public PuzzleState moveUp()
+	{
+		PuzzleState cloneState = clone();
+		if (cloneState.moveCell(moveDirection.up))
+		{
+			return cloneState;
+		}
+		return null;
+	}
+
+	public PuzzleState moveDown()
+	{
+		PuzzleState cloneState = clone();
+		if (cloneState.moveCell(moveDirection.down))
+		{
+			return cloneState;
+		}
+		return null;
+	}
+
+	public Cell getEmptyCell()
 	{
 		Cell emptyCell = null;
 
@@ -423,20 +463,6 @@ public class PuzzleState implements Comparable<PuzzleState>
 		}
 	}
 
-	private class Cell
-	{
-		public final int x;
-		public final int y;
-
-		public Cell(int x, int y)
-		{
-			this.x = x;
-			this.y = y;
-		}
-	}
-
-	int i = 0;
-
 	@Override
 	public int compareTo(PuzzleState state)
 	{
@@ -454,6 +480,18 @@ public class PuzzleState implements Comparable<PuzzleState>
 		else
 		{
 			return 0;
+		}
+	}
+
+	public class Cell
+	{
+		public final int x;
+		public final int y;
+
+		public Cell(int x, int y)
+		{
+			this.x = x;
+			this.y = y;
 		}
 	}
 }
