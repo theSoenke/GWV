@@ -94,32 +94,3 @@ public class PuzzleWerkzeug
 
 }
 
-class Tile
-{
-
-	private int row;
-	private int col;
-	private String number;
-
-	public Tile(int r, int c, String n)
-	{
-		row = r;
-		col = c;
-		number = n;
-	}
-
-	public void setNumber(String newNumber)
-	{
-		number = newNumber;
-	}
-
-	public String getNumber()
-	{
-		return number;
-	}
-
-	public boolean isInFinalPosition(int r, int c)
-	{
-		return r == row && c == col;
-	}
-}

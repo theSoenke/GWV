@@ -10,7 +10,7 @@ import java.util.Random;
 public class PuzzleState implements Comparable<PuzzleState>
 {
 	private final int[][] _puzzle;
-	private Cell _emptyCell;
+	private Tile _emptyCell;
 	private PuzzleState _parentState;
 	private int _moves;
 	private int _manhattanDistance;
@@ -348,7 +348,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 			if (_emptyCell.y > 0)
 			{
 				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y - 1][_emptyCell.x];
-				_emptyCell = new Cell(_emptyCell.x, _emptyCell.y - 1);
+				_emptyCell = new Tile(_emptyCell.x, _emptyCell.y - 1);
 				_puzzle[_emptyCell.y][_emptyCell.x] = 0;
 				return true;
 			}
@@ -359,7 +359,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 			if (_emptyCell.y < 3)
 			{
 				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y + 1][_emptyCell.x];
-				_emptyCell = new Cell(_emptyCell.x, _emptyCell.y + 1);
+				_emptyCell = new Tile(_emptyCell.x, _emptyCell.y + 1);
 				_puzzle[_emptyCell.y][_emptyCell.x] = 0;
 				return true;
 			}
@@ -370,7 +370,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 			if (_emptyCell.x > 0)
 			{
 				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y][_emptyCell.x - 1];
-				_emptyCell = new Cell(_emptyCell.x - 1, _emptyCell.y);
+				_emptyCell = new Tile(_emptyCell.x - 1, _emptyCell.y);
 				_puzzle[_emptyCell.y][_emptyCell.x] = 0;
 				return true;
 			}
@@ -381,7 +381,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 			if (_emptyCell.x < 3)
 			{
 				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y][_emptyCell.x + 1];
-				_emptyCell = new Cell(_emptyCell.x + 1, _emptyCell.y);
+				_emptyCell = new Tile(_emptyCell.x + 1, _emptyCell.y);
 				_puzzle[_emptyCell.y][_emptyCell.x] = 0;
 				return true;
 			}
@@ -431,9 +431,9 @@ public class PuzzleState implements Comparable<PuzzleState>
 		return null;
 	}
 
-	public Cell getEmptyCell()
+	public Tile getEmptyCell()
 	{
-		Cell emptyCell = null;
+		Tile emptyCell = null;
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -443,7 +443,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 				{
 					if (emptyCell == null)
 					{
-						emptyCell = new Cell(j, i);
+						emptyCell = new Tile(j, i);
 					}
 					else
 					{
@@ -483,12 +483,12 @@ public class PuzzleState implements Comparable<PuzzleState>
 		}
 	}
 
-	public class Cell
+	public class Tile
 	{
 		public final int x;
 		public final int y;
 
-		public Cell(int x, int y)
+		public Tile(int x, int y)
 		{
 			this.x = x;
 			this.y = y;
