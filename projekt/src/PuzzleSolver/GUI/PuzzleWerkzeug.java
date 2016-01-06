@@ -26,6 +26,11 @@ public class PuzzleWerkzeug
 	{
 		_currentState = PuzzleState.createPuzzleBySliding();
 	}
+	
+	 public void solve()
+	 {
+	       
+     }
 
 	public boolean moveTile(int r, int c)
 	{
