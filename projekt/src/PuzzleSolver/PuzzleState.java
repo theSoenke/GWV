@@ -14,8 +14,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	private PuzzleState _parentState;
 	private int _moves;
 	private int _heuristic;
-	private boolean _manhattanDist;
-	private int _manhattanDistance;
+	private boolean _linearConflict;
 
 	/*
 	 * Move direction of the empty cell
@@ -25,51 +24,48 @@ public class PuzzleState implements Comparable<PuzzleState>
 		up, down, left, right
 	}
 
-	public PuzzleState(int[][] puzzle, boolean manhattanDist)
+	public PuzzleState(int[][] puzzle, boolean linearConflict)
 	{
-		initState(puzzle, manhattanDist);
+		initState(puzzle, linearConflict);
 	}
 
-	public PuzzleState(int[][] puzzle, int moves, PuzzleState parent, boolean manhattanDist)
+	public PuzzleState(int[][] puzzle, int moves, PuzzleState parent, boolean linearConflict)
 	{
-		initState(puzzle, manhattanDist);
+		initState(puzzle, linearConflict);
 
 		_moves = moves;
 		_parentState = parent;
 
 	}
 
-	private void initState(int[][] puzzle, boolean manhattanDist)
+	private void initState(int[][] puzzle, boolean linearConflict)
 	{
 		if (puzzle.length != 4 && puzzle[0].length != 4)
 		{
 			throw new RuntimeException("Puzzle is not 4x4");
 		}
 
-		_manhattanDist = manhattanDist;
+		_linearConflict = linearConflict;
 		_puzzle = puzzle;
 		_emptyCell = getEmptyCell();
 
-		_manhattanDistance = calcManhattanDistance();
-		if (manhattanDist)
+		_heuristic = calcManhattanDistance();
+
+		if (linearConflict)
 		{
-			_heuristic = _manhattanDistance;
-		}
-		else
-		{
-			_heuristic = calcLinearConflict();
+			_heuristic += calcLinearConflict();
 		}
 	}
 
 	/*
 	 * Returns a puzzle that is solvable
 	 */
-	public static PuzzleState createSolvablePuzzle(boolean manhattanDist)
+	public static PuzzleState createSolvablePuzzle(boolean linearConflict)
 	{
 		PuzzleState puzzle = null;
 		do
 		{
-			puzzle = createRandomPuzzle(manhattanDist);
+			puzzle = createRandomPuzzle(linearConflict);
 		}
 		while (!puzzle.isSolvable());
 
@@ -79,10 +75,10 @@ public class PuzzleState implements Comparable<PuzzleState>
 	/*
 	 * Returns a random puzzle created by sliding tiles
 	 */
-	public static PuzzleState createPuzzleBySliding(boolean manhattanDist)
+	public static PuzzleState createPuzzleBySliding(boolean linearConflict)
 	{
 		int[][] defaultPuzzle = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 15, 0 } };
-		PuzzleState puzzle = new PuzzleState(defaultPuzzle, manhattanDist);
+		PuzzleState puzzle = new PuzzleState(defaultPuzzle, linearConflict);
 		Random random = new Random();
 
 		for (int i = 0; i < 100; i++)
@@ -98,7 +94,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	/*
 	 * Create a random puzzle. Can be unsolvable
 	 */
-	public static PuzzleState createRandomPuzzle(boolean manhattanDist)
+	public static PuzzleState createRandomPuzzle(boolean linearConflict)
 	{
 		int[][] puzzle = new int[4][4];
 
@@ -115,7 +111,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 			}
 		}
 
-		return new PuzzleState(puzzle, manhattanDist);
+		return new PuzzleState(puzzle, linearConflict);
 	}
 
 	public PuzzleState getParentState()
@@ -135,7 +131,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 
 	public boolean isSolved()
 	{
-		if (_manhattanDistance == 0)
+		if (_heuristic == 0)
 		{
 			return true;
 		}
@@ -269,7 +265,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		{
 			puzzleClone[i] = Arrays.copyOf(_puzzle[i], _puzzle.length);
 		}
-		PuzzleState cloneState = new PuzzleState(puzzleClone, _moves + 1, this, _manhattanDist);
+		PuzzleState cloneState = new PuzzleState(puzzleClone, _moves + 1, this, _linearConflict);
 		return cloneState;
 	}
 

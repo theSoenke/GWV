@@ -23,22 +23,6 @@ public class PuzzleStateTest
 	@Test
 	public void testManhattanDistance()
 	{
-		PuzzleState state1 = new PuzzleState(_testPuzzle1, true);
-		assertEquals(0, state1.getHeuristic());
-
-		PuzzleState state2 = new PuzzleState(_testPuzzle2, true);
-		assertEquals(2, state2.getHeuristic());
-
-		PuzzleState state4 = new PuzzleState(_testPuzzle4, true);
-		assertEquals(1, state4.getHeuristic());
-
-		PuzzleState state6 = new PuzzleState(_testPuzzle6, true);
-		assertEquals(1, state6.getHeuristic());
-	}
-
-	@Test
-	public void testLinearConflictDistance()
-	{
 		PuzzleState state1 = new PuzzleState(_testPuzzle1, false);
 		assertEquals(0, state1.getHeuristic());
 
@@ -46,20 +30,36 @@ public class PuzzleStateTest
 		assertEquals(2, state2.getHeuristic());
 
 		PuzzleState state4 = new PuzzleState(_testPuzzle4, false);
-		assertEquals(0, state4.getHeuristic());
+		assertEquals(1, state4.getHeuristic());
+
+		PuzzleState state6 = new PuzzleState(_testPuzzle6, false);
+		assertEquals(1, state6.getHeuristic());
+	}
+
+	@Test
+	public void testLinearConflictDistance()
+	{
+		PuzzleState state1 = new PuzzleState(_testPuzzle1, true);
+		assertEquals(0, state1.getHeuristic());
+
+		PuzzleState state2 = new PuzzleState(_testPuzzle2, true);
+		assertEquals(4, state2.getHeuristic());
+
+		PuzzleState state4 = new PuzzleState(_testPuzzle4, true);
+		assertEquals(1, state4.getHeuristic());
 	}
 
 	@Test
 	public void testNeighborStates()
 	{
-		PuzzleState state1 = new PuzzleState(_testPuzzle1, true);
+		PuzzleState state1 = new PuzzleState(_testPuzzle1, false);
 		List<PuzzleState> neighbors = state1.getNeighborStates();
 		assertEquals(2, neighbors.size());
 
 		int[][] stateUpValues = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 0 }, { 13, 14, 15, 12 } };
 		int[][] stateLeftValues = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 0, 15 } };
-		PuzzleState stateUp = new PuzzleState(stateUpValues, true);
-		PuzzleState stateLeft = new PuzzleState(stateLeftValues, true);
+		PuzzleState stateUp = new PuzzleState(stateUpValues, false);
+		PuzzleState stateLeft = new PuzzleState(stateLeftValues, false);
 
 		assertTrue(neighbors.contains(stateUp));
 		assertTrue(neighbors.contains(stateLeft));
@@ -68,25 +68,25 @@ public class PuzzleStateTest
 	@Test
 	public void testIsSolvable()
 	{
-		PuzzleState state1 = new PuzzleState(_testPuzzle1, true);
+		PuzzleState state1 = new PuzzleState(_testPuzzle1, false);
 		assertTrue(state1.isSolvable());
 
-		PuzzleState state2 = new PuzzleState(_testPuzzle2, true);
+		PuzzleState state2 = new PuzzleState(_testPuzzle2, false);
 		assertFalse(state2.isSolvable());
 
-		PuzzleState state3 = new PuzzleState(_testPuzzle3, true);
+		PuzzleState state3 = new PuzzleState(_testPuzzle3, false);
 		assertFalse(state3.isSolvable());
 
-		PuzzleState state4 = new PuzzleState(_testPuzzle5, true);
+		PuzzleState state4 = new PuzzleState(_testPuzzle5, false);
 		assertTrue(state4.isSolvable());
 	}
 
 	@Test
 	public void testStateEquals()
 	{
-		PuzzleState state1 = new PuzzleState(_testPuzzle1, true);
-		PuzzleState state2 = new PuzzleState(_testPuzzle1, true);
-		PuzzleState state3 = new PuzzleState(_testPuzzle2, true);
+		PuzzleState state1 = new PuzzleState(_testPuzzle1, false);
+		PuzzleState state2 = new PuzzleState(_testPuzzle1, false);
+		PuzzleState state3 = new PuzzleState(_testPuzzle2, false);
 
 		assertTrue(state1.equals(state2));
 		assertFalse(state1.equals(state3));
@@ -97,8 +97,8 @@ public class PuzzleStateTest
 	@Test
 	public void testPritorityQueueManhattanDistance()
 	{
-		PuzzleState state1 = new PuzzleState(_testPuzzle1, true);
-		PuzzleState state2 = new PuzzleState(_testPuzzle4, true);
+		PuzzleState state1 = new PuzzleState(_testPuzzle1, false);
+		PuzzleState state2 = new PuzzleState(_testPuzzle4, false);
 
 		PriorityQueue<PuzzleState> queue = new PriorityQueue<PuzzleState>();
 		queue.add(state1);
