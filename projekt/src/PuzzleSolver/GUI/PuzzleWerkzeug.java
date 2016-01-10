@@ -24,7 +24,7 @@ public class PuzzleWerkzeug
 	 */
 	public void reset()
 	{
-		_currentState = PuzzleState.createPuzzleBySliding();
+		_currentState = PuzzleState.createPuzzleBySliding(true);
 	}
 	
 	 public void solve()
@@ -90,7 +90,7 @@ public class PuzzleWerkzeug
 
 	public boolean isGameOver()
 	{
-		if (_currentState.getManhattanDistance() == 0)
+		if (_currentState.isSolved())
 		{
 			return true;
 		}

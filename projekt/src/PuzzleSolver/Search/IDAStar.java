@@ -12,7 +12,7 @@ public class IDAStar
 
 	public IDAStar(PuzzleState initialState)
 	{
-		int depth = initialState.getManhattanDistance();
+		int depth = initialState.getHeuristic();
 		int maxDepth = depth * 10;
 		_initialState = initialState;
 
@@ -60,7 +60,7 @@ public class IDAStar
 			currentState = frontier.poll();
 			minDepth = Integer.MAX_VALUE;
 
-			if (currentState.getManhattanDistance() == 0)
+			if (currentState.getHeuristic() == 0)
 			{
 				_foundGoal = true;
 				return minDepth;
@@ -72,7 +72,7 @@ public class IDAStar
 				{
 					frontier.add(neighbor);
 
-					int cost = neighbor.getMoves() + neighbor.getManhattanDistance();
+					int cost = neighbor.getMoves() + neighbor.getHeuristic();
 
 					if (cost < minDepth)
 					{

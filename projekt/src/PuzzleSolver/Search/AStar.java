@@ -41,9 +41,7 @@ public class AStar
 		{
 			currentState = frontier.poll();
 
-			int manhattanDist = currentState.getManhattanDistance();
-
-			if (manhattanDist == 0)
+			if (currentState.isSolved())
 			{
 				_goalState = currentState;
 				return;

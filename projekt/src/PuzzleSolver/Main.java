@@ -1,6 +1,7 @@
 package PuzzleSolver;
 
 import PuzzleSolver.GUI.PuzzleGUI;
+import PuzzleSolver.Search.AStar;
 
 public class Main
 {
@@ -15,11 +16,11 @@ public class Main
 	{
 		_gui = new PuzzleGUI();
 		_gui.showUI();
-		PuzzleState puzzle = PuzzleState.createPuzzleBySliding();
+		PuzzleState puzzle = PuzzleState.createPuzzleBySliding(true);
 		System.out.println("Initial State:");
 		puzzle.printPuzzle();
 
 		// IDAStar idastar = new IDAStar(puzzle);
-		// AStar aStar = new AStar(puzzle);
+		AStar aStar = new AStar(puzzle);
 	}
 }
