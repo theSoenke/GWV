@@ -15,6 +15,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	private int _moves;
 	private int _heuristic;
 	private boolean _manhattanDist;
+	private int _manhattanDistance;
 
 	/*
 	 * Move direction of the empty cell
@@ -49,9 +50,10 @@ public class PuzzleState implements Comparable<PuzzleState>
 		_puzzle = puzzle;
 		_emptyCell = getEmptyCell();
 
+		_manhattanDistance = calcManhattanDistance();
 		if (manhattanDist)
 		{
-			_heuristic = calcManhattanDistance();
+			_heuristic = _manhattanDistance;
 		}
 		else
 		{
@@ -131,16 +133,15 @@ public class PuzzleState implements Comparable<PuzzleState>
 		return _puzzle;
 	}
 
-	
 	public boolean isSolved()
 	{
-		if(calcManhattanDistance() == 0)
+		if (_manhattanDistance == 0)
 		{
 			return true;
 		}
 		return false;
 	}
-	
+
 	/*
 	 * Returns true when the puzzle has as solution
 	 */
