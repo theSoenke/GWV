@@ -1,5 +1,7 @@
 package PuzzleSolver.GUI;
 
+import javax.swing.JOptionPane;
+
 import PuzzleSolver.PuzzleState;
 
 public class PuzzleWerkzeug
@@ -92,7 +94,10 @@ public class PuzzleWerkzeug
 	{
 		if (_currentState.isSolved())
 		{
+			_currentState.printPuzzle();
+			JOptionPane.showMessageDialog(null, "You've got it." , "Congratulations",JOptionPane.PLAIN_MESSAGE);
 			return true;
+			
 		}
 		return false;
 	}

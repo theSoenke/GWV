@@ -22,6 +22,7 @@ public class PuzzleGUI
 	private JPanel mainpanel;
 	private JButton solve;
 	private JButton reset;
+	private JButton help;
 	private JFrame frame;
 	private GraphicsPanel puzzleGraphics;
 
@@ -39,8 +40,9 @@ public class PuzzleGUI
 		mainpanel.setLayout(main);
 		frame.getContentPane().add(mainpanel, BorderLayout.SOUTH);
 		mainpanel.setBackground(new Color(255, 255, 255));
-		implementSolveButton();
 		implementResetButton();
+		implementHelpButton();
+		implementSolveButton();
 	}
 
 	private void implementPuzzle()
@@ -72,12 +74,24 @@ public class PuzzleGUI
 		solve.setSelected(true);
 		solve.addActionListener(new SolveAction());
 	}
+	
+	private void implementHelpButton()
+	{
+		help = new JButton();
+		mainpanel.add(help);
+		help.setText("Help!");
+		help.setPreferredSize(new java.awt.Dimension(180, 50));
+		help.setFont(new Font("Tahoma", Font.BOLD, 14));
+		help.setBackground(new Color(200, 200, 200));
+		help.setSelected(true);
+		help.addActionListener(new SolveAction());
+	}
 
 	private void implementResetButton()
 	{
 		reset = new JButton();
 		mainpanel.add(reset);
-		reset.setText("Reset");
+		reset.setText("New");
 		reset.setPreferredSize(new java.awt.Dimension(180, 50));
 		reset.setFont(new Font("Tahoma", Font.BOLD, 14));
 		reset.setBackground(new Color(200, 200, 200));
@@ -157,11 +171,13 @@ public class PuzzleGUI
 			}
 
 			this.repaint();
+			
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0)
 		{
+			werkzeug.isGameOver();
 		}
 	}
 

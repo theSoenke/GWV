@@ -81,7 +81,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		PuzzleState puzzle = new PuzzleState(defaultPuzzle, linearConflict);
 		Random random = new Random();
 
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 10; i++)
 		{
 			List<PuzzleState> neighbors = puzzle.getNeighborStates();
 			int rand = random.nextInt(neighbors.size());
