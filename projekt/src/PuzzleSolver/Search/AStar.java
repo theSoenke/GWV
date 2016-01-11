@@ -70,7 +70,7 @@ public class AStar
 		System.out.println("No solution found");
 	}
 
-	private void printSolution()
+	public List<PuzzleState> getSolution()
 	{
 		List<PuzzleState> path = new ArrayList<PuzzleState>();
 		PuzzleState currentState = _goalState;
@@ -82,6 +82,13 @@ public class AStar
 		}
 
 		Collections.reverse(path);
+
+		return path;
+	}
+
+	private void printSolution()
+	{
+		List<PuzzleState> path = getSolution();
 
 		System.out.println("Solution:");
 

@@ -1,8 +1,15 @@
 package PuzzleSolver.GUI;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 import PuzzleSolver.PuzzleState;
+import PuzzleSolver.GUI.PuzzleGUI.GraphicsPanel;
+import PuzzleSolver.Search.AStar;
 
 public class PuzzleWerkzeug
 {
@@ -10,6 +17,7 @@ public class PuzzleWerkzeug
 	private static final int COLS = 4;
 
 	private PuzzleState _currentState;
+	private Timer _timer;
 
 	public PuzzleWerkzeug()
 	{
@@ -28,11 +36,37 @@ public class PuzzleWerkzeug
 	{
 		_currentState = PuzzleState.createPuzzleBySliding(true);
 	}
-	
-	 public void solve()
-	 {
-	       
-     }
+
+	/*
+	 * Solves current puzzle
+	 */
+	public void solve(GraphicsPanel panel)
+	{
+		AStar aStar = new AStar(_currentState);
+		List<PuzzleState> path = aStar.getSolution();
+
+		for (int i = 0; i < path.size(); i++)
+		{
+			waitInBackground(500 * (i + 1), path.get(i), panel);
+		}
+	}
+
+	public void waitInBackground(int timeInSeconds, final PuzzleState state, final GraphicsPanel panel)
+	{
+
+		_timer = new Timer(timeInSeconds, new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				_currentState = state;
+				panel.repaint();
+				_timer.stop();
+			}
+		});
+		_timer.setRepeats(false);
+		_timer.start();
+	}
 
 	public boolean moveTile(int r, int c)
 	{
@@ -98,12 +132,11 @@ public class PuzzleWerkzeug
 		if (_currentState.isSolved())
 		{
 			_currentState.printPuzzle();
-			JOptionPane.showMessageDialog(null, "You've got it." , "Congratulations",JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, "You've got it.", "Congratulations", JOptionPane.PLAIN_MESSAGE);
 			return true;
-			
+
 		}
 		return false;
 	}
 
 }
-

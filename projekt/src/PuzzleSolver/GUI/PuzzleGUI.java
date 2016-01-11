@@ -74,7 +74,7 @@ public class PuzzleGUI
 		solve.setSelected(true);
 		solve.addActionListener(new SolveAction());
 	}
-	
+
 	private void implementHelpButton()
 	{
 		help = new JButton();
@@ -171,7 +171,7 @@ public class PuzzleGUI
 			}
 
 			this.repaint();
-			
+
 		}
 
 		@Override
@@ -193,8 +193,7 @@ public class PuzzleGUI
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			werkzeug.solve();
-			puzzleGraphics.repaint();
+			werkzeug.solve(puzzleGraphics);
 		}
 	}
 
