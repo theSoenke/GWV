@@ -42,6 +42,7 @@ public class PuzzleWerkzeug
 			if (tmpState != null)
 			{
 				_currentState = tmpState;
+				isGameOver();
 				return true;
 			}
 		}
@@ -51,6 +52,7 @@ public class PuzzleWerkzeug
 			if (tmpState != null)
 			{
 				_currentState = tmpState;
+				isGameOver();
 				return true;
 			}
 		}
@@ -60,6 +62,7 @@ public class PuzzleWerkzeug
 			if (tmpState != null)
 			{
 				_currentState = tmpState;
+				isGameOver();
 				return true;
 			}
 		}
@@ -69,10 +72,10 @@ public class PuzzleWerkzeug
 			if (tmpState != null)
 			{
 				_currentState = tmpState;
+				isGameOver();
 				return true;
 			}
 		}
-
 		return false;
 	}
 

@@ -177,7 +177,6 @@ public class PuzzleGUI
 		@Override
 		public void mouseReleased(MouseEvent arg0)
 		{
-			werkzeug.isGameOver();
 		}
 	}
 
