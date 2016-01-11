@@ -16,7 +16,7 @@ public class Main
 	{
 		_gui = new PuzzleGUI();
 		_gui.showUI();
-		PuzzleState puzzle = PuzzleState.createPuzzleBySliding(true);
+		PuzzleState puzzle = PuzzleState.createPuzzleBySliding(false);
 		System.out.println("Initial State:");
 		puzzle.printPuzzle();
 

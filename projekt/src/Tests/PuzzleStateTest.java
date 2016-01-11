@@ -1,6 +1,8 @@
 package Tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.PriorityQueue;
@@ -17,6 +19,7 @@ public class PuzzleStateTest
 	private int[][] _testPuzzle4 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 0, 15 } };
 	private int[][] _testPuzzle5 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 0, 11 }, { 13, 14, 15, 12 } };
 	private int[][] _testPuzzle6 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 0 }, { 13, 14, 15, 12 } };
+	private int[][] _testPuzzle7 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 0, 15 } };
 
 	@Test
 	public void testManhattanDistance()
@@ -45,6 +48,9 @@ public class PuzzleStateTest
 
 		PuzzleState state4 = new PuzzleState(_testPuzzle4, true);
 		assertEquals(1, state4.getHeuristic());
+
+		PuzzleState state7 = new PuzzleState(_testPuzzle7, true);
+		assertEquals(1, state7.getHeuristic());
 	}
 
 	@Test
@@ -103,5 +109,15 @@ public class PuzzleStateTest
 		queue.add(state2);
 
 		assertEquals(state1, queue.poll());
+	}
+
+	@Test
+	public void testIsSolved()
+	{
+		PuzzleState state1 = new PuzzleState(_testPuzzle1, false);
+		PuzzleState state2 = new PuzzleState(_testPuzzle7, false);
+
+		assertTrue(state1.isSolved());
+		assertFalse(state2.isSolved());
 	}
 }
