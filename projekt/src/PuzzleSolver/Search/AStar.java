@@ -40,6 +40,8 @@ public class AStar
 		while (!frontier.isEmpty())
 		{
 			currentState = frontier.poll();
+			
+			System.out.println("test");
 
 			if (currentState.isSolved())
 			{

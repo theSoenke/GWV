@@ -15,6 +15,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	private int _moves;
 	private int _heuristic;
 	private boolean _linearConflict;
+	private boolean _isFringePattern;
 
 	/*
 	 * Move direction of the empty cell
@@ -49,7 +50,9 @@ public class PuzzleState implements Comparable<PuzzleState>
 		_puzzle = puzzle;
 		_emptyCell = getEmptyCell();
 
-		_heuristic = fringeDistance();//calcManhattanDistance();
+		_heuristic = fringeDistance();// calcManhattanDistance();
+		System.out.println("Fringe heuristic: " + _heuristic);
+		System.out.println("Is fringe: " + _isFringePattern);
 
 		if (linearConflict)
 		{
@@ -429,7 +432,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	{
 		if (dir == moveDirection.up)
 		{
-			if (_emptyCell.y > 0)
+			if (_emptyCell.y > 0 && !(_emptyCell.y == 1 && _isFringePattern))
 			{
 				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y - 1][_emptyCell.x];
 				_emptyCell = new Tile(_emptyCell.x, _emptyCell.y - 1);
@@ -451,7 +454,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		}
 		else if (dir == moveDirection.left)
 		{
-			if (_emptyCell.x > 0)
+			if (_emptyCell.x > 0 && !(_emptyCell.x == 1 && _isFringePattern))
 			{
 				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y][_emptyCell.x - 1];
 				_emptyCell = new Tile(_emptyCell.x - 1, _emptyCell.y);
@@ -477,6 +480,47 @@ public class PuzzleState implements Comparable<PuzzleState>
 
 	private int fringeDistance()
 	{
+		int distance = fringePatternDistance();
+
+		if (distance == 0)
+		{
+			_isFringePattern = true;
+		}
+		else
+		{
+			_isFringePattern = false;
+		}
+		distance = 0;
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				int value = _puzzle[i][j];
+
+				if (_isFringePattern)
+				{
+					int y = ((value - 1) / 4);
+					int x = ((value - 1) % 4);
+					distance += Math.abs(i - y) + Math.abs(j - x);
+				}
+				else
+				{
+					if (value == 1 || value == 2 || value == 3 || value == 4 || value == 5 || value == 9 || value == 13)
+					{
+						int y = ((value - 1) / 4);
+						int x = ((value - 1) % 4);
+						distance += Math.abs(i - y) + Math.abs(j - x);
+					}
+				}
+			}
+		}
+
+		return distance;
+	}
+
+	private int fringePatternDistance()
+	{
 		int distance = 0;
 
 		for (int i = 0; i < 4; i++)
@@ -485,18 +529,17 @@ public class PuzzleState implements Comparable<PuzzleState>
 			{
 				int value = _puzzle[i][j];
 
-				if ((value == 1 || value == 2 || value == 3 || value == 4 || value == 5
-						 || value == 9 || value == 13))
+				if (value == 1 || value == 2 || value == 3 || value == 4 || value == 5 || value == 9 || value == 13)
 				{
-				int y = ((value - 1) / 4);
-				int x = ((value - 1) % 4);
-				distance += Math.abs(i - y) + Math.abs(j - x);
+					int y = ((value - 1) / 4);
+					int x = ((value - 1) % 4);
+					distance += Math.abs(i - y) + Math.abs(j - x);
+					System.out.println("value: " + value + " x: " + x + " y:" + y + " distance: " + distance);
 				}
 			}
 		}
 
 		return distance;
-
 	}
 
 	public PuzzleState moveRight()
