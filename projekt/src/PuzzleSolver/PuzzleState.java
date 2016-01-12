@@ -188,42 +188,6 @@ public class PuzzleState implements Comparable<PuzzleState>
 		}
 	}
 
-	public boolean isSolvable2()
-	{
-		if (_heuristic == 0)
-		{
-			return true;
-		}
-
-		int parity = 0;
-		int emptyRow = 0;
-		List<Integer> flatpuzzle = convertToFlatArray();
-
-		for (int i = 0; i < flatpuzzle.size(); i++)
-		{
-			for (int j = i + 1; j < flatpuzzle.size(); j++)
-			{
-				if (flatpuzzle.get(i) == 0)
-				{
-					emptyRow = i;
-				}
-				if (flatpuzzle.get(i) > flatpuzzle.get(j) && flatpuzzle.get(i) != 0 && flatpuzzle.get(j) != 0)
-				{
-					parity++;
-				}
-			}
-		}
-
-		if (emptyRow % 2 == 0)
-		{
-			return (parity % 2 == 0);
-		}
-		else
-		{
-			return (parity % 2 != 0);
-		}
-	}
-
 	/*
 	 * Converts 2d to 1d array
 	 */
@@ -488,9 +452,9 @@ public class PuzzleState implements Comparable<PuzzleState>
 		}
 		else
 		{
+			distance = 0;
 			_isFringePattern = false;
 		}
-		distance = 0;
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -498,20 +462,11 @@ public class PuzzleState implements Comparable<PuzzleState>
 			{
 				int value = _puzzle[i][j];
 
-				if (_isFringePattern)
+				if (!_isFringePattern)
 				{
 					int y = ((value - 1) / 4);
 					int x = ((value - 1) % 4);
 					distance += Math.abs(i - y) + Math.abs(j - x);
-				}
-				else
-				{
-					if (value == 1 || value == 2 || value == 3 || value == 4 || value == 5 || value == 9 || value == 13)
-					{
-						int y = ((value - 1) / 4);
-						int x = ((value - 1) % 4);
-						distance += Math.abs(i - y) + Math.abs(j - x);
-					}
 				}
 			}
 		}

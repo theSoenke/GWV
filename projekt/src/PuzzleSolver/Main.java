@@ -19,7 +19,7 @@ public class Main
 		// PuzzleState puzzle = PuzzleState.createPuzzleBySliding(false);
 		System.out.println("Initial State:");
 
-		int[][] puzzleTest = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 0, 15 } };
+		int[][] puzzleTest = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 0, 14, 15 } };
 		PuzzleState puzzle = new PuzzleState(puzzleTest, false);
 		puzzle.printPuzzle();
 
