@@ -47,7 +47,7 @@ public class AStar
 				return;
 			}
 
-			for (PuzzleState neighbor : currentState.getNeighborStates())
+			for (PuzzleState neighbor : currentState.getNeighborStates(true))
 			{
 				if (!closed.contains(neighbor.hashCode()) && !open.contains(neighbor.hashCode()))
 				{

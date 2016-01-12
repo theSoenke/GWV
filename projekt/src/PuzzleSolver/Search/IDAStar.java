@@ -66,7 +66,7 @@ public class IDAStar
 				return minDepth;
 			}
 
-			for (PuzzleState neighbor : currentState.getNeighborStates())
+			for (PuzzleState neighbor : currentState.getNeighborStates(true))
 			{
 				if (!closed.contains(neighbor) && !frontier.contains(neighbor))
 				{

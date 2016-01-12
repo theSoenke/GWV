@@ -130,7 +130,6 @@ public class PuzzleWerkzeug
 	{
 		if (_currentState.isSolved())
 		{
-			_currentState.printPuzzle();
 			JOptionPane.showMessageDialog(null, "You've got it.", "Congratulations", JOptionPane.PLAIN_MESSAGE);
 			return true;
 

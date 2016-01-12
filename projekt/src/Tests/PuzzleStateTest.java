@@ -57,7 +57,7 @@ public class PuzzleStateTest
 	public void testNeighborStates()
 	{
 		PuzzleState state1 = new PuzzleState(_testPuzzle1, false);
-		List<PuzzleState> neighbors = state1.getNeighborStates();
+		List<PuzzleState> neighbors = state1.getNeighborStates(false);
 		assertEquals(2, neighbors.size());
 
 		int[][] stateUpValues = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 0 }, { 13, 14, 15, 12 } };

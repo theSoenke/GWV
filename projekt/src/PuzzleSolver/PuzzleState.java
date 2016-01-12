@@ -84,10 +84,12 @@ public class PuzzleState implements Comparable<PuzzleState>
 
 		for (int i = 0; i < 100; i++)
 		{
-			List<PuzzleState> neighbors = puzzle.getNeighborStates();
+			List<PuzzleState> neighbors = puzzle.getNeighborStates(false);
 			int rand = random.nextInt(neighbors.size());
 			puzzle = neighbors.get(rand);
 		}
+		
+		puzzle.printPuzzle();
 
 		return puzzle;
 	}
@@ -355,31 +357,31 @@ public class PuzzleState implements Comparable<PuzzleState>
 	/*
 	 * Returns all possible neighbor states
 	 */
-	public List<PuzzleState> getNeighborStates()
+	public List<PuzzleState> getNeighborStates(boolean fringePattern)
 	{
 		List<PuzzleState> neighbors = new LinkedList<PuzzleState>();
 
 		PuzzleState left = clone();
-		if (left.moveCell(moveDirection.left))
+		if (left.moveCell(moveDirection.left, fringePattern))
 		{
 			neighbors.add(left);
 		}
 
 		PuzzleState right = clone();
-		if (right.moveCell(moveDirection.right))
+		if (right.moveCell(moveDirection.right, fringePattern))
 		{
 			neighbors.add(right);
 		}
 
 		PuzzleState up = clone();
-		if (up.moveCell(moveDirection.up))
+		if (up.moveCell(moveDirection.up, fringePattern))
 		{
 			neighbors.add(up);
 		}
 
 		PuzzleState down = clone();
 
-		if (down.moveCell(moveDirection.down))
+		if (down.moveCell(moveDirection.down, fringePattern))
 		{
 			neighbors.add(down);
 		}
@@ -390,11 +392,11 @@ public class PuzzleState implements Comparable<PuzzleState>
 	/*
 	 * Tries to move empty cell
 	 */
-	private boolean moveCell(moveDirection dir)
+	private boolean moveCell(moveDirection dir, boolean fringePattern)
 	{
 		if (dir == moveDirection.up)
 		{
-			if (_emptyCell.y > 0 && !(_emptyCell.y == 1 && _isFringePattern))
+			if (_emptyCell.y > 0 &&  (!fringePattern || !(_emptyCell.y == 1 && _isFringePattern)))
 			{
 				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y - 1][_emptyCell.x];
 				_emptyCell = new Tile(_emptyCell.x, _emptyCell.y - 1);
@@ -416,7 +418,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		}
 		else if (dir == moveDirection.left)
 		{
-			if (_emptyCell.x > 0 && !(_emptyCell.x == 1 && _isFringePattern))
+			if (_emptyCell.x > 0 && (!fringePattern || !(_emptyCell.x == 1 && _isFringePattern)))
 			{
 				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y][_emptyCell.x - 1];
 				_emptyCell = new Tile(_emptyCell.x - 1, _emptyCell.y);
@@ -502,7 +504,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	public PuzzleState moveRight()
 	{
 		PuzzleState cloneState = clone();
-		if (cloneState.moveCell(moveDirection.right))
+		if (cloneState.moveCell(moveDirection.right, true))
 		{
 			return cloneState;
 		}
@@ -512,7 +514,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	public PuzzleState moveLeft()
 	{
 		PuzzleState cloneState = clone();
-		if (cloneState.moveCell(moveDirection.left))
+		if (cloneState.moveCell(moveDirection.left, true))
 		{
 			return cloneState;
 		}
@@ -522,7 +524,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	public PuzzleState moveUp()
 	{
 		PuzzleState cloneState = clone();
-		if (cloneState.moveCell(moveDirection.up))
+		if (cloneState.moveCell(moveDirection.up, true))
 		{
 			return cloneState;
 		}
@@ -532,7 +534,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	public PuzzleState moveDown()
 	{
 		PuzzleState cloneState = clone();
-		if (cloneState.moveCell(moveDirection.down))
+		if (cloneState.moveCell(moveDirection.down, true))
 		{
 			return cloneState;
 		}
