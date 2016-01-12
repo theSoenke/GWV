@@ -51,8 +51,6 @@ public class PuzzleState implements Comparable<PuzzleState>
 		_emptyCell = getEmptyCell();
 
 		_heuristic = fringeDistance();// calcManhattanDistance();
-		System.out.println("Fringe heuristic: " + _heuristic);
-		System.out.println("Is fringe: " + _isFringePattern);
 
 		if (linearConflict)
 		{
@@ -448,25 +446,28 @@ public class PuzzleState implements Comparable<PuzzleState>
 
 		if (distance == 0)
 		{
+			distance = 0;
 			_isFringePattern = true;
 		}
 		else
 		{
-			distance = 0;
 			_isFringePattern = false;
 		}
 
-		for (int i = 0; i < 4; i++)
+		if (_isFringePattern)
 		{
-			for (int j = 0; j < 4; j++)
+			for (int i = 0; i < 4; i++)
 			{
-				int value = _puzzle[i][j];
-
-				if (!_isFringePattern)
+				for (int j = 0; j < 4; j++)
 				{
-					int y = ((value - 1) / 4);
-					int x = ((value - 1) % 4);
-					distance += Math.abs(i - y) + Math.abs(j - x);
+					int value = _puzzle[i][j];
+
+					if (value != 0)
+					{
+						int y = ((value - 1) / 4);
+						int x = ((value - 1) % 4);
+						distance += Math.abs(i - y) + Math.abs(j - x);
+					}
 				}
 			}
 		}
@@ -489,7 +490,8 @@ public class PuzzleState implements Comparable<PuzzleState>
 					int y = ((value - 1) / 4);
 					int x = ((value - 1) % 4);
 					distance += Math.abs(i - y) + Math.abs(j - x);
-					System.out.println("value: " + value + " x: " + x + " y:" + y + " distance: " + distance);
+					// System.out.println("value: " + value + " x: " + x + " y:"
+					// + y + " distance: " + distance);
 				}
 			}
 		}

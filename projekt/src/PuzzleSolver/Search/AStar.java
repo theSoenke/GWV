@@ -41,8 +41,6 @@ public class AStar
 		{
 			currentState = frontier.poll();
 			
-			System.out.println("test");
-
 			if (currentState.isSolved())
 			{
 				_goalState = currentState;
