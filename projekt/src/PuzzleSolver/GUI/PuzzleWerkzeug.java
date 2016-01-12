@@ -53,7 +53,6 @@ public class PuzzleWerkzeug
 
 	public void waitInBackground(int timeInSeconds, final PuzzleState state, final GraphicsPanel panel)
 	{
-
 		_timer = new Timer(timeInSeconds, new ActionListener() {
 
 			@Override

@@ -49,7 +49,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		_puzzle = puzzle;
 		_emptyCell = getEmptyCell();
 
-		_heuristic = calcManhattanDistance();
+		_heuristic = fringeDistance();//calcManhattanDistance();
 
 		if (linearConflict)
 		{
@@ -81,7 +81,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		PuzzleState puzzle = new PuzzleState(defaultPuzzle, linearConflict);
 		Random random = new Random();
 
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 100; i++)
 		{
 			List<PuzzleState> neighbors = puzzle.getNeighborStates();
 			int rand = random.nextInt(neighbors.size());
@@ -473,6 +473,36 @@ public class PuzzleState implements Comparable<PuzzleState>
 		}
 
 		return false;
+	}
+
+	private int fringeDistance()
+	{
+		int distance = 0;
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				int value = _puzzle[i][j];
+
+				if (value == 0 || value == 6 || value == 7 || value == 8 || value == 10 || value == 11
+						|| value == 12 || value == 14 || value == 15)
+				{
+					continue;
+				}
+				else if (_heuristic == 0 && (value == 1 || value == 2 || value == 3 || value == 5 || value == 9 || value == 13 ))
+				{
+					continue;
+				}
+				int y = ((value - 1) / 4);
+				int x = ((value - 1) % 4);
+				distance += Math.abs(i - y) + Math.abs(j - x);
+			}
+		}
+
+		System.out.println(distance);
+		return distance;
+
 	}
 
 	public PuzzleState moveRight()

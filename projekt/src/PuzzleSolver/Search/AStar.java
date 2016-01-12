@@ -62,8 +62,10 @@ public class AStar
 			if (closed.size() % 10000 == 0)
 			{
 				System.out.println("closed: " + closed.size() + " frontier: " + frontier.size());
+				System.out.println(currentState.getHeuristic());
+				System.out.println(currentState.getMoves());
+				currentState.printPuzzle();
 				// System.out.println(currentState.getHeuristic());
-				// currentState.printPuzzle();
 			}
 		}
 
