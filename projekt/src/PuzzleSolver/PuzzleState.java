@@ -485,22 +485,16 @@ public class PuzzleState implements Comparable<PuzzleState>
 			{
 				int value = _puzzle[i][j];
 
-				if (value == 0 || value == 6 || value == 7 || value == 8 || value == 10 || value == 11
-						|| value == 12 || value == 14 || value == 15)
+				if ((value == 1 || value == 2 || value == 3 || value == 4 || value == 5
+						 || value == 9 || value == 13))
 				{
-					continue;
-				}
-				else if (_heuristic == 0 && (value == 1 || value == 2 || value == 3 || value == 5 || value == 9 || value == 13 ))
-				{
-					continue;
-				}
 				int y = ((value - 1) / 4);
 				int x = ((value - 1) % 4);
 				distance += Math.abs(i - y) + Math.abs(j - x);
+				}
 			}
 		}
 
-		System.out.println(distance);
 		return distance;
 
 	}
