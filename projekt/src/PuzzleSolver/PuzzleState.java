@@ -50,7 +50,8 @@ public class PuzzleState implements Comparable<PuzzleState>
 		_puzzle = puzzle;
 		_emptyCell = getEmptyCell();
 
-		_heuristic = fringeDistance();// calcManhattanDistance();
+		//_heuristic = calcManhattanDistance();
+		_heuristic = fringeDistance();
 
 		if (linearConflict)
 		{
@@ -88,7 +89,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 			int rand = random.nextInt(neighbors.size());
 			puzzle = neighbors.get(rand);
 		}
-		
+
 		puzzle.printPuzzle();
 
 		return puzzle;
@@ -396,7 +397,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	{
 		if (dir == moveDirection.up)
 		{
-			if (_emptyCell.y > 0 &&  (!fringePattern || !(_emptyCell.y == 1 && _isFringePattern)))
+			if (_emptyCell.y > 0 && (!fringePattern || !(_emptyCell.y == 1 && _isFringePattern)))
 			{
 				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y - 1][_emptyCell.x];
 				_emptyCell = new Tile(_emptyCell.x, _emptyCell.y - 1);

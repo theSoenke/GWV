@@ -1,7 +1,8 @@
 package PuzzleSolver.Search;
 
 import java.util.HashSet;
-import java.util.PriorityQueue;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import PuzzleSolver.PuzzleState;
 
@@ -13,7 +14,6 @@ public class IDAStar
 	public IDAStar(PuzzleState initialState)
 	{
 		int depth = initialState.getHeuristic();
-		int maxDepth = depth * 10;
 		_initialState = initialState;
 
 		if (!initialState.isSolvable())
@@ -22,12 +22,11 @@ public class IDAStar
 			return;
 		}
 
-		//depth = depthBoundSearch(_initialState, 100);
-		while (!_foundGoal && depth < maxDepth)
+		while (!_foundGoal && depth < 150)
 		{
 			depth = depthBoundSearch(_initialState, depth);
 			System.out.println(depth);
-			//depth++;
+			// depth++;
 		}
 
 		if (_foundGoal)
@@ -47,8 +46,10 @@ public class IDAStar
 	 */
 	private int depthBoundSearch(PuzzleState root, int bound)
 	{
-		PriorityQueue<PuzzleState> frontier = new PriorityQueue<PuzzleState>();
-		HashSet<PuzzleState> closed = new HashSet<PuzzleState>();
+		Queue<PuzzleState> frontier = new LinkedList<PuzzleState>();
+		HashSet<Integer> closed = new HashSet<Integer>();
+		HashSet<Integer> open = new HashSet<Integer>();
+
 		int minDepth = 0;
 		PuzzleState currentState = null;
 
@@ -60,28 +61,33 @@ public class IDAStar
 			currentState = frontier.poll();
 			minDepth = Integer.MAX_VALUE;
 
-			if (currentState.getHeuristic() == 0)
+			if (currentState.isSolved())
 			{
 				_foundGoal = true;
 				return minDepth;
 			}
 
-			for (PuzzleState neighbor : currentState.getNeighborStates(true))
+			for (PuzzleState neighbor : currentState.getNeighborStates(false))
 			{
-				if (!closed.contains(neighbor) && !frontier.contains(neighbor))
+				if (!closed.contains(neighbor.hashCode()) && !open.contains(neighbor.hashCode()))
 				{
-					frontier.add(neighbor);
-
 					int cost = neighbor.getMoves() + neighbor.getHeuristic();
-
+					
 					if (cost < minDepth)
 					{
 						minDepth = cost;
 					}
+					
+					if(cost < bound)
+					{
+						frontier.add(neighbor);
+						open.add(neighbor.hashCode());
+					}
 				}
 			}
 
-			closed.add(currentState);
+			open.remove(currentState.hashCode());
+			closed.add(currentState.hashCode());
 		}
 
 		return minDepth;

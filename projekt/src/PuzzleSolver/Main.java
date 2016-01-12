@@ -2,6 +2,7 @@ package PuzzleSolver;
 
 import PuzzleSolver.GUI.PuzzleGUI;
 import PuzzleSolver.Search.AStar;
+import PuzzleSolver.Search.IDAStar;
 
 public class Main
 {
@@ -27,7 +28,7 @@ public class Main
 		 * PuzzleState(puzzleTest, false);
 		 */
 
-		// IDAStar idastar = new IDAStar(puzzle);
-		AStar aStar = new AStar(puzzle);
+		IDAStar idastar = new IDAStar(puzzle);
+		//AStar aStar = new AStar(puzzle);
 	}
 }
