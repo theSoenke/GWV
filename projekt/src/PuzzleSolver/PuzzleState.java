@@ -50,8 +50,8 @@ public class PuzzleState implements Comparable<PuzzleState>
 		_puzzle = puzzle;
 		_emptyCell = getEmptyCell();
 
-		//_heuristic = calcManhattanDistance();
-		_heuristic = fringeDistance();
+		_heuristic = calcManhattanDistance();
+		//_heuristic = fringeDistance();
 
 		if (linearConflict)
 		{

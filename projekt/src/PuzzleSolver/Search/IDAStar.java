@@ -22,11 +22,11 @@ public class IDAStar
 			return;
 		}
 
-		while (!_foundGoal && depth < 150)
+		while (!_foundGoal && depth < 200)
 		{
-			depth = depthBoundSearch(_initialState, depth);
+			depthBoundSearch(_initialState, depth);
 			System.out.println(depth);
-			// depth++;
+			depth += 2;
 		}
 
 		if (_foundGoal)
@@ -44,27 +44,25 @@ public class IDAStar
 	 * 
 	 * @return new max depth bound
 	 */
-	private int depthBoundSearch(PuzzleState root, int bound)
+	private void depthBoundSearch(PuzzleState root, int bound)
 	{
 		Queue<PuzzleState> frontier = new LinkedList<PuzzleState>();
 		HashSet<Integer> closed = new HashSet<Integer>();
 		HashSet<Integer> open = new HashSet<Integer>();
 
-		int minDepth = 0;
 		PuzzleState currentState = null;
 
 		PuzzleState startState = root.clone();
 		frontier.add(startState);
 
-		while (!frontier.isEmpty() && minDepth < bound)
+		while (!frontier.isEmpty())
 		{
 			currentState = frontier.poll();
-			minDepth = Integer.MAX_VALUE;
 
 			if (currentState.isSolved())
 			{
 				_foundGoal = true;
-				return minDepth;
+				return;
 			}
 
 			for (PuzzleState neighbor : currentState.getNeighborStates(false))
@@ -72,13 +70,8 @@ public class IDAStar
 				if (!closed.contains(neighbor.hashCode()) && !open.contains(neighbor.hashCode()))
 				{
 					int cost = neighbor.getMoves() + neighbor.getHeuristic();
-					
-					if (cost < minDepth)
-					{
-						minDepth = cost;
-					}
-					
-					if(cost < bound)
+
+					if (cost < bound)
 					{
 						frontier.add(neighbor);
 						open.add(neighbor.hashCode());
@@ -89,7 +82,5 @@ public class IDAStar
 			open.remove(currentState.hashCode());
 			closed.add(currentState.hashCode());
 		}
-
-		return minDepth;
 	}
 }
