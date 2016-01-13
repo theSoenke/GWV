@@ -21,7 +21,7 @@ public class Main
 		// PuzzleState puzzle = PuzzleState.createPuzzleBySliding(true);
 		System.out.println("Initial State:");
 
-		int[][] puzzleTest = { { 2, 15, 0, 14 }, { 10, 3, 5, 4 }, { 13, 8, 1, 9 }, { 11, 12, 7, 6 } };
+		byte[][] puzzleTest = { { 2, 15, 0, 14 }, { 10, 3, 5, 4 }, { 13, 8, 1, 9 }, { 11, 12, 7, 6 } };
 		PuzzleState puzzle = new PuzzleState(puzzleTest, false);
 		puzzle.printPuzzle();
 

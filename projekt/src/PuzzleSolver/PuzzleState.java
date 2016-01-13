@@ -9,13 +9,12 @@ import java.util.Random;
 
 public class PuzzleState implements Comparable<PuzzleState>
 {
-	private int[][] _puzzle;
+	private byte[][] _puzzle;
 	private Tile _emptyCell;
 	private PuzzleState _parentState;
 	private int _moves;
 	private int _heuristic;
 	private boolean _linearConflict;
-	private boolean _isFringePattern;
 
 	/*
 	 * Move direction of the empty cell
@@ -25,12 +24,12 @@ public class PuzzleState implements Comparable<PuzzleState>
 		up, down, left, right
 	}
 
-	public PuzzleState(int[][] puzzle, boolean linearConflict)
+	public PuzzleState(byte[][] puzzle, boolean linearConflict)
 	{
 		initState(puzzle, linearConflict);
 	}
 
-	public PuzzleState(int[][] puzzle, int moves, PuzzleState parent, boolean linearConflict)
+	public PuzzleState(byte[][] puzzle, int moves, PuzzleState parent, boolean linearConflict)
 	{
 		initState(puzzle, linearConflict);
 
@@ -39,7 +38,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 
 	}
 
-	private void initState(int[][] puzzle, boolean linearConflict)
+	private void initState(byte[][] puzzle, boolean linearConflict)
 	{
 		if (puzzle.length != 4 && puzzle[0].length != 4)
 		{
@@ -78,7 +77,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	 */
 	public static PuzzleState createPuzzleBySliding(boolean linearConflict)
 	{
-		int[][] defaultPuzzle = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 15, 0 } };
+		byte[][] defaultPuzzle = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 15, 0 } };
 		PuzzleState puzzle = new PuzzleState(defaultPuzzle, linearConflict);
 		Random random = new Random();
 
@@ -99,7 +98,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	 */
 	public static PuzzleState createRandomPuzzle(boolean linearConflict)
 	{
-		int[][] puzzle = new int[4][4];
+		byte[][] puzzle = new byte[4][4];
 
 		List<Integer> numbers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
 		Collections.shuffle(numbers);
@@ -109,7 +108,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		{
 			for (int y = 0; y < 4; y++)
 			{
-				puzzle[x][y] = numbers.get(i);
+				puzzle[x][y] = numbers.get(i).byteValue();
 				i++;
 			}
 		}
@@ -127,7 +126,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		return _moves;
 	}
 
-	public int[][] getArray()
+	public byte[][] getArray()
 	{
 		return _puzzle;
 	}
@@ -146,7 +145,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	 */
 	public boolean isSolvable()
 	{
-		List<Integer> puzzle = convertToFlatArray();
+		List<Byte> puzzle = convertToFlatArray();
 		int parity = 0;
 		int gridWidth = 4;
 		int row = 0;
@@ -191,9 +190,9 @@ public class PuzzleState implements Comparable<PuzzleState>
 	/*
 	 * Converts 2d to 1d array
 	 */
-	private List<Integer> convertToFlatArray()
+	private List<Byte> convertToFlatArray()
 	{
-		List<Integer> flatpuzzle = new ArrayList<Integer>();
+		List<Byte> flatpuzzle = new ArrayList<Byte>();
 
 		for (int i = 0; i < _puzzle.length; i++)
 		{
@@ -226,7 +225,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	@Override
 	public PuzzleState clone()
 	{
-		int[][] puzzleClone = new int[4][4];
+		byte[][] puzzleClone = new byte[4][4];
 
 		for (int i = 0; i < _puzzle.length; i++)
 		{
@@ -274,7 +273,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				int value = _puzzle[i][j];
+				int value = (int) _puzzle[i][j];
 				if (value != 0)
 				{
 					int y = ((value - 1) / 4);
@@ -335,7 +334,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 			int max = -1;
 			for (int c = 0; c < 4; c++)
 			{
-				int value = _puzzle[r][c];
+				int value = (int) _puzzle[r][c];
 				if (value != 0 && (value - 1) / 4 == r)
 				{
 					if (value > max)
