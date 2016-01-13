@@ -7,11 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class PuzzleState implements Comparable<PuzzleState>
+public class PuzzleStateFringe implements Comparable<PuzzleStateFringe>
 {
 	private int[][] _puzzle;
 	private Tile _emptyCell;
-	private PuzzleState _parentState;
+	private PuzzleStateFringe _parentState;
 	private int _moves;
 	private int _heuristic;
 	private boolean _linearConflict;
@@ -25,12 +25,12 @@ public class PuzzleState implements Comparable<PuzzleState>
 		up, down, left, right
 	}
 
-	public PuzzleState(int[][] puzzle, boolean linearConflict)
+	public PuzzleStateFringe(int[][] puzzle, boolean linearConflict)
 	{
 		initState(puzzle, linearConflict);
 	}
 
-	public PuzzleState(int[][] puzzle, int moves, PuzzleState parent, boolean linearConflict)
+	public PuzzleStateFringe(int[][] puzzle, int moves, PuzzleStateFringe parent, boolean linearConflict)
 	{
 		initState(puzzle, linearConflict);
 
@@ -50,7 +50,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		_puzzle = puzzle;
 		_emptyCell = getEmptyCell();
 
-		_heuristic = calcManhattanDistance();
+		_heuristic = fringeDistance();
 
 		if (linearConflict)
 		{
@@ -61,9 +61,9 @@ public class PuzzleState implements Comparable<PuzzleState>
 	/*
 	 * Returns a puzzle that is solvable
 	 */
-	public static PuzzleState createSolvablePuzzle(boolean linearConflict)
+	public static PuzzleStateFringe createSolvablePuzzle(boolean linearConflict)
 	{
-		PuzzleState puzzle = null;
+		PuzzleStateFringe puzzle = null;
 		do
 		{
 			puzzle = createRandomPuzzle(linearConflict);
@@ -76,15 +76,15 @@ public class PuzzleState implements Comparable<PuzzleState>
 	/*
 	 * Returns a random puzzle created by sliding tiles
 	 */
-	public static PuzzleState createPuzzleBySliding(boolean linearConflict)
+	public static PuzzleStateFringe createPuzzleBySliding(boolean linearConflict)
 	{
 		int[][] defaultPuzzle = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 15, 0 } };
-		PuzzleState puzzle = new PuzzleState(defaultPuzzle, linearConflict);
+		PuzzleStateFringe puzzle = new PuzzleStateFringe(defaultPuzzle, linearConflict);
 		Random random = new Random();
 
 		for (int i = 0; i < 50; i++)
 		{
-			List<PuzzleState> neighbors = puzzle.getNeighborStates();
+			List<PuzzleStateFringe> neighbors = puzzle.getNeighborStates(false);
 			int rand = random.nextInt(neighbors.size());
 			puzzle = neighbors.get(rand);
 		}
@@ -97,7 +97,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	/*
 	 * Create a random puzzle. Can be unsolvable
 	 */
-	public static PuzzleState createRandomPuzzle(boolean linearConflict)
+	public static PuzzleStateFringe createRandomPuzzle(boolean linearConflict)
 	{
 		int[][] puzzle = new int[4][4];
 
@@ -114,10 +114,10 @@ public class PuzzleState implements Comparable<PuzzleState>
 			}
 		}
 
-		return new PuzzleState(puzzle, linearConflict);
+		return new PuzzleStateFringe(puzzle, linearConflict);
 	}
 
-	public PuzzleState getParentState()
+	public PuzzleStateFringe getParentState()
 	{
 		return _parentState;
 	}
@@ -215,16 +215,16 @@ public class PuzzleState implements Comparable<PuzzleState>
 	@Override
 	public boolean equals(Object o)
 	{
-		if (!(o instanceof PuzzleState))
+		if (!(o instanceof PuzzleStateFringe))
 		{
 			return false;
 		}
-		PuzzleState state = (PuzzleState) o;
+		PuzzleStateFringe state = (PuzzleStateFringe) o;
 		return Arrays.deepEquals(_puzzle, state.getArray());
 	}
 
 	@Override
-	public PuzzleState clone()
+	public PuzzleStateFringe clone()
 	{
 		int[][] puzzleClone = new int[4][4];
 
@@ -232,7 +232,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		{
 			puzzleClone[i] = Arrays.copyOf(_puzzle[i], _puzzle.length);
 		}
-		PuzzleState cloneState = new PuzzleState(puzzleClone, _moves + 1, this, _linearConflict);
+		PuzzleStateFringe cloneState = new PuzzleStateFringe(puzzleClone, _moves + 1, this, _linearConflict);
 		return cloneState;
 	}
 
@@ -357,31 +357,31 @@ public class PuzzleState implements Comparable<PuzzleState>
 	/*
 	 * Returns all possible neighbor states
 	 */
-	public List<PuzzleState> getNeighborStates()
+	public List<PuzzleStateFringe> getNeighborStates(boolean fringePattern)
 	{
-		List<PuzzleState> neighbors = new LinkedList<PuzzleState>();
+		List<PuzzleStateFringe> neighbors = new LinkedList<PuzzleStateFringe>();
 
-		PuzzleState left = clone();
-		if (left.moveCell(moveDirection.left))
+		PuzzleStateFringe left = clone();
+		if (left.moveCell(moveDirection.left, fringePattern))
 		{
 			neighbors.add(left);
 		}
 
-		PuzzleState right = clone();
-		if (right.moveCell(moveDirection.right))
+		PuzzleStateFringe right = clone();
+		if (right.moveCell(moveDirection.right, fringePattern))
 		{
 			neighbors.add(right);
 		}
 
-		PuzzleState up = clone();
-		if (up.moveCell(moveDirection.up))
+		PuzzleStateFringe up = clone();
+		if (up.moveCell(moveDirection.up, fringePattern))
 		{
 			neighbors.add(up);
 		}
 
-		PuzzleState down = clone();
+		PuzzleStateFringe down = clone();
 
-		if (down.moveCell(moveDirection.down))
+		if (down.moveCell(moveDirection.down, fringePattern))
 		{
 			neighbors.add(down);
 		}
@@ -392,11 +392,11 @@ public class PuzzleState implements Comparable<PuzzleState>
 	/*
 	 * Tries to move empty cell
 	 */
-	private boolean moveCell(moveDirection dir)
+	private boolean moveCell(moveDirection dir, boolean fringePattern)
 	{
 		if (dir == moveDirection.up)
 		{
-			if (_emptyCell.y > 0)
+			if (_emptyCell.y > 0 && (!fringePattern || !(_emptyCell.y == 1 && _isFringePattern)))
 			{
 				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y - 1][_emptyCell.x];
 				_emptyCell = new Tile(_emptyCell.x, _emptyCell.y - 1);
@@ -418,7 +418,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		}
 		else if (dir == moveDirection.left)
 		{
-			if (_emptyCell.x > 0)
+			if (_emptyCell.x > 0 && (!fringePattern || !(_emptyCell.x == 1 && _isFringePattern)))
 			{
 				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y][_emptyCell.x - 1];
 				_emptyCell = new Tile(_emptyCell.x - 1, _emptyCell.y);
@@ -442,40 +442,99 @@ public class PuzzleState implements Comparable<PuzzleState>
 		return false;
 	}
 
-	public PuzzleState moveRight()
+	private int fringeDistance()
 	{
-		PuzzleState cloneState = clone();
-		if (cloneState.moveCell(moveDirection.right))
+		int distance = fringePatternDistance();
+
+		if (distance == 0)
+		{
+			distance = 0;
+			_isFringePattern = true;
+		}
+		else
+		{
+			_isFringePattern = false;
+		}
+
+		if (_isFringePattern)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					int value = _puzzle[i][j];
+
+					if (value != 0)
+					{
+						int y = ((value - 1) / 4);
+						int x = ((value - 1) % 4);
+						distance += Math.abs(i - y) + Math.abs(j - x);
+					}
+				}
+			}
+		}
+
+		return distance;
+	}
+
+	private int fringePatternDistance()
+	{
+		int distance = 0;
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				int value = _puzzle[i][j];
+
+				if (value == 1 || value == 2 || value == 3 || value == 4 || value == 5 || value == 9 || value == 13)
+				{
+					int y = ((value - 1) / 4);
+					int x = ((value - 1) % 4);
+					distance += Math.abs(i - y) + Math.abs(j - x);
+					// System.out.println("value: " + value + " x: " + x + " y:"
+					// + y + " distance: " + distance);
+				}
+			}
+		}
+
+		return distance;
+	}
+
+	public PuzzleStateFringe moveRight()
+	{
+		PuzzleStateFringe cloneState = clone();
+		if (cloneState.moveCell(moveDirection.right, true))
 		{
 			return cloneState;
 		}
 		return null;
 	}
 
-	public PuzzleState moveLeft()
+	public PuzzleStateFringe moveLeft()
 	{
-		PuzzleState cloneState = clone();
-		if (cloneState.moveCell(moveDirection.left))
+		PuzzleStateFringe cloneState = clone();
+		if (cloneState.moveCell(moveDirection.left, true))
 		{
 			return cloneState;
 		}
 		return null;
 	}
 
-	public PuzzleState moveUp()
+	public PuzzleStateFringe moveUp()
 	{
-		PuzzleState cloneState = clone();
-		if (cloneState.moveCell(moveDirection.up))
+		PuzzleStateFringe cloneState = clone();
+		if (cloneState.moveCell(moveDirection.up, true))
 		{
 			return cloneState;
 		}
 		return null;
 	}
 
-	public PuzzleState moveDown()
+	public PuzzleStateFringe moveDown()
 	{
-		PuzzleState cloneState = clone();
-		if (cloneState.moveCell(moveDirection.down))
+		PuzzleStateFringe cloneState = clone();
+		if (cloneState.moveCell(moveDirection.down, true))
 		{
 			return cloneState;
 		}
@@ -515,7 +574,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	}
 
 	@Override
-	public int compareTo(PuzzleState state)
+	public int compareTo(PuzzleStateFringe state)
 	{
 		float cost = _moves + getHeuristic();
 		float compareCost = state.getMoves() + state.getHeuristic();

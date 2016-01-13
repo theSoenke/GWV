@@ -65,7 +65,7 @@ public class IDAStar
 				return;
 			}
 
-			for (PuzzleState neighbor : currentState.getNeighborStates(false))
+			for (PuzzleState neighbor : currentState.getNeighborStates())
 			{
 				if (!closed.contains(neighbor.hashCode()) && !open.contains(neighbor.hashCode()))
 				{

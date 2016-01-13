@@ -18,17 +18,14 @@ public class Main
 		// _gui = new PuzzleGUI();
 		// _gui.showUI();
 
-		PuzzleState puzzle = PuzzleState.createPuzzleBySliding(false);
+		// PuzzleState puzzle = PuzzleState.createPuzzleBySliding(true);
 		System.out.println("Initial State:");
+
+		int[][] puzzleTest = { { 2, 15, 0, 14 }, { 10, 3, 5, 4 }, { 13, 8, 1, 9 }, { 11, 12, 7, 6 } };
+		PuzzleState puzzle = new PuzzleState(puzzleTest, false);
 		puzzle.printPuzzle();
 
-		/*
-		 * int[][] puzzleTest = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11,
-		 * 12 }, { 13, 0, 14, 15 } }; PuzzleState puzzle = new
-		 * PuzzleState(puzzleTest, false);
-		 */
-
 		IDAStar idastar = new IDAStar(puzzle);
-		//AStar aStar = new AStar(puzzle);
+		// AStar aStar = new AStar(puzzle);
 	}
 }

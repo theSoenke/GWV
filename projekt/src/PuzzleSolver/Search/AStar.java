@@ -40,14 +40,14 @@ public class AStar
 		while (!frontier.isEmpty())
 		{
 			currentState = frontier.poll();
-			
+
 			if (currentState.isSolved())
 			{
 				_goalState = currentState;
 				return;
 			}
 
-			for (PuzzleState neighbor : currentState.getNeighborStates(true))
+			for (PuzzleState neighbor : currentState.getNeighborStates())
 			{
 				if (!closed.contains(neighbor.hashCode()) && !open.contains(neighbor.hashCode()))
 				{
