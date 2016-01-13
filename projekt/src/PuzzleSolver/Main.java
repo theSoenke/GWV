@@ -18,11 +18,11 @@ public class Main
 		// _gui = new PuzzleGUI();
 		// _gui.showUI();
 
-		// PuzzleState puzzle = PuzzleState.createPuzzleBySliding(true);
+		// PuzzleState puzzle = PuzzleGenerator.createPuzzleBySliding(true);
 		System.out.println("Initial State:");
 
-		byte[][] puzzleTest = { { 2, 15, 0, 14 }, { 10, 3, 5, 4 }, { 13, 8, 1, 9 }, { 11, 12, 7, 6 } };
-		PuzzleState puzzle = new PuzzleState(puzzleTest, false);
+		byte[][] puzzleTest = { { 2, 5, 6, 3 }, { 13, 0, 7, 8 }, { 12, 11, 4, 14 }, { 10, 15, 9, 1 } };
+		PuzzleState puzzle = new PuzzleState(puzzleTest, true);
 		puzzle.printPuzzle();
 
 		IDAStar idastar = new IDAStar(puzzle);

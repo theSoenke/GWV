@@ -2,10 +2,8 @@ package PuzzleSolver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 public class PuzzleStateFringe implements Comparable<PuzzleStateFringe>
 {
@@ -56,65 +54,6 @@ public class PuzzleStateFringe implements Comparable<PuzzleStateFringe>
 		{
 			_heuristic += calcLinearConflict();
 		}
-	}
-
-	/*
-	 * Returns a puzzle that is solvable
-	 */
-	public static PuzzleStateFringe createSolvablePuzzle(boolean linearConflict)
-	{
-		PuzzleStateFringe puzzle = null;
-		do
-		{
-			puzzle = createRandomPuzzle(linearConflict);
-		}
-		while (!puzzle.isSolvable());
-
-		return puzzle;
-	}
-
-	/*
-	 * Returns a random puzzle created by sliding tiles
-	 */
-	public static PuzzleStateFringe createPuzzleBySliding(boolean linearConflict)
-	{
-		int[][] defaultPuzzle = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 15, 0 } };
-		PuzzleStateFringe puzzle = new PuzzleStateFringe(defaultPuzzle, linearConflict);
-		Random random = new Random();
-
-		for (int i = 0; i < 50; i++)
-		{
-			List<PuzzleStateFringe> neighbors = puzzle.getNeighborStates(false);
-			int rand = random.nextInt(neighbors.size());
-			puzzle = neighbors.get(rand);
-		}
-
-		puzzle.printPuzzle();
-
-		return puzzle;
-	}
-
-	/*
-	 * Create a random puzzle. Can be unsolvable
-	 */
-	public static PuzzleStateFringe createRandomPuzzle(boolean linearConflict)
-	{
-		int[][] puzzle = new int[4][4];
-
-		List<Integer> numbers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-		Collections.shuffle(numbers);
-
-		int i = 0;
-		for (int x = 0; x < 4; x++)
-		{
-			for (int y = 0; y < 4; y++)
-			{
-				puzzle[x][y] = numbers.get(i);
-				i++;
-			}
-		}
-
-		return new PuzzleStateFringe(puzzle, linearConflict);
 	}
 
 	public PuzzleStateFringe getParentState()

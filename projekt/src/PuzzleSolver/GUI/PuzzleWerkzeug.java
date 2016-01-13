@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
+import PuzzleSolver.PuzzleGenerator;
 import PuzzleSolver.PuzzleState;
 import PuzzleSolver.GUI.PuzzleGUI.GraphicsPanel;
 import PuzzleSolver.Search.AStar;
@@ -34,7 +35,7 @@ public class PuzzleWerkzeug
 	 */
 	public void reset()
 	{
-		_currentState = PuzzleState.createPuzzleBySliding(true);
+		_currentState = PuzzleGenerator.createPuzzleBySliding(true);
 	}
 
 	/*

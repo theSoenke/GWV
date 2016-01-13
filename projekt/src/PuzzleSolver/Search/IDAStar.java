@@ -22,12 +22,18 @@ public class IDAStar
 			return;
 		}
 
+		long startTime = System.currentTimeMillis();
+
 		while (!_foundGoal && depth < 200)
 		{
 			depthBoundSearch(_initialState, depth);
 			System.out.println(depth);
 			depth += 2;
 		}
+
+		long endTime = System.currentTimeMillis();
+		long duration = endTime - startTime;
+		System.out.println("Duration: " + duration + "ms");
 
 		if (_foundGoal)
 		{
@@ -82,5 +88,6 @@ public class IDAStar
 			open.remove(currentState.hashCode());
 			closed.add(currentState.hashCode());
 		}
+
 	}
 }
