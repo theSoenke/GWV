@@ -27,7 +27,7 @@ public class PuzzleGenerator
 	 */
 	public static PuzzleState createPuzzleBySliding(boolean linearConflict)
 	{
-		byte[][] defaultPuzzle = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 15, 0 } };
+		byte[] defaultPuzzle = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0 };
 		PuzzleState puzzle = new PuzzleState(defaultPuzzle, linearConflict);
 		Random random = new Random();
 
@@ -48,19 +48,14 @@ public class PuzzleGenerator
 	 */
 	public static PuzzleState createRandomPuzzle(boolean linearConflict)
 	{
-		byte[][] puzzle = new byte[4][4];
+		byte[] puzzle = new byte[16];
 
 		List<Integer> numbers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
 		Collections.shuffle(numbers);
 
-		int i = 0;
-		for (int x = 0; x < 4; x++)
+		for (int i = 0; i < 16; i++)
 		{
-			for (int y = 0; y < 4; y++)
-			{
-				puzzle[x][y] = numbers.get(i).byteValue();
-				i++;
-			}
+			puzzle[i] = numbers.get(i).byteValue();
 		}
 
 		return new PuzzleState(puzzle, linearConflict);

@@ -27,7 +27,8 @@ public class PuzzleWerkzeug
 
 	public int getNumber(int r, int c)
 	{
-		return _currentState.getArray()[r][c];
+		int pos = (c * 4) + r;
+		return _currentState.getArray()[pos];
 	}
 
 	/*
@@ -115,7 +116,8 @@ public class PuzzleWerkzeug
 
 	private boolean moveEmptyTile(int r, int c)
 	{
-		if (_currentState.getEmptyCell().y == r && _currentState.getEmptyCell().x == c)
+		int pos = (c * 4) + 1;
+		if (_currentState.getEmptyCell() == pos)
 		{
 			return true;
 		}
@@ -137,5 +139,4 @@ public class PuzzleWerkzeug
 		}
 		return false;
 	}
-
 }

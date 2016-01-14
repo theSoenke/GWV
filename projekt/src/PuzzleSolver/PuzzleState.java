@@ -1,14 +1,13 @@
 package PuzzleSolver;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class PuzzleState implements Comparable<PuzzleState>
 {
-	private byte[][] _puzzle;
-	private Tile _emptyCell;
+	private byte[] _puzzle;
+	private int _emptyCell;
 	private PuzzleState _parentState;
 	private int _moves;
 	private int _heuristic;
@@ -22,12 +21,12 @@ public class PuzzleState implements Comparable<PuzzleState>
 		up, down, left, right
 	}
 
-	public PuzzleState(byte[][] puzzle, boolean linearConflict)
+	public PuzzleState(byte[] puzzle, boolean linearConflict)
 	{
 		initState(puzzle, linearConflict);
 	}
 
-	public PuzzleState(byte[][] puzzle, int moves, PuzzleState parent, boolean linearConflict)
+	public PuzzleState(byte[] puzzle, int moves, PuzzleState parent, boolean linearConflict)
 	{
 		initState(puzzle, linearConflict);
 
@@ -36,9 +35,9 @@ public class PuzzleState implements Comparable<PuzzleState>
 
 	}
 
-	private void initState(byte[][] puzzle, boolean linearConflict)
+	private void initState(byte[] puzzle, boolean linearConflict)
 	{
-		if (puzzle.length != 4 && puzzle[0].length != 4)
+		if (puzzle.length != 16)
 		{
 			throw new RuntimeException("Puzzle is not 4x4");
 		}
@@ -65,7 +64,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		return _moves;
 	}
 
-	public byte[][] getArray()
+	public byte[] getArray()
 	{
 		return _puzzle;
 	}
@@ -84,25 +83,24 @@ public class PuzzleState implements Comparable<PuzzleState>
 	 */
 	public boolean isSolvable()
 	{
-		List<Byte> puzzle = convertToFlatArray();
 		int parity = 0;
 		int gridWidth = 4;
 		int row = 0;
 		int blankRow = 0;
 
-		for (int i = 0; i < puzzle.size(); i++)
+		for (int i = 0; i < _puzzle.length; i++)
 		{
 			if (i % gridWidth == 0)
 			{
 				row++;
 			}
-			if (puzzle.get(i) == 0)
+			if (_puzzle[i] == 0)
 			{
 				blankRow = row;
 			}
-			for (int j = i + 1; j < puzzle.size(); j++)
+			for (int j = i + 1; j < _puzzle.length; j++)
 			{
-				if (puzzle.get(i) > puzzle.get(j) && puzzle.get(j) != 0)
+				if (_puzzle[i] > _puzzle[j] && _puzzle[j] != 0)
 				{
 					parity++;
 				}
@@ -126,28 +124,10 @@ public class PuzzleState implements Comparable<PuzzleState>
 		}
 	}
 
-	/*
-	 * Converts 2d to 1d array
-	 */
-	private List<Byte> convertToFlatArray()
-	{
-		List<Byte> flatpuzzle = new ArrayList<Byte>();
-
-		for (int i = 0; i < _puzzle.length; i++)
-		{
-			for (int j = 0; j < _puzzle.length; j++)
-			{
-				flatpuzzle.add(_puzzle[i][j]);
-			}
-		}
-
-		return flatpuzzle;
-	}
-
 	@Override
 	public int hashCode()
 	{
-		return Arrays.deepHashCode(_puzzle);
+		return Arrays.hashCode(_puzzle);
 	}
 
 	@Override
@@ -158,17 +138,17 @@ public class PuzzleState implements Comparable<PuzzleState>
 			return false;
 		}
 		PuzzleState state = (PuzzleState) o;
-		return Arrays.deepEquals(_puzzle, state.getArray());
+		return Arrays.equals(_puzzle, state.getArray());
 	}
 
 	@Override
 	public PuzzleState clone()
 	{
-		byte[][] puzzleClone = new byte[4][4];
+		byte[] puzzleClone = new byte[16];
 
 		for (int i = 0; i < _puzzle.length; i++)
 		{
-			puzzleClone[i] = Arrays.copyOf(_puzzle[i], _puzzle.length);
+			puzzleClone = Arrays.copyOf(_puzzle, _puzzle.length);
 		}
 		PuzzleState cloneState = new PuzzleState(puzzleClone, _moves + 1, this, _linearConflict);
 		return cloneState;
@@ -179,15 +159,15 @@ public class PuzzleState implements Comparable<PuzzleState>
 	 */
 	public void printPuzzle()
 	{
-		for (int i = 0; i < 4; i++)
+		String line = "";
+		for (int i = 0; i < 16; i++)
 		{
-			String line = "";
-			for (int j = 0; j < 4; j++)
+			line += _puzzle[i] + "\t";
+			if (i % 4 == 0)
 			{
-				line += _puzzle[i][j] + "\t";
+				System.out.println(line + "\n");
+				line = "";
 			}
-			System.out.println(line + "\n");
-			line = "";
 		}
 
 		System.out.println("\n");
@@ -208,17 +188,20 @@ public class PuzzleState implements Comparable<PuzzleState>
 	{
 		int distance = 0;
 
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < _puzzle.length; i++)
 		{
-			for (int j = 0; j < 4; j++)
+			if (_puzzle[i] != 0)
 			{
-				int value = (int) _puzzle[i][j];
-				if (value != 0)
-				{
-					int y = ((value - 1) / 4);
-					int x = ((value - 1) % 4);
-					distance += Math.abs(i - y) + Math.abs(j - x);
-				}
+				int desX = (_puzzle[i] - 1) % 4;
+				int desY = (_puzzle[i] - 1) / 4;
+
+				int posX = i % 4;
+				int posY = i / 4;
+
+				// System.out.println("value: " + _puzzle[i] + " desX: " + desX
+				// + " desY: " + desY + " posX: " + posX + " posY: " + posY);
+
+				distance += (Math.abs(desX - posX) + Math.abs(desY - posY));
 			}
 		}
 
@@ -240,26 +223,21 @@ public class PuzzleState implements Comparable<PuzzleState>
 	{
 		int linearConflict = 0;
 
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < _puzzle.length; i++)
 		{
 			int max = -1;
-			for (int j = 0; j < 4; j++)
+			int value = _puzzle[i];
+			if (value != 0 && value % 4 == i + 1)
 			{
-				int valuealue = _puzzle[i][j];
-				if (valuealue != 0 && valuealue % 4 == i + 1)
+				if (value > max)
 				{
-					if (valuealue > max)
-					{
-						max = valuealue;
-					}
-					else
-					{
-						linearConflict += 2;
-					}
+					max = value;
 				}
-
+				else
+				{
+					linearConflict += 2;
+				}
 			}
-
 		}
 		return linearConflict;
 	}
@@ -268,26 +246,21 @@ public class PuzzleState implements Comparable<PuzzleState>
 	{
 		int linearConflict = 0;
 
-		for (int r = 0; r < 4; r++)
+		for (int i = 0; i < 4; i++)
 		{
 			int max = -1;
-			for (int c = 0; c < 4; c++)
+			int value = (int) _puzzle[i];
+			if (value != 0 && (value - 1) / 4 == i)
 			{
-				int value = (int) _puzzle[r][c];
-				if (value != 0 && (value - 1) / 4 == r)
+				if (value > max)
 				{
-					if (value > max)
-					{
-						max = value;
-					}
-					else
-					{
-						linearConflict += 2;
-					}
+					max = value;
 				}
-
+				else
+				{
+					linearConflict += 2;
+				}
 			}
-
 		}
 		return linearConflict;
 	}
@@ -333,46 +306,49 @@ public class PuzzleState implements Comparable<PuzzleState>
 	 */
 	private boolean moveCell(moveDirection dir)
 	{
+		int emptyX = _emptyCell % 4;
+		int emptyY = _emptyCell / 4;
+
 		if (dir == moveDirection.up)
 		{
-			if (_emptyCell.y > 0)
+			if (emptyY > 0)
 			{
-				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y - 1][_emptyCell.x];
-				_emptyCell = new Tile(_emptyCell.x, _emptyCell.y - 1);
-				_puzzle[_emptyCell.y][_emptyCell.x] = 0;
+				_puzzle[_emptyCell] = _puzzle[_emptyCell - 4];
+				_emptyCell = _emptyCell - 4;
+				_puzzle[_emptyCell] = 0;
 				return true;
 			}
 			return false;
 		}
 		else if (dir == moveDirection.down)
 		{
-			if (_emptyCell.y < 3)
+			if (emptyY < 3)
 			{
-				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y + 1][_emptyCell.x];
-				_emptyCell = new Tile(_emptyCell.x, _emptyCell.y + 1);
-				_puzzle[_emptyCell.y][_emptyCell.x] = 0;
+				_puzzle[_emptyCell] = _puzzle[_emptyCell + 4];
+				_emptyCell = _emptyCell + 4;
+				_puzzle[_emptyCell] = 0;
 				return true;
 			}
 			return false;
 		}
 		else if (dir == moveDirection.left)
 		{
-			if (_emptyCell.x > 0)
+			if (emptyX > 0)
 			{
-				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y][_emptyCell.x - 1];
-				_emptyCell = new Tile(_emptyCell.x - 1, _emptyCell.y);
-				_puzzle[_emptyCell.y][_emptyCell.x] = 0;
+				_puzzle[_emptyCell] = _puzzle[_emptyCell - 1];
+				_emptyCell = _emptyCell - 1;
+				_puzzle[_emptyCell] = 0;
 				return true;
 			}
 			return false;
 		}
 		else if (dir == moveDirection.right)
 		{
-			if (_emptyCell.x < 3)
+			if (emptyX < 3)
 			{
-				_puzzle[_emptyCell.y][_emptyCell.x] = _puzzle[_emptyCell.y][_emptyCell.x + 1];
-				_emptyCell = new Tile(_emptyCell.x + 1, _emptyCell.y);
-				_puzzle[_emptyCell.y][_emptyCell.x] = 0;
+				_puzzle[_emptyCell] = _puzzle[_emptyCell + 1];
+				_emptyCell = _emptyCell + 1;
+				_puzzle[_emptyCell] = 0;
 				return true;
 			}
 			return false;
@@ -421,36 +397,17 @@ public class PuzzleState implements Comparable<PuzzleState>
 		return null;
 	}
 
-	public Tile getEmptyCell()
+	public int getEmptyCell()
 	{
-		Tile emptyCell = null;
-
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < _puzzle.length; i++)
 		{
-			for (int j = 0; j < 4; j++)
+			if (_puzzle[i] == 0)
 			{
-				if (_puzzle[i][j] == 0)
-				{
-					if (emptyCell == null)
-					{
-						emptyCell = new Tile(j, i);
-					}
-					else
-					{
-						throw new RuntimeException("Puzzle contains more than 1 empty cell");
-					}
-				}
+				return i;
 			}
 		}
 
-		if (emptyCell == null)
-		{
-			throw new RuntimeException("Puzzle does not contain an empty cell");
-		}
-		else
-		{
-			return emptyCell;
-		}
+		throw new RuntimeException("Puzzle does not contain an empty cell");
 	}
 
 	@Override
@@ -470,18 +427,6 @@ public class PuzzleState implements Comparable<PuzzleState>
 		else
 		{
 			return 0;
-		}
-	}
-
-	public class Tile
-	{
-		public final int x;
-		public final int y;
-
-		public Tile(int x, int y)
-		{
-			this.x = x;
-			this.y = y;
 		}
 	}
 }

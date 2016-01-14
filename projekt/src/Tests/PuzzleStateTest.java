@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 import org.junit.Test;
 
@@ -13,13 +14,13 @@ import PuzzleSolver.PuzzleState;
 
 public class PuzzleStateTest
 {
-	private byte[][] _testPuzzle1 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 15, 0 } };
-	private byte[][] _testPuzzle2 = { { 2, 1, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 15, 0 } };
-	private byte[][] _testPuzzle3 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 15, 14, 0 } };
-	private byte[][] _testPuzzle4 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 0, 15 } };
-	private byte[][] _testPuzzle5 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 0, 11 }, { 13, 14, 15, 12 } };
-	private byte[][] _testPuzzle6 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 0 }, { 13, 14, 15, 12 } };
-	private byte[][] _testPuzzle7 = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 0, 15 } };
+	private byte[] _testPuzzle1 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0 };
+	private byte[] _testPuzzle2 = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0 };
+	private byte[] _testPuzzle3 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 14, 0 };
+	private byte[] _testPuzzle4 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15 };
+	private byte[] _testPuzzle5 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 11, 13, 14, 15, 12 };
+	private byte[] _testPuzzle6 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 13, 14, 15, 12 };
+	private byte[] _testPuzzle7 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15 };
 
 	@Test
 	public void testManhattanDistance()
@@ -60,8 +61,8 @@ public class PuzzleStateTest
 		List<PuzzleState> neighbors = state1.getNeighborStates();
 		assertEquals(2, neighbors.size());
 
-		byte[][] stateUpValues = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 0 }, { 13, 14, 15, 12 } };
-		byte[][] stateLeftValues = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 }, { 13, 14, 0, 15 } };
+		byte[] stateUpValues = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 13, 14, 15, 12 };
+		byte[] stateLeftValues = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15 };
 		PuzzleState stateUp = new PuzzleState(stateUpValues, false);
 		PuzzleState stateLeft = new PuzzleState(stateLeftValues, false);
 
@@ -104,7 +105,7 @@ public class PuzzleStateTest
 		PuzzleState state1 = new PuzzleState(_testPuzzle1, false);
 		PuzzleState state2 = new PuzzleState(_testPuzzle4, false);
 
-		PriorityQueue<PuzzleState> queue = new PriorityQueue<PuzzleState>();
+		Queue<PuzzleState> queue = new PriorityQueue<PuzzleState>();
 		queue.add(state1);
 		queue.add(state2);
 
