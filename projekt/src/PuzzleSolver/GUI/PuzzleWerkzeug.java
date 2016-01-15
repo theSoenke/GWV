@@ -52,6 +52,11 @@ public class PuzzleWerkzeug
 			waitInBackground(500 * (i + 1), path.get(i), panel);
 		}
 	}
+	
+	public void help()
+	{
+		
+	}
 
 	public void waitInBackground(int timeInSeconds, final PuzzleState state, final GraphicsPanel panel)
 	{

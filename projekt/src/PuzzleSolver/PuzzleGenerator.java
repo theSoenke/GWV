@@ -31,7 +31,7 @@ public class PuzzleGenerator
 		PuzzleState puzzle = new PuzzleState(defaultPuzzle, linearConflict);
 		Random random = new Random();
 
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 100; i++)
 		{
 			List<PuzzleState> neighbors = puzzle.getNeighborStates();
 			int rand = random.nextInt(neighbors.size());

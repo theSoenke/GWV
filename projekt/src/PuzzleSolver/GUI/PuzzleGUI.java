@@ -84,7 +84,7 @@ public class PuzzleGUI
 		help.setFont(new Font("Tahoma", Font.BOLD, 14));
 		help.setBackground(new Color(200, 200, 200));
 		help.setSelected(true);
-		help.addActionListener(new SolveAction());
+		help.addActionListener(new HelpAction());
 	}
 
 	private void implementResetButton()
@@ -131,7 +131,7 @@ public class PuzzleGUI
 				{
 					int x = c * CELL_SIZE;
 					int y = r * CELL_SIZE;
-					int value = werkzeug.getNumber(r, c);
+					int value = werkzeug.getNumber(c, r);
 					if (value != 0)
 					{
 						g.setColor(Color.gray);
@@ -197,4 +197,11 @@ public class PuzzleGUI
 		}
 	}
 
+	public class HelpAction implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			werkzeug.solve(puzzleGraphics);
+		}
+	}
 }
