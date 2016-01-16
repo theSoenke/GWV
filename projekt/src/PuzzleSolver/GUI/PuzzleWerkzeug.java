@@ -10,7 +10,7 @@ import javax.swing.Timer;
 import PuzzleSolver.PuzzleGenerator;
 import PuzzleSolver.PuzzleState;
 import PuzzleSolver.GUI.PuzzleGUI.GraphicsPanel;
-import PuzzleSolver.Search.AStar;
+import PuzzleSolver.Search.IDAStar;
 
 public class PuzzleWerkzeug
 {
@@ -44,18 +44,18 @@ public class PuzzleWerkzeug
 	 */
 	public void solve(GraphicsPanel panel)
 	{
-		AStar aStar = new AStar(_currentState);
-		List<PuzzleState> path = aStar.getSolution();
+		IDAStar idaStar = new IDAStar(_currentState);
+		List<PuzzleState> path = idaStar.getSolution();
 
 		for (int i = 0; i < path.size(); i++)
 		{
 			waitInBackground(500 * (i + 1), path.get(i), panel);
 		}
 	}
-	
+
 	public void help()
 	{
-		
+
 	}
 
 	public void waitInBackground(int timeInSeconds, final PuzzleState state, final GraphicsPanel panel)

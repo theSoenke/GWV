@@ -1,20 +1,24 @@
 package PuzzleSolver.Search;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import PuzzleSolver.PuzzleState;
 
 public class IDAStar
 {
-	private final PuzzleState _initialState;
+	private final PuzzleState _startState;
+	private PuzzleState _goalState;
 	private boolean _foundGoal;
 
 	public IDAStar(PuzzleState initialState)
 	{
 		int depth = initialState.getHeuristic();
-		_initialState = initialState;
+		_startState = initialState;
 
 		if (!initialState.isSolvable())
 		{
@@ -26,18 +30,17 @@ public class IDAStar
 
 		while (!_foundGoal && depth < 200)
 		{
-			depthBoundSearch(_initialState, depth);
+			depthBoundSearch(_startState, depth);
 			System.out.println(depth);
 			depth += 2;
 		}
 
 		long endTime = System.currentTimeMillis();
 		long duration = endTime - startTime;
-		System.out.println("Duration: " + duration + "ms");
 
 		if (_foundGoal)
 		{
-			System.out.println("Found best path");
+			System.out.println("Found optimal solution in " + duration + "ms");
 		}
 		else
 		{
@@ -68,6 +71,7 @@ public class IDAStar
 			if (currentState.isSolved())
 			{
 				_foundGoal = true;
+				_goalState = currentState;
 				return;
 			}
 
@@ -88,6 +92,33 @@ public class IDAStar
 			open.remove(currentState.hashCode());
 			closed.add(currentState.hashCode());
 		}
+	}
 
+	public List<PuzzleState> getSolution()
+	{
+		List<PuzzleState> path = new ArrayList<PuzzleState>();
+		PuzzleState currentState = _goalState;
+
+		while (currentState != null && !currentState.equals(_startState))
+		{
+			currentState = currentState.getParentState();
+			path.add(currentState);
+		}
+
+		Collections.reverse(path);
+
+		return path;
+	}
+
+	private void printSolution()
+	{
+		List<PuzzleState> path = getSolution();
+
+		System.out.println("Solution:");
+
+		for (PuzzleState state : path)
+		{
+			state.printPuzzle();
+		}
 	}
 }
