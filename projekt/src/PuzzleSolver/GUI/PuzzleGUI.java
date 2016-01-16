@@ -19,27 +19,28 @@ import javax.swing.WindowConstants;
 
 public class PuzzleGUI
 {
-	private JPanel mainpanel;
-	private JButton solve;
-	private JButton reset;
-	private JButton help;
-	private JFrame frame;
-	private GraphicsPanel puzzleGraphics;
+	private JPanel _mainpanel;
+	private JButton _solveBtn;
+	private JButton _resetBtn;
+	private JButton _helpBtn;
+	private JFrame _frame;
+	private GraphicsPanel _puzzleGraphics;
 
-	private PuzzleWerkzeug werkzeug = new PuzzleWerkzeug();
+	private PuzzleWerkzeug _werkzeug;
 
 	public PuzzleGUI()
 	{
+		_werkzeug = new PuzzleWerkzeug();
 		initGUI();
 	}
 
 	private void implementButtonPanel()
 	{
-		mainpanel = new JPanel();
+		_mainpanel = new JPanel();
 		GridLayout main = new GridLayout();
-		mainpanel.setLayout(main);
-		frame.getContentPane().add(mainpanel, BorderLayout.SOUTH);
-		mainpanel.setBackground(new Color(255, 255, 255));
+		_mainpanel.setLayout(main);
+		_frame.getContentPane().add(_mainpanel, BorderLayout.SOUTH);
+		_mainpanel.setBackground(new Color(255, 255, 255));
 		implementResetButton();
 		implementHelpButton();
 		implementSolveButton();
@@ -47,62 +48,63 @@ public class PuzzleGUI
 
 	private void implementPuzzle()
 	{
-		puzzleGraphics = new GraphicsPanel();
-		frame.getContentPane().add(puzzleGraphics, BorderLayout.CENTER);
+		_puzzleGraphics = new GraphicsPanel();
+		_frame.getContentPane().add(_puzzleGraphics, BorderLayout.CENTER);
 	}
 
 	private void initGUI()
 	{
-		frame = new JFrame("15-Puzzle");
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.getContentPane().setBackground(new Color(255, 255, 255));
-		frame.setTitle("15-Puzzle");
+		_frame = new JFrame("15-Puzzle");
+		_frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		_frame.getContentPane().setBackground(new Color(255, 255, 255));
+		_frame.setTitle("15-Puzzle");
 		implementButtonPanel();
 		implementPuzzle();
-		frame.pack();
-		frame.setSize(337, 409);
+		_frame.pack();
+		_frame.setSize(320, 400);
+		_frame.setResizable(false);
 	}
 
 	private void implementSolveButton()
 	{
-		solve = new JButton();
-		mainpanel.add(solve);
-		solve.setText("Solve!");
-		solve.setPreferredSize(new java.awt.Dimension(180, 50));
-		solve.setFont(new Font("Tahoma", Font.BOLD, 14));
-		solve.setBackground(new Color(200, 200, 200));
-		solve.setSelected(true);
-		solve.addActionListener(new SolveAction());
+		_solveBtn = new JButton();
+		_mainpanel.add(_solveBtn);
+		_solveBtn.setText("Solve!");
+		_solveBtn.setPreferredSize(new java.awt.Dimension(180, 50));
+		_solveBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
+		_solveBtn.setBackground(new Color(200, 200, 200));
+		_solveBtn.setSelected(true);
+		_solveBtn.addActionListener(new SolveAction());
 	}
 
 	private void implementHelpButton()
 	{
-		help = new JButton();
-		mainpanel.add(help);
-		help.setText("Help!");
-		help.setPreferredSize(new java.awt.Dimension(180, 50));
-		help.setFont(new Font("Tahoma", Font.BOLD, 14));
-		help.setBackground(new Color(200, 200, 200));
-		help.setSelected(true);
-		help.addActionListener(new HelpAction());
+		_helpBtn = new JButton();
+		_mainpanel.add(_helpBtn);
+		_helpBtn.setText("Help!");
+		_helpBtn.setPreferredSize(new java.awt.Dimension(180, 50));
+		_helpBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
+		_helpBtn.setBackground(new Color(200, 200, 200));
+		_helpBtn.setSelected(true);
+		_helpBtn.addActionListener(new HelpAction());
 	}
 
 	private void implementResetButton()
 	{
-		reset = new JButton();
-		mainpanel.add(reset);
-		reset.setText("New");
-		reset.setPreferredSize(new java.awt.Dimension(180, 50));
-		reset.setFont(new Font("Tahoma", Font.BOLD, 14));
-		reset.setBackground(new Color(200, 200, 200));
-		reset.setSelected(true);
-		reset.addActionListener(new NewGameAction());
+		_resetBtn = new JButton();
+		_mainpanel.add(_resetBtn);
+		_resetBtn.setText("New");
+		_resetBtn.setPreferredSize(new java.awt.Dimension(180, 50));
+		_resetBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
+		_resetBtn.setBackground(new Color(200, 200, 200));
+		_resetBtn.setSelected(true);
+		_resetBtn.addActionListener(new NewGameAction());
 	}
 
 	public void showUI()
 	{
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
+		_frame.setLocationRelativeTo(null);
+		_frame.setVisible(true);
 	}
 
 	class GraphicsPanel extends JPanel implements MouseListener
@@ -131,7 +133,7 @@ public class PuzzleGUI
 				{
 					int x = c * CELL_SIZE;
 					int y = r * CELL_SIZE;
-					int value = werkzeug.getNumber(c, r);
+					int value = _werkzeug.getNumber(c, r);
 					if (value != 0)
 					{
 						g.setColor(Color.gray);
@@ -165,7 +167,7 @@ public class PuzzleGUI
 			int col = e.getX() / CELL_SIZE;
 			int row = e.getY() / CELL_SIZE;
 
-			if (!werkzeug.moveTile(row, col))
+			if (!_werkzeug.moveTile(row, col))
 			{
 				Toolkit.getDefaultToolkit().beep();
 			}
@@ -184,8 +186,8 @@ public class PuzzleGUI
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			werkzeug.reset();
-			puzzleGraphics.repaint();
+			_werkzeug.reset();
+			_puzzleGraphics.repaint();
 		}
 	}
 
@@ -193,7 +195,7 @@ public class PuzzleGUI
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			werkzeug.solve(puzzleGraphics);
+			_werkzeug.solve(_puzzleGraphics);
 		}
 	}
 
@@ -201,7 +203,7 @@ public class PuzzleGUI
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			werkzeug.solve(puzzleGraphics);
+			_werkzeug.solve(_puzzleGraphics);
 		}
 	}
 }
