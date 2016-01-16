@@ -76,56 +76,19 @@ public class PuzzleWerkzeug
 
 	public boolean moveTile(int r, int c)
 	{
-		if (moveEmptyTile(r, c - 1))
-		{
-			PuzzleState tmpState = _currentState.moveRight();
-			if (tmpState != null)
-			{
-				_currentState = tmpState;
-				isGameOver();
-				return true;
-			}
-		}
-		else if (moveEmptyTile(r, c + 1))
-		{
-			PuzzleState tmpState = _currentState.moveLeft();
-			if (tmpState != null)
-			{
-				_currentState = tmpState;
-				isGameOver();
-				return true;
-			}
-		}
-		else if (moveEmptyTile(r - 1, c))
-		{
-			PuzzleState tmpState = _currentState.moveDown();
-			if (tmpState != null)
-			{
-				_currentState = tmpState;
-				isGameOver();
-				return true;
-			}
-		}
-		else if (moveEmptyTile(r + 1, c))
-		{
-			PuzzleState tmpState = _currentState.moveUp();
-			if (tmpState != null)
-			{
-				_currentState = tmpState;
-				isGameOver();
-				return true;
-			}
-		}
-		return false;
-	}
+		List<PuzzleState> neighbors = _currentState.getNeighborStates();
+		int valuePos = (r * 4) + c;
 
-	private boolean moveEmptyTile(int r, int c)
-	{
-		int pos = (c * 4) + 1;
-		if (_currentState.getEmptyCell() == pos)
+		for (PuzzleState neighbor : neighbors)
 		{
-			return true;
+			if (neighbor.getEmptyCell() == valuePos)
+			{
+				isGameOver();
+				_currentState = neighbor;
+				return true;
+			}
 		}
+
 		return false;
 	}
 

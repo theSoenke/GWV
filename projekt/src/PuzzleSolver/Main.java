@@ -14,16 +14,17 @@ public class Main
 
 	public Main()
 	{
-		 _gui = new PuzzleGUI();
-		 _gui.showUI();
+		_gui = new PuzzleGUI();
+		_gui.showUI();
 
-		/*PuzzleState puzzle = PuzzleGenerator.createPuzzleBySliding(true);
-		System.out.println("Initial State:");
+		// PuzzleState puzzle = PuzzleGenerator.createPuzzleBySliding(true);
+		// System.out.println("Initial State:");
 
-		byte[] puzzleTest = { 14, 7, 4, 10, 15, 1, 6, 13, 0, 2, 9, 8, 12, 5, 11, 3 };
-		// PuzzleState puzzle = new PuzzleState(puzzleTest, true);
-		puzzle.printPuzzle();
+		// byte[] puzzleTest = { 14, 7, 4, 10, 15, 1, 6, 13, 0, 2, 9, 8, 12, 5,
+		// 11, 3 };
+		// PuzzleState puzzle = new PuzzleState(puzzleTest, false);
+		// puzzle.printPuzzle();
 
-		IDAStar idastar = new IDAStar(puzzle);*/
+		// IDAStar idastar = new IDAStar(puzzle);
 	}
 }

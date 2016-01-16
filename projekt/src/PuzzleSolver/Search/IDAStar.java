@@ -1,9 +1,9 @@
 package PuzzleSolver.Search;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -55,7 +55,7 @@ public class IDAStar
 	 */
 	private void depthBoundSearch(PuzzleState root, int bound)
 	{
-		Queue<PuzzleState> frontier = new LinkedList<PuzzleState>();
+		Queue<PuzzleState> frontier = new ArrayDeque<PuzzleState>();
 		HashSet<Integer> closed = new HashSet<Integer>();
 		HashSet<Integer> open = new HashSet<Integer>();
 
