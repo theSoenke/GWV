@@ -4,14 +4,16 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import PuzzleSolver.Search.Heuristic.Heuristic;
+
 public class PuzzleState implements Comparable<PuzzleState>
 {
 	private byte[] _puzzle;
 	private int _emptyCell;
 	private PuzzleState _parentState;
 	private int _moves;
-	private int _heuristic;
-	private boolean _linearConflict;
+	private Heuristic _heuristic;
+	private int _heuristicDistance;
 
 	/*
 	 * Move direction of the empty cell
@@ -21,37 +23,32 @@ public class PuzzleState implements Comparable<PuzzleState>
 		up, down, left, right
 	}
 
-	public PuzzleState(byte[] puzzle, boolean linearConflict)
+	public PuzzleState(byte[] puzzle, Heuristic heuristic)
 	{
-		initState(puzzle, linearConflict);
+		initState(puzzle, heuristic);
 	}
 
-	public PuzzleState(byte[] puzzle, int moves, PuzzleState parent, boolean linearConflict)
+	public PuzzleState(byte[] puzzle, int moves, PuzzleState parent, Heuristic heuristic)
 	{
-		initState(puzzle, linearConflict);
+		initState(puzzle, heuristic);
 
 		_moves = moves;
 		_parentState = parent;
 
 	}
 
-	private void initState(byte[] puzzle, boolean linearConflict)
+	private void initState(byte[] puzzle, Heuristic heuristic)
 	{
 		if (puzzle.length != 16)
 		{
 			throw new RuntimeException("Puzzle is not 4x4");
 		}
 
-		_linearConflict = linearConflict;
 		_puzzle = puzzle;
 		_emptyCell = getEmptyCell();
 
-		_heuristic = calcManhattanDistance();
-
-		if (linearConflict)
-		{
-			_heuristic += calcLinearConflict();
-		}
+		_heuristic = heuristic;
+		_heuristicDistance = heuristic.calculate(_puzzle);
 	}
 
 	public PuzzleState getParentState()
@@ -71,7 +68,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 
 	public boolean isSolved()
 	{
-		if (_heuristic == 0)
+		if (_heuristicDistance == 0)
 		{
 			return true;
 		}
@@ -150,7 +147,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		{
 			puzzleClone = Arrays.copyOf(_puzzle, _puzzle.length);
 		}
-		PuzzleState cloneState = new PuzzleState(puzzleClone, _moves + 1, this, _linearConflict);
+		PuzzleState cloneState = new PuzzleState(puzzleClone, _moves + 1, this, _heuristic);
 		return cloneState;
 	}
 
@@ -178,91 +175,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	 */
 	public int getHeuristic()
 	{
-		return _heuristic;
-	}
-
-	/*
-	 * Returns Manhattan distance of puzzle state
-	 */
-	private int calcManhattanDistance()
-	{
-		int distance = 0;
-
-		for (int i = 0; i < _puzzle.length; i++)
-		{
-			if (_puzzle[i] != 0)
-			{
-				int desX = (_puzzle[i] - 1) % 4;
-				int desY = (_puzzle[i] - 1) / 4;
-
-				int posX = i % 4;
-				int posY = i / 4;
-
-				// System.out.println("value: " + _puzzle[i] + " desX: " + desX
-				// + " desY: " + desY + " posX: " + posX + " posY: " + posY);
-
-				distance += (Math.abs(desX - posX) + Math.abs(desY - posY));
-			}
-		}
-
-		return distance;
-	}
-
-	/*
-	 * Returns linear conflict of puzzle state
-	 */
-	private int calcLinearConflict()
-	{
-		int linearConflict = horizontalConflict();
-		linearConflict += verticalConflict();
-
-		return linearConflict;
-	}
-
-	private int horizontalConflict()
-	{
-		int linearConflict = 0;
-
-		for (int i = 0; i < _puzzle.length; i++)
-		{
-			int max = -1;
-			int value = _puzzle[i];
-			if (value != 0 && value % 4 == i + 1)
-			{
-				if (value > max)
-				{
-					max = value;
-				}
-				else
-				{
-					linearConflict += 2;
-				}
-			}
-		}
-		return linearConflict;
-	}
-
-	private int verticalConflict()
-	{
-		int linearConflict = 0;
-
-		for (int i = 0; i < 4; i++)
-		{
-			int max = -1;
-			int value = (int) _puzzle[i];
-			if (value != 0 && (value - 1) / 4 == i)
-			{
-				if (value > max)
-				{
-					max = value;
-				}
-				else
-				{
-					linearConflict += 2;
-				}
-			}
-		}
-		return linearConflict;
+		return _heuristicDistance;
 	}
 
 	/*

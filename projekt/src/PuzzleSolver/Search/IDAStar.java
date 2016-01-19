@@ -14,6 +14,7 @@ public class IDAStar
 	private final PuzzleState _startState;
 	private PuzzleState _goalState;
 	private boolean _foundGoal;
+	private int _steps = 0;
 
 	public IDAStar(PuzzleState initialState)
 	{
@@ -40,7 +41,7 @@ public class IDAStar
 
 		if (_foundGoal)
 		{
-			System.out.println("Found optimal solution in " + duration + "ms");
+			System.out.println("Found optimal solution in " + duration + "ms with " + _steps + " steps");
 		}
 		else
 		{
@@ -66,6 +67,7 @@ public class IDAStar
 
 		while (!frontier.isEmpty())
 		{
+			_steps++;
 			currentState = frontier.poll();
 
 			if (currentState.isSolved())

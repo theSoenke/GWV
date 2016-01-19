@@ -11,6 +11,7 @@ import PuzzleSolver.PuzzleGenerator;
 import PuzzleSolver.PuzzleState;
 import PuzzleSolver.GUI.PuzzleGUI.GraphicsPanel;
 import PuzzleSolver.Search.IDAStar;
+import PuzzleSolver.Search.Heuristic.ManhattanDistance;
 
 public class PuzzleWerkzeug
 {
@@ -36,7 +37,7 @@ public class PuzzleWerkzeug
 	 */
 	public void reset()
 	{
-		_currentState = PuzzleGenerator.createPuzzleBySliding(true);
+		_currentState = PuzzleGenerator.createPuzzleBySliding(new ManhattanDistance());
 	}
 
 	/*
