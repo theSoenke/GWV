@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import PuzzleSolver.Search.Heuristic.FringePattern;
 import PuzzleSolver.Search.Heuristic.Heuristic;
 
 public class PuzzleState implements Comparable<PuzzleState>
@@ -160,7 +161,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 		for (int i = 0; i < 16; i++)
 		{
 			line += _puzzle[i] + "\t";
-			if (i % 4 == 0)
+			if ((i + 1) % 4 == 0)
 			{
 				System.out.println(line + "\n");
 				line = "";
@@ -226,6 +227,14 @@ public class PuzzleState implements Comparable<PuzzleState>
 		{
 			if (emptyY > 0)
 			{
+				if (_heuristic instanceof FringePattern)
+				{
+					if (!(emptyY == 1 && ((FringePattern) _heuristic).isFringePattern()))
+					{
+						return false;
+					}
+				}
+
 				_puzzle[_emptyCell] = _puzzle[_emptyCell - 4];
 				_emptyCell = _emptyCell - 4;
 				_puzzle[_emptyCell] = 0;
@@ -248,6 +257,14 @@ public class PuzzleState implements Comparable<PuzzleState>
 		{
 			if (emptyX > 0)
 			{
+				if (_heuristic instanceof FringePattern)
+				{
+					if (!(emptyX == 1 && ((FringePattern) _heuristic).isFringePattern()))
+					{
+						return false;
+					}
+				}
+
 				_puzzle[_emptyCell] = _puzzle[_emptyCell - 1];
 				_emptyCell = _emptyCell - 1;
 				_puzzle[_emptyCell] = 0;

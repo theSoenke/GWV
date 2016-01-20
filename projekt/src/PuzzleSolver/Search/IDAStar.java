@@ -42,6 +42,7 @@ public class IDAStar
 		if (_foundGoal)
 		{
 			System.out.println("Found optimal solution in " + duration + "ms with " + _steps + " steps");
+			printSolution();
 		}
 		else
 		{

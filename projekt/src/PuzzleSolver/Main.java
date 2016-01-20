@@ -2,6 +2,7 @@ package PuzzleSolver;
 
 import PuzzleSolver.GUI.PuzzleGUI;
 import PuzzleSolver.Search.IDAStar;
+import PuzzleSolver.Search.Heuristic.FringePattern;
 import PuzzleSolver.Search.Heuristic.ManhattanDistance;
 
 public class Main

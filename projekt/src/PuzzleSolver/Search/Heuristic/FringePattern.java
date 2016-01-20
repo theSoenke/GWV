@@ -7,8 +7,13 @@ public class FringePattern implements Heuristic
 	@Override
 	public int calculate(byte[] puzzle)
 	{
-		// TODO implement fringe pattern distance
+		fringeDistance(puzzle);
 		return 0;
+	}
+
+	public boolean isFringePattern()
+	{
+		return _isFringePattern;
 	}
 
 	private int fringeDistance(byte[] puzzle)
@@ -61,8 +66,7 @@ public class FringePattern implements Heuristic
 					int y = ((value - 1) / 4);
 					int x = ((value - 1) % 4);
 					distance += Math.abs(i - y) + Math.abs(j - x);
-					// System.out.println("value: " + value + " x: " + x + " y:"
-					// + y + " distance: " + distance);
+					System.out.println("value: " + value + " x: " + x + " y:" + y + " distance: " + distance);
 				}
 			}
 		}
