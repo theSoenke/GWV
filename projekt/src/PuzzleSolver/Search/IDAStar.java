@@ -29,7 +29,7 @@ public class IDAStar
 
 		long startTime = System.currentTimeMillis();
 
-		while (!_foundGoal && depth < 200)
+		while (!_foundGoal && depth < 20000)
 		{
 			depthBoundSearch(_startState, depth);
 			System.out.println(depth);
