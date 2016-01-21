@@ -11,6 +11,7 @@ import java.util.Queue;
 import org.junit.Test;
 
 import PuzzleSolver.PuzzleState;
+import PuzzleSolver.Search.Heuristic.FringePattern;
 import PuzzleSolver.Search.Heuristic.LinearConflict;
 import PuzzleSolver.Search.Heuristic.ManhattanDistance;
 
@@ -23,6 +24,7 @@ public class PuzzleStateTest
 	private byte[] _testPuzzle5 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 11, 13, 14, 15, 12 };
 	private byte[] _testPuzzle6 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 13, 14, 15, 12 };
 	private byte[] _testPuzzle7 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15 };
+	private byte[] _testPuzzleFringe = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0 };
 
 	@Test
 	public void testManhattanDistance()
@@ -40,7 +42,7 @@ public class PuzzleStateTest
 		assertEquals(1, state6.getHeuristic());
 	}
 
-	@Test
+	/*@Test
 	public void testLinearConflictDistance()
 	{
 		PuzzleState state1 = new PuzzleState(_testPuzzle1, new LinearConflict());
@@ -54,6 +56,20 @@ public class PuzzleStateTest
 
 		PuzzleState state7 = new PuzzleState(_testPuzzle7, new LinearConflict());
 		assertEquals(1, state7.getHeuristic());
+	}*/
+
+	@Test
+	public void testFringePatternDistance()
+	{
+		FringePattern fringePattern1 = new FringePattern();
+		int dist1 = fringePattern1.calculate(_testPuzzleFringe);
+
+		assertEquals(0, dist1);
+		
+		FringePattern fringePattern2 = new FringePattern();
+		int dist2 = fringePattern2.calculate(_testPuzzleFringe);
+
+		assertEquals(0, dist2);
 	}
 
 	@Test

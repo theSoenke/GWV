@@ -23,7 +23,7 @@ public class Main
 		// System.out.println("Initial State:");
 
 		byte[] puzzleTest = { 14, 7, 4, 10, 15, 1, 6, 13, 0, 2, 9, 8, 12, 5, 11, 3 };
-		PuzzleState puzzle = new PuzzleState(puzzleTest, new ManhattanDistance());
+		PuzzleState puzzle = new PuzzleState(puzzleTest, new FringePattern());
 		puzzle.printPuzzle();
 
 		
