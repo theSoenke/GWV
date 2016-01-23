@@ -60,10 +60,6 @@ public class PuzzleWerkzeug
 
 	public void help()
 	{
-		System.out.println(_currentState.isSolved());
-		System.out.println("Heuristic: " + _currentState.getHeuristic() + " Moves: " + _currentState.getMoves());
-		System.out.println("Hashcode: " + _currentState.hashCode());
-		_currentState.printPuzzle();
 	}
 
 	public void waitInBackground(int timeInSeconds, final Queue<PuzzleState> states, final GraphicsPanel panel)
@@ -103,7 +99,6 @@ public class PuzzleWerkzeug
 		{
 			if (neighbor.getEmptyCell() == valuePos)
 			{
-				isGameOver();
 				_currentState = neighbor;
 				return true;
 			}

@@ -141,13 +141,16 @@ public class PuzzleStateTest
 	public void testIsSolved()
 	{
 		PuzzleState state1 = new PuzzleState(_testPuzzle1, new ManhattanDistance());
-		PuzzleState state2 = new PuzzleState(_testPuzzle7, new ManhattanDistance());
+		PuzzleState state7 = new PuzzleState(_testPuzzle7, new ManhattanDistance());
 		PuzzleState state3 = new PuzzleState(_testSolved, new ManhattanDistance());
-		PuzzleState state4 = new PuzzleState(_testPuzzle8, new ManhattanDistance());
+		PuzzleState state8 = new PuzzleState(_testPuzzle8, new ManhattanDistance());
+		PuzzleState state4 = new PuzzleState(_testPuzzle4, new ManhattanDistance());
+
 
 		assertTrue(state1.isSolved());
-		assertFalse(state2.isSolved());
+		assertFalse(state7.isSolved());
 		assertFalse(state3.isSolved());
+		assertFalse(state8.isSolved());
 		assertFalse(state4.isSolved());
 	}
 }

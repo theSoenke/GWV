@@ -219,6 +219,8 @@ public class PuzzleState implements Comparable<PuzzleState>
 		int emptyX = _emptyCell % 4;
 		int emptyY = _emptyCell / 4;
 
+		boolean result = true;
+
 		if (dir == moveDirection.up)
 		{
 			if (emptyY > 0)
@@ -227,16 +229,20 @@ public class PuzzleState implements Comparable<PuzzleState>
 				{
 					if (!(emptyY == 1 && ((FringePattern) _heuristic).isFringePattern()))
 					{
-						return false;
+						result = false;
 					}
 				}
-
-				_puzzle[_emptyCell] = _puzzle[_emptyCell - 4];
-				_emptyCell = _emptyCell - 4;
-				_puzzle[_emptyCell] = 0;
-				return true;
+				else
+				{
+					_puzzle[_emptyCell] = _puzzle[_emptyCell - 4];
+					_emptyCell = _emptyCell - 4;
+					_puzzle[_emptyCell] = 0;
+				}
 			}
-			return false;
+			else
+			{
+				result = false;
+			}
 		}
 		else if (dir == moveDirection.down)
 		{
@@ -245,9 +251,11 @@ public class PuzzleState implements Comparable<PuzzleState>
 				_puzzle[_emptyCell] = _puzzle[_emptyCell + 4];
 				_emptyCell = _emptyCell + 4;
 				_puzzle[_emptyCell] = 0;
-				return true;
 			}
-			return false;
+			else
+			{
+				result = false;
+			}
 		}
 		else if (dir == moveDirection.left)
 		{
@@ -257,16 +265,20 @@ public class PuzzleState implements Comparable<PuzzleState>
 				{
 					if (!(emptyX == 1 && ((FringePattern) _heuristic).isFringePattern()))
 					{
-						return false;
+						result = false;
 					}
 				}
-
-				_puzzle[_emptyCell] = _puzzle[_emptyCell - 1];
-				_emptyCell = _emptyCell - 1;
-				_puzzle[_emptyCell] = 0;
-				return true;
+				else
+				{
+					_puzzle[_emptyCell] = _puzzle[_emptyCell - 1];
+					_emptyCell = _emptyCell - 1;
+					_puzzle[_emptyCell] = 0;
+				}
 			}
-			return false;
+			else
+			{
+				result = false;
+			}
 		}
 		else if (dir == moveDirection.right)
 		{
@@ -275,52 +287,16 @@ public class PuzzleState implements Comparable<PuzzleState>
 				_puzzle[_emptyCell] = _puzzle[_emptyCell + 1];
 				_emptyCell = _emptyCell + 1;
 				_puzzle[_emptyCell] = 0;
-				return true;
 			}
-			return false;
+			else
+			{
+				result = false;
+			}
 		}
+		
+		_heuristicDistance = _heuristic.calculate(_puzzle);
 
-		return false;
-	}
-
-	public PuzzleState moveRight()
-	{
-		PuzzleState cloneState = clone();
-		if (cloneState.moveCell(moveDirection.right))
-		{
-			return cloneState;
-		}
-		return null;
-	}
-
-	public PuzzleState moveLeft()
-	{
-		PuzzleState cloneState = clone();
-		if (cloneState.moveCell(moveDirection.left))
-		{
-			return cloneState;
-		}
-		return null;
-	}
-
-	public PuzzleState moveUp()
-	{
-		PuzzleState cloneState = clone();
-		if (cloneState.moveCell(moveDirection.up))
-		{
-			return cloneState;
-		}
-		return null;
-	}
-
-	public PuzzleState moveDown()
-	{
-		PuzzleState cloneState = clone();
-		if (cloneState.moveCell(moveDirection.down))
-		{
-			return cloneState;
-		}
-		return null;
+		return result;
 	}
 
 	public int getEmptyCell()

@@ -107,8 +107,8 @@ public class IDAStar
 
 		while (currentState != null && !currentState.equals(_startState))
 		{
-			currentState = currentState.getParentState();
 			path.add(currentState);
+			currentState = currentState.getParentState();
 		}
 
 		Collections.reverse(path);

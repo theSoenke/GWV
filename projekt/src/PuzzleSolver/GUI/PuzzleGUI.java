@@ -173,7 +173,8 @@ public class PuzzleGUI
 			}
 
 			this.repaint();
-
+			
+			_werkzeug.isGameOver();
 		}
 
 		@Override
