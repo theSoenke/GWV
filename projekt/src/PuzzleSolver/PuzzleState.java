@@ -147,6 +147,18 @@ public class PuzzleState implements Comparable<PuzzleState>
 		PuzzleState cloneState = new PuzzleState(puzzleClone, _moves + 1, this, _heuristic);
 		return cloneState;
 	}
+	
+	public PuzzleState getStartState()
+	{
+		byte[] puzzleClone = new byte[16];
+
+		for (int i = 0; i < _puzzle.length; i++)
+		{
+			puzzleClone = Arrays.copyOf(_puzzle, _puzzle.length);
+		}
+		PuzzleState cloneState = new PuzzleState(puzzleClone, 0, null, _heuristic);
+		return cloneState;
+	}
 
 	/*
 	 * Prints the puzzle on the console

@@ -56,7 +56,10 @@ public class PuzzleWerkzeug
 
 	public void help()
 	{
-
+		System.out.println(_currentState.isSolved());
+		System.out.println("Heuristic: " + _currentState.getHeuristic());
+		System.out.println("Moves: " + _currentState.getMoves());
+		_currentState.printPuzzle();
 	}
 
 	public void waitInBackground(int timeInSeconds, final PuzzleState state, final GraphicsPanel panel)

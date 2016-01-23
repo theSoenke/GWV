@@ -203,7 +203,7 @@ public class PuzzleGUI
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			_werkzeug.solve(_puzzleGraphics);
+			_werkzeug.help();
 		}
 	}
 }
