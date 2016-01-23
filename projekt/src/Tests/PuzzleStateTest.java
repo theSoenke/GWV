@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import PuzzleSolver.PuzzleState;
 import PuzzleSolver.Search.Heuristic.FringePattern;
-import PuzzleSolver.Search.Heuristic.LinearConflict;
 import PuzzleSolver.Search.Heuristic.ManhattanDistance;
 
 public class PuzzleStateTest
