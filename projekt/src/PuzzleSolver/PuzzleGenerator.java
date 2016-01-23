@@ -42,7 +42,7 @@ public class PuzzleGenerator
 
 		puzzle.printPuzzle();
 		
-		return puzzle.getStartState();
+		return new PuzzleState(puzzle.getArray(), heuristic);
 	}
 
 	/*
