@@ -2,13 +2,15 @@ package PuzzleSolver.Search.Heuristic;
 
 public class ManhattanDistance implements Heuristic
 {
+	private int _distance = 1;
+
 	/*
 	 * Returns Manhattan distance of puzzle state
 	 */
 	@Override
 	public int calculate(byte[] puzzle)
 	{
-		int distance = 0;
+		_distance = 0;
 
 		for (int i = 0; i < puzzle.length; i++)
 		{
@@ -20,10 +22,19 @@ public class ManhattanDistance implements Heuristic
 				int posX = i % 4;
 				int posY = i / 4;
 
-				distance += (Math.abs(desX - posX) + Math.abs(desY - posY));
+				_distance += (Math.abs(desX - posX) + Math.abs(desY - posY));
 			}
 		}
 
-		return distance;
+		return _distance;
+	}
+
+	public boolean isSolved()
+	{
+		if (_distance == 0)
+		{
+			return true;
+		}
+		return false;
 	}
 }

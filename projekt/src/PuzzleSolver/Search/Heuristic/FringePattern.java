@@ -3,11 +3,21 @@ package PuzzleSolver.Search.Heuristic;
 public class FringePattern implements Heuristic
 {
 	private boolean _isFringePattern;
+	private int _distance = 1;
 
 	@Override
 	public int calculate(byte[] puzzle)
 	{
 		return fringeDistance(puzzle);
+	}
+
+	public boolean isSolved()
+	{
+		if (_distance == 0)
+		{
+			return true;
+		}
+		return false;
 	}
 
 	public boolean isFringePattern()
@@ -17,9 +27,9 @@ public class FringePattern implements Heuristic
 
 	private int fringeDistance(byte[] puzzle)
 	{
-		int distance = fringePatternDistance(puzzle);
+		_distance = fringePatternDistance(puzzle);
 
-		if (distance == 0)
+		if (_distance == 0)
 		{
 			_isFringePattern = true;
 		}
@@ -40,12 +50,12 @@ public class FringePattern implements Heuristic
 					int posX = i % 4;
 					int posY = i / 4;
 
-					distance += (Math.abs(desX - posX) + Math.abs(desY - posY));
+					_distance += (Math.abs(desX - posX) + Math.abs(desY - posY));
 				}
 			}
 		}
 
-		return distance;
+		return _distance;
 	}
 
 	private int fringePatternDistance(byte[] puzzle)

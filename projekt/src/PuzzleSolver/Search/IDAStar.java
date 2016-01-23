@@ -32,7 +32,7 @@ public class IDAStar
 		while (!_foundGoal && depth < 20000)
 		{
 			depthBoundSearch(_startState, depth);
-			System.out.println(depth);
+			// System.out.println(depth);
 			depth += 2;
 		}
 
@@ -41,8 +41,9 @@ public class IDAStar
 
 		if (_foundGoal)
 		{
-			System.out.println("Found optimal solution in " + duration + "ms with " + _steps + " steps");
-			printSolution();
+			System.out.println("Duration: " + duration + "ms \nExplored nodes: " + _steps + "\nPath length: "
+					+ getSolution().size());
+			// printSolution();
 		}
 		else
 		{
@@ -83,6 +84,8 @@ public class IDAStar
 				if (!closed.contains(neighbor.hashCode()) && !open.contains(neighbor.hashCode()))
 				{
 					int cost = neighbor.getMoves() + neighbor.getHeuristic();
+
+					// System.out.println("cost: " + cost);
 
 					if (cost < bound)
 					{

@@ -69,11 +69,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 
 	public boolean isSolved()
 	{
-		if (_heuristicDistance == 0)
-		{
-			return true;
-		}
-		return false;
+		return _heuristic.isSolved();
 	}
 
 	/*
