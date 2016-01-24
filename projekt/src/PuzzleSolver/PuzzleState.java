@@ -73,7 +73,7 @@ public class PuzzleState implements Comparable<PuzzleState>
 	}
 
 	/*
-	 * Returns true when the puzzle has as solution
+	 * Returns true when the puzzle has a solution
 	 */
 	public boolean isSolvable()
 	{

@@ -20,7 +20,6 @@ public class AStar
 		if (startState.isSolvable())
 		{
 			solve();
-			printSolution();
 		}
 		else
 		{

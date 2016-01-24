@@ -1,12 +1,12 @@
 package PuzzleSolver.Search.Heuristic;
 
+/*
+ * Returns Manhattan distance of puzzle state
+ */
 public class ManhattanDistance implements Heuristic
 {
 	private int _distance = 1;
 
-	/*
-	 * Returns Manhattan distance of puzzle state
-	 */
 	@Override
 	public int calculate(byte[] puzzle)
 	{

@@ -39,8 +39,6 @@ public class PuzzleGenerator
 			int rand = random.nextInt(neighbors.size());
 			puzzle = neighbors.get(rand);
 		}
-
-		puzzle.printPuzzle();
 		
 		return new PuzzleState(puzzle.getArray(), heuristic);
 	}

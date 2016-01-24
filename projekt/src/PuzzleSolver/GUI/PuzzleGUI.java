@@ -22,7 +22,6 @@ public class PuzzleGUI
 	private JPanel _mainpanel;
 	private JButton _solveBtn;
 	private JButton _resetBtn;
-	private JButton _helpBtn;
 	private JFrame _frame;
 	private GraphicsPanel _puzzleGraphics;
 
@@ -42,7 +41,6 @@ public class PuzzleGUI
 		_frame.getContentPane().add(_mainpanel, BorderLayout.SOUTH);
 		_mainpanel.setBackground(new Color(255, 255, 255));
 		implementResetButton();
-		implementHelpButton();
 		implementSolveButton();
 	}
 
@@ -75,18 +73,6 @@ public class PuzzleGUI
 		_solveBtn.setBackground(new Color(200, 200, 200));
 		_solveBtn.setSelected(true);
 		_solveBtn.addActionListener(new SolveAction());
-	}
-
-	private void implementHelpButton()
-	{
-		_helpBtn = new JButton();
-		_mainpanel.add(_helpBtn);
-		_helpBtn.setText("Help!");
-		_helpBtn.setPreferredSize(new java.awt.Dimension(180, 50));
-		_helpBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
-		_helpBtn.setBackground(new Color(200, 200, 200));
-		_helpBtn.setSelected(true);
-		_helpBtn.addActionListener(new HelpAction());
 	}
 
 	private void implementResetButton()
@@ -173,7 +159,7 @@ public class PuzzleGUI
 			}
 
 			this.repaint();
-			
+
 			_werkzeug.isGameOver();
 		}
 
@@ -197,14 +183,6 @@ public class PuzzleGUI
 		public void actionPerformed(ActionEvent e)
 		{
 			_werkzeug.solve(_puzzleGraphics);
-		}
-	}
-
-	public class HelpAction implements ActionListener
-	{
-		public void actionPerformed(ActionEvent e)
-		{
-			_werkzeug.help();
 		}
 	}
 }

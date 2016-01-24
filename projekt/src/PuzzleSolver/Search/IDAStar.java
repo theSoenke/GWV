@@ -13,7 +13,6 @@ public class IDAStar
 {
 	private final PuzzleState _startState;
 	private PuzzleState _goalState;
-	private boolean _foundGoal;
 	private int _steps = 0;
 
 	public IDAStar(PuzzleState initialState)
@@ -29,7 +28,7 @@ public class IDAStar
 
 		long startTime = System.currentTimeMillis();
 
-		while (!_foundGoal && depth < 20000)
+		while (_goalState == null && depth < 500)
 		{
 			depthBoundSearch(_startState, depth);
 			// System.out.println(depth);
@@ -39,22 +38,20 @@ public class IDAStar
 		long endTime = System.currentTimeMillis();
 		long duration = endTime - startTime;
 
-		if (_foundGoal)
+		if (_goalState != null)
 		{
-			System.out.println("Duration: " + duration + "ms \nExplored nodes: " + _steps + "\nPath length: "
-					+ getSolution().size());
-			// printSolution();
+			System.out.println("Duration: " + duration + "ms");
+			System.out.println("Explored nodes: " + _steps);
+			System.out.println("Path length: " + getSolution().size());
 		}
 		else
 		{
-			System.out.println("No solution found");
+			System.err.println("No solution found");
 		}
 	}
 
 	/**
 	 * Starts a depth bound DFS with a manhattan heuristic
-	 * 
-	 * @return new max depth bound
 	 */
 	private void depthBoundSearch(PuzzleState root, int bound)
 	{
@@ -74,7 +71,6 @@ public class IDAStar
 
 			if (currentState.isSolved())
 			{
-				_foundGoal = true;
 				_goalState = currentState;
 				return;
 			}
@@ -84,8 +80,6 @@ public class IDAStar
 				if (!closed.contains(neighbor.hashCode()) && !open.contains(neighbor.hashCode()))
 				{
 					int cost = neighbor.getMoves() + neighbor.getHeuristic();
-
-					// System.out.println("cost: " + cost);
 
 					if (cost < bound)
 					{

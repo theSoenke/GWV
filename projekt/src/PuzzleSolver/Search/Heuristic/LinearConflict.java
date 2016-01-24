@@ -1,12 +1,12 @@
 package PuzzleSolver.Search.Heuristic;
 
+/*
+ * Returns manhattan distance + linear conflict of puzzle state
+ */
 public class LinearConflict extends ManhattanDistance
 {
 	private byte[][] _puzzle;
 
-	/*
-	 * Returns linear conflict of puzzle state
-	 */
 	@Override
 	public int calculate(byte[] puzzle)
 	{

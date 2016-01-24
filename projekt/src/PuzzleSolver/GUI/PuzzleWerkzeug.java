@@ -17,9 +17,6 @@ import PuzzleSolver.Search.Heuristic.ManhattanDistance;
 
 public class PuzzleWerkzeug
 {
-	private static final int ROWS = 4;
-	private static final int COLS = 4;
-
 	private PuzzleState _currentState;
 	private Timer _timer;
 
@@ -39,6 +36,10 @@ public class PuzzleWerkzeug
 	 */
 	public void reset()
 	{
+		if (_timer != null)
+		{
+			_timer.stop();
+		}
 		_currentState = PuzzleGenerator.createPuzzleBySliding(new ManhattanDistance());
 	}
 
@@ -55,19 +56,23 @@ public class PuzzleWerkzeug
 		{
 			pathQueue.add(path.get(i));
 		}
-		waitInBackground(1000, pathQueue, panel);
+		animateSolution(1000, pathQueue, panel);
 	}
 
-	public void help()
-	{
-	}
-
-	public void waitInBackground(int timeInSeconds, final Queue<PuzzleState> states, final GraphicsPanel panel)
+	/*
+	 * Animates the solution in the GUI
+	 */
+	public void animateSolution(int timeInSeconds, final Queue<PuzzleState> states, final GraphicsPanel panel)
 	{
 		if (!states.isEmpty())
 		{
 			_currentState = states.poll();
 			panel.repaint();
+		}
+		
+		if (_timer != null)
+		{
+			_timer.stop();
 		}
 
 		_timer = new Timer(timeInSeconds, new ActionListener() {
@@ -90,6 +95,9 @@ public class PuzzleWerkzeug
 		_timer.start();
 	}
 
+	/*
+	 * Move tile to empty position when possible
+	 */
 	public boolean moveTile(int r, int c)
 	{
 		List<PuzzleState> neighbors = _currentState.getNeighborStates();
@@ -107,11 +115,9 @@ public class PuzzleWerkzeug
 		return false;
 	}
 
-	public boolean isLegal(int r, int c)
-	{
-		return r >= 0 && r < ROWS && c >= 0 && c < COLS;
-	}
-
+	/*
+	 * Returns true when the puzzle is solved and shows a dialog
+	 */
 	public boolean isGameOver()
 	{
 		if (_currentState.isSolved())
