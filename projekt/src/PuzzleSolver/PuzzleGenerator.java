@@ -33,7 +33,7 @@ public class PuzzleGenerator
 		PuzzleState puzzle = new PuzzleState(defaultPuzzle, heuristic);
 		Random random = new Random();
 
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 200; i++)
 		{
 			List<PuzzleState> neighbors = puzzle.getNeighborStates();
 			int rand = random.nextInt(neighbors.size());

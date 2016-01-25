@@ -28,13 +28,4 @@ public class ManhattanDistance implements Heuristic
 
 		return _distance;
 	}
-
-	public boolean isSolved()
-	{
-		if (_distance == 0)
-		{
-			return true;
-		}
-		return false;
-	}
 }

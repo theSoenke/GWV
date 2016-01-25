@@ -11,15 +11,6 @@ public class FringePattern implements Heuristic
 		return fringeDistance(puzzle);
 	}
 
-	public boolean isSolved()
-	{
-		if (_distance == 0)
-		{
-			return true;
-		}
-		return false;
-	}
-
 	public boolean isFringePattern()
 	{
 		return _isFringePattern;

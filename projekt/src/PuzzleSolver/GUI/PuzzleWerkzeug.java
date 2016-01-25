@@ -40,7 +40,10 @@ public class PuzzleWerkzeug
 		{
 			_timer.stop();
 		}
-		_currentState = PuzzleGenerator.createPuzzleBySliding(new ManhattanDistance());
+		 _currentState = PuzzleGenerator.createPuzzleBySliding(new ManhattanDistance());
+
+		//byte[] puzzle = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 14, 15, 0 };
+		//_currentState = new PuzzleState(puzzle, new ManhattanDistance());
 	}
 
 	/*
@@ -56,26 +59,26 @@ public class PuzzleWerkzeug
 		{
 			pathQueue.add(path.get(i));
 		}
-		animateSolution(1000, pathQueue, panel);
+		animateSolution(500, pathQueue, panel);
 	}
 
 	/*
 	 * Animates the solution in the GUI
 	 */
-	public void animateSolution(int timeInSeconds, final Queue<PuzzleState> states, final GraphicsPanel panel)
+	public void animateSolution(int timeInMS, final Queue<PuzzleState> states, final GraphicsPanel panel)
 	{
 		if (!states.isEmpty())
 		{
 			_currentState = states.poll();
 			panel.repaint();
 		}
-		
+
 		if (_timer != null)
 		{
 			_timer.stop();
 		}
 
-		_timer = new Timer(timeInSeconds, new ActionListener() {
+		_timer = new Timer(timeInMS, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e)
