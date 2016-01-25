@@ -71,7 +71,6 @@ public class PuzzleStateTest
 
 		assertEquals(0, dist1);
 		assertTrue(fringePattern1.isFringePattern());
-		assertTrue(fringePattern1.isSolved());
 
 		FringePattern fringePattern2 = new FringePattern();
 		int dist2 = fringePattern2.calculate(_testPuzzle7);
